@@ -437,7 +437,27 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
 .sidebar-seller{font-size:0.67rem;color:var(--muted);margin-top:1px}
 .sidebar-price{font-size:0.76rem;font-weight:700;color:var(--teal);margin-top:2px}
 .sidebar-flag{font-size:0.82rem;flex-shrink:0}
-.sidebar-empty{text-align:center;color:var(--muted);font-size:0.78rem;padding:12px 0}
+.sidebar-empty{text-align:center;padding:1.5rem 1rem;font-size:0.75rem;color:#9CA3AF;line-height:1.6}
+
+/* ── SIDEBAR CARD ── */
+.sidebar-card{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid #0FAF8A}
+.sidebar-card:last-child{margin-bottom:0}
+.sidebar-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.1);border-left-color:#0B1C3D;transform:translateX(2px)}
+.sc-top{display:flex;align-items:flex-start;gap:6px;margin-bottom:8px}
+.sc-rank{font-size:0.72rem;font-weight:700;border:1.5px solid;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.sc-flag{font-size:1rem;flex-shrink:0}
+.sc-info{flex:1;min-width:0}
+.sc-title{font-size:0.75rem;font-weight:500;color:#0B1C3D;line-height:1.3;margin-bottom:2px}
+.sc-seller{font-size:0.68rem;color:#6B7A99}
+.sc-prices{background:#F7F9FC;border-radius:6px;padding:7px 9px;display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
+.sc-product-price{display:flex;justify-content:space-between;align-items:flex-start;gap:4px}
+.sc-label{font-size:0.68rem;color:#9CA3AF;flex-shrink:0}
+.sc-value{font-size:0.72rem;font-weight:500;color:#374151;text-align:right}
+.sc-converted{display:block;font-size:0.65rem;color:#6B7A99;font-weight:400}
+.sc-landed-row{display:flex;justify-content:space-between;font-size:0.68rem;color:#6B7A99;padding-top:2px}
+.sc-total-row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E2E8F0;padding-top:5px;margin-top:3px;font-size:0.72rem;font-weight:600;color:#0B1C3D}
+.sc-total-price{color:#0FAF8A;font-size:0.82rem;font-weight:700}
+.sc-cta{text-align:center;font-size:0.72rem;color:#0FAF8A;font-weight:500;padding-top:2px}
 
 /* ── RESPONSIVE ── */
 @media(max-width:860px){.results-layout{grid-template-columns:1fr}.results-sidebar{display:none!important}}
@@ -600,12 +620,12 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
     </div><!-- /results-main -->
     <div class="results-sidebar" id="results-sidebar" style="display:none">
       <div class="sidebar-panel">
-        <div class="sidebar-title">🌍 Top 10 Global</div>
-        <div id="top10-global" class="sidebar-list"><div class="sidebar-loading">Searching…</div></div>
+        <div class="sidebar-title">🌍 Top 5 — Cheapest Landed Cost</div>
+        <div id="top10-global" class="sidebar-list"><div class="sidebar-empty">Searching…</div></div>
       </div>
       <div class="sidebar-panel">
-        <div class="sidebar-title" id="top10-local-title">📍 Top 10 Local</div>
-        <div id="top10-local" class="sidebar-list"><div class="sidebar-loading">Searching…</div></div>
+        <div class="sidebar-title" id="local-panel-title">📍 Top 5 — Your Country</div>
+        <div id="top10-local" class="sidebar-list"><div class="sidebar-empty">Searching…</div></div>
       </div>
       <div style="font-size:0.63rem;color:#9CA3AF;text-align:center;padding:4px 2px;line-height:1.6">
         <div id="rates-updated">Loading rates…</div>
@@ -1040,8 +1060,8 @@ function showLoading(){
   </div>`;
   const qs = el('quote-section'); if(qs) qs.style.display='none';
   const sb=el('results-sidebar'); if(sb) sb.style.display='none';
-  const g=el('top10-global'); if(g) g.innerHTML='<div class="sidebar-loading">Searching…</div>';
-  const l=el('top10-local'); if(l) l.innerHTML='<div class="sidebar-loading">Searching…</div>';
+  const g=el('top10-global'); if(g) g.innerHTML='<div class="sidebar-empty">Searching…</div>';
+  const l=el('top10-local'); if(l) l.innerHTML='<div class="sidebar-empty">Searching…</div>';
 }
 
 function showNoResults(query){
@@ -1364,39 +1384,87 @@ function renderAftermarketResults(items, query, detection){
 }
 
 /* ── TOP-10 SIDEBAR ── */
-function buildTop10Lists(allItems, query){
-  const sb=el('results-sidebar'); if(!sb) return;
-  sb.style.display='block';
+function buildTop10Lists(allItems){
+  const buyerCode=(userLocation?.countryCode||'US').toUpperCase();
+  const buyerCur=getBuyerCurrency(buyerCode);
 
-  const byUSD = allItems
-    .map(i=>({...i, _usd: toUSD(i.price, i.market)}))
-    .filter(i=>i._usd)
-    .sort((a,b)=>a._usd-b._usd);
+  const sidebar=el('results-sidebar');
+  if(sidebar) sidebar.style.display='flex';
 
-  const localCode = (userLocation.country||'').slice(0,20);
-  const localItems = byUSD.filter(i=>i.market===localCode || i.marketCode===(userLocation.countryCode||'').toLowerCase());
+  const localTitle=el('local-panel-title');
+  if(localTitle) localTitle.textContent=(userLocation?.flag||'📍')+' Top 5 — '+(userLocation?.country||'Your Country');
 
-  function renderList(items, max){
-    if(!items.length) return `<div class="sidebar-empty">No results found</div>`;
-    return items.slice(0,max).map((item,idx)=>{
-      const rank=idx+1;
-      const rankClass=rank<=3?` rank-${rank}`:'';
-      return `<a href="${esc(item.link||'#')}" target="_blank" rel="noopener noreferrer" class="sidebar-item" style="text-decoration:none;color:inherit">
-        <div class="sidebar-rank${rankClass}">${rank}</div>
-        <div class="sidebar-info">
-          <div class="sidebar-product-title">${esc((item.title||'').substring(0,60))}</div>
-          <div class="sidebar-seller">${esc(item.source||'')}</div>
-          <div class="sidebar-price">$${fmtNum(item._usd,2)} USD</div>
+  const category=detectPartNumber(el('results-q')?.value||currentQuery||'').category||'general';
+
+  const itemsWithLanded=allItems
+    .filter(item=>item.link&&item.link.startsWith('http')&&item.title&&item.price)
+    .map(item=>{
+      const priceUSD=toUSD(item.price,item.market)||parsePrice(item.price)||999999;
+      const sellerGl=(item.marketCode||'us').toUpperCase();
+      const calc=calcLanded(priceUSD,sellerGl,buyerCode,category);
+      const landedUSD=calc?calc.total:priceUSD;
+      const landedBuyer=toBuyerCurrency(landedUSD,buyerCode).amount;
+      const productBuyer=toBuyerCurrency(priceUSD,buyerCode).amount;
+      return{...item,priceUSD,landedUSD,landedBuyer,productBuyer,calc};
+    })
+    .filter(item=>item.priceUSD<999999);
+
+  itemsWithLanded.sort((a,b)=>a.landedUSD-b.landedUSD);
+
+  const top5Global=itemsWithLanded.slice(0,5);
+
+  const userMarketName={'US':'USA','IN':'India','CN':'China','GB':'UK','DE':'Germany','AE':'UAE','JP':'Japan','AU':'Australia'}[buyerCode]||'USA';
+  const top5Local=itemsWithLanded
+    .filter(item=>item.market===userMarketName||item.marketCode?.toUpperCase()===buyerCode)
+    .slice(0,5);
+
+  function makeSidebarCard(item,rank){
+    const sellerCur=MARKET_CURRENCY[item.market]||{symbol:'$',code:'USD'};
+    const rawPrice=parsePrice(item.price);
+    const rankColors={1:'#F5A623',2:'#94A3B8',3:'#CD7C54'};
+    const rankColor=rankColors[rank]||'#6B7A99';
+    const shortTitle=item.title.length>45?item.title.substring(0,45)+'…':item.title;
+    const sellerName=item.source||item.market||'Seller';
+    const shipBuyer=item.calc?toBuyerCurrency(item.calc.shipping,buyerCode).amount:0;
+    const dutyCustomsBuyer=item.calc?toBuyerCurrency(item.calc.importDuty+item.calc.customsFee,buyerCode).amount:0;
+    const localTaxBuyer=item.calc?toBuyerCurrency(item.calc.localTax,buyerCode).amount:0;
+    return `<a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer" class="sidebar-card"
+      onclick="trackClick('${(item.market||'').replace(/'/g,'')}','${(item.source||'').replace(/'/g,'')}')">
+      <div class="sc-top">
+        <div class="sc-rank" style="color:${rankColor};border-color:${rankColor};">${rank}</div>
+        <div class="sc-flag">${item.marketFlag||'🌍'}</div>
+        <div class="sc-info">
+          <div class="sc-title" title="${esc(item.title)}">${esc(shortTitle)}</div>
+          <div class="sc-seller">${esc(sellerName)}</div>
         </div>
-        <span class="sidebar-flag">${item.marketFlag||'🌍'}</span>
-      </a>`;
-    }).join('');
+      </div>
+      <div class="sc-prices">
+        <div class="sc-product-price">
+          <span class="sc-label">Product price</span>
+          <span class="sc-value">${sellerCur.symbol}${rawPrice?rawPrice.toFixed(2):'—'} ${sellerCur.code}${sellerCur.code!==buyerCur.code?`<span class="sc-converted">≈${buyerCur.symbol}${item.productBuyer.toFixed(2)} ${buyerCur.code}</span>`:''}</span>
+        </div>
+        ${item.calc&&!item.calc.sameCountry?`
+        <div class="sc-landed-row"><span class="sc-label">Shipping est.</span><span class="sc-value">${buyerCur.symbol}${shipBuyer.toFixed(2)}</span></div>
+        <div class="sc-landed-row"><span class="sc-label">Duty + customs</span><span class="sc-value">${buyerCur.symbol}${dutyCustomsBuyer.toFixed(2)}</span></div>`:''}
+        ${item.calc?`<div class="sc-landed-row"><span class="sc-label">${esc(item.calc.localTaxName)}</span><span class="sc-value">${buyerCur.symbol}${localTaxBuyer.toFixed(2)}</span></div>`:''}
+        <div class="sc-total-row">
+          <span>YOU PAY</span>
+          <span class="sc-total-price">${buyerCur.symbol}${item.landedBuyer.toFixed(2)} ${buyerCur.code}</span>
+        </div>
+      </div>
+      <div class="sc-cta">View Product →</div>
+    </a>`;
   }
 
-  const g=el('top10-global'); if(g) g.innerHTML=renderList(byUSD,10);
-  const localTitle=el('top10-local-title');
-  if(localTitle) localTitle.textContent=`📍 Top 10 · ${userLocation.flag} ${localCode||'Local'}`;
-  const l=el('top10-local'); if(l) l.innerHTML=localItems.length?renderList(localItems,10):`<div class="sidebar-empty">No local results. Showing global only.</div>`;
+  const globalEl=el('top10-global');
+  if(globalEl) globalEl.innerHTML=top5Global.length===0
+    ?`<div class="sidebar-empty">No results found yet.<br>Run a search first.</div>`
+    :top5Global.map((item,idx)=>makeSidebarCard(item,idx+1)).join('');
+
+  const localEl=el('top10-local');
+  if(localEl) localEl.innerHTML=top5Local.length===0
+    ?`<div class="sidebar-empty">No results from ${userLocation?.flag||'📍'} ${userLocation?.country||'your country'} yet.<br>Try selecting your country in market filters.</div>`
+    :top5Local.map((item,idx)=>makeSidebarCard(item,idx+1)).join('');
 }
 
 /* ── LANDED COST DATA ── */
