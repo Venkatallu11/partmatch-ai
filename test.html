@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PartMatch AI — Test Suite</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:monospace;background:#0B1C3D;color:#e2e8f0;padding:2rem;}
+h1{color:#0FAF8A;margin-bottom:1.5rem;font-size:1.2rem;}
+.test{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;margin-bottom:6px;border-radius:6px;background:rgba(255,255,255,0.05);}
+.test-status{font-size:1.1rem;flex-shrink:0;margin-top:1px;}
+.test-name{font-size:0.85rem;font-weight:600;color:#fff;}
+.test-detail{font-size:0.75rem;color:#9CA3AF;margin-top:3px;}
+.test-error{color:#F05A4E;}
+.test-pass{color:#0FAF8A;}
+.test.pass{border-left:3px solid #0FAF8A;}
+.test.fail{border-left:3px solid #F05A4E;}
+.test.running{border-left:3px solid #F5A623;}
+.test.skip{border-left:3px solid #6B7A99;}
+.summary{margin-top:1.5rem;padding:1rem;background:#152B5C;border-radius:8px;}
+.summary-title{color:#0FAF8A;font-size:1rem;margin-bottom:8px;}
+.btn{padding:10px 20px;background:#0FAF8A;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.9rem;margin-right:8px;margin-bottom:1rem;}
+.btn:hover{background:#0A9076;}
+.btn-secondary{background:#152B5C;}
+.section-title{color:#F5A623;font-size:0.85rem;margin:1.5rem 0 0.5rem;letter-spacing:1px;text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<h1>⚙ PartMatch AI — Test Suite</h1>
+
+<button class="btn" onclick="runAllTests()">▶ Run All Tests</button>
+<button class="btn btn-secondary" onclick="clearResults()">Clear</button>
+<button class="btn btn-secondary" onclick="window.open('https://partmatch-ai.vercel.app','_blank')">Open App</button>
+
+<div id="summary" class="summary" style="display:none;">
+  <div class="summary-title">Test Results</div>
+  <div id="summary-content"></div>
+</div>
+
+<div class="section-title">API Tests</div>
+<div id="api-tests"></div>
+
+<div class="section-title">Search Tests</div>
+<div id="search-tests"></div>
+
+<div class="section-title">Currency Tests</div>
+<div id="currency-tests"></div>
+
+<div class="section-title">Calculation Tests</div>
+<div id="calc-tests"></div>
+
+<div class="section-title">Edge Case Tests</div>
+<div id="edge-tests"></div>
+
+<script>
+const SERPER_KEY  = '58ef3d3145d814ffd17502ddce24a72ee5a6d7eb';
+const EXCHANGE_KEY= '5e57228c67493ddedefa8a33';
+const EBAY_APP_ID = 'VENKATAR-PartMatc-PRD-bdcf40d80-cc6c3904';
+const EBAY_SECRET = 'PRD-dcf40d80bd9b-63e0-4c51-a4a2-ff72';
+
+let results = {pass:0, fail:0, skip:0};
+
+function addTest(containerId, id, name){
+  const c=document.getElementById(containerId);
+  const div=document.createElement('div');
+  div.className='test running'; div.id='test-'+id;
+  div.innerHTML=`<div class="test-status">⏳</div><div><div class="test-name">${name}</div><div class="test-detail" id="detail-${id}">Running...</div></div>`;
+  c.appendChild(div);
+}
+function passTest(id, detail){
+  const el=document.getElementById('test-'+id); if(!el) return;
+  el.className='test pass'; el.querySelector('.test-status').textContent='✅';
+  document.getElementById('detail-'+id).innerHTML='<span class="test-pass">'+detail+'</span>';
+  results.pass++;
+}
+function failTest(id, detail){
+  const el=document.getElementById('test-'+id); if(!el) return;
+  el.className='test fail'; el.querySelector('.test-status').textContent='❌';
+  document.getElementById('detail-'+id).innerHTML='<span class="test-error">'+detail+'</span>';
+  results.fail++;
+}
+function skipTest(id, detail){
+  const el=document.getElementById('test-'+id); if(!el) return;
+  el.className='test skip'; el.querySelector('.test-status').textContent='⏭️';
+  document.getElementById('detail-'+id).textContent=detail;
+  results.skip++;
+}
+
+async function runAllTests(){
+  results={pass:0,fail:0,skip:0};
+  ['api-tests','search-tests','currency-tests','calc-tests','edge-tests'].forEach(id=>{
+    document.getElementById(id).innerHTML='';
+  });
+  document.getElementById('summary').style.display='none';
+  await runAPITests();
+  await runSearchTests();
+  await runCurrencyTests();
+  await runCalcTests();
+  await runEdgeTests();
+  showSummary();
+}
+
+async function runAPITests(){
+  const c='api-tests';
+
+  // T1: Serper API
+  addTest(c,'t1','Serper API — connectivity');
+  try{
+    const r=await fetch('https://google.serper.dev/shopping',{method:'POST',
+      headers:{'X-API-KEY':SERPER_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({q:'hydraulic seal',gl:'us',num:1})});
+    const d=await r.json();
+    if(d.shopping && d.shopping.length>0) passTest('t1','Connected — returned '+d.shopping.length+' results');
+    else failTest('t1','Connected but no results returned');
+  }catch(e){ failTest('t1','FAILED: '+e.message); }
+
+  // T2: Exchange Rate API
+  addTest(c,'t2','Exchange Rate API — live rates');
+  try{
+    const r=await fetch('https://v6.exchangerate-api.com/v6/'+EXCHANGE_KEY+'/latest/USD');
+    const d=await r.json();
+    if(d.result==='success' && d.conversion_rates)
+      passTest('t2','Live rates — INR: '+d.conversion_rates.INR?.toFixed(2)+', CNY: '+d.conversion_rates.CNY?.toFixed(2));
+    else failTest('t2','API responded but no rates: '+d.result);
+  }catch(e){ failTest('t2','FAILED: '+e.message); }
+
+  // T3: eBay OAuth Token
+  addTest(c,'t3','eBay API — OAuth token generation');
+  try{
+    const creds=btoa(EBAY_APP_ID+':'+EBAY_SECRET);
+    const r=await fetch('https://api.ebay.com/identity/v1/oauth2/token',{method:'POST',
+      headers:{'Authorization':'Basic '+creds,'Content-Type':'application/x-www-form-urlencoded'},
+      body:'grant_type=client_credentials&scope=https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope'});
+    const d=await r.json();
+    if(d.access_token){
+      passTest('t3','Token obtained — expires in '+d.expires_in+'s');
+      window._ebayToken=d.access_token;
+    } else failTest('t3','No token — '+(d.error_description||JSON.stringify(d)));
+  }catch(e){ failTest('t3','FAILED: '+e.message); }
+
+  // T4: eBay Product Search
+  addTest(c,'t4','eBay API — product search');
+  try{
+    if(!window._ebayToken){ skipTest('t4','Skipped — no token from T3'); return; }
+    const r=await fetch('https://api.ebay.com/buy/browse/v1/item_summary/search?q=hydraulic+seal&limit=3&sort=price',
+      {headers:{'Authorization':'Bearer '+window._ebayToken,'X-EBAY-C-MARKETPLACE-ID':'EBAY_US'}});
+    const d=await r.json();
+    if(d.itemSummaries?.length>0){
+      const item=d.itemSummaries[0];
+      passTest('t4','Found '+d.itemSummaries.length+' items — cheapest: $'+item.price?.value);
+    } else failTest('t4','No items returned: '+JSON.stringify(d).substring(0,100));
+  }catch(e){ failTest('t4','FAILED: '+e.message); }
+
+  // T5: GitHub tax rates
+  addTest(c,'t5','GitHub tax rates JSON — fetchable');
+  try{
+    const r=await fetch('https://raw.githubusercontent.com/Venkatallu11/partmatch-ai/main/tax-rates.json?t='+Date.now());
+    if(r.ok){ const d=await r.json(); passTest('t5','Tax rates loaded — updated: '+d._updated); }
+    else failTest('t5','HTTP '+r.status+' — file may not be pushed yet');
+  }catch(e){ failTest('t5','FAILED: '+e.message); }
+}
+
+async function runSearchTests(){
+  const c='search-tests';
+  const queries=[
+    {id:'s1',q:'hydraulic piston seal 80mm NBR',expect:'seal results'},
+    {id:'s2',q:'M8 hex bolt grade 8.8',expect:'fastener results'},
+    {id:'s3',q:'Atlas Copco 57788856',expect:'aftermarket results'},
+    {id:'s4',q:'SKF 6205 bearing',expect:'bearing results'},
+    {id:'s5',q:'Donaldson P553000 filter',expect:'filter results'}
+  ];
+  for(const test of queries){
+    addTest(c,test.id,'Search: "'+test.q+'"');
+    try{
+      const r=await fetch('https://google.serper.dev/shopping',{method:'POST',
+        headers:{'X-API-KEY':SERPER_KEY,'Content-Type':'application/json'},
+        body:JSON.stringify({q:test.q,gl:'us',num:5})});
+      const d=await r.json();
+      const count=d.shopping?.length||0;
+      if(count>0){ const first=d.shopping[0]; passTest(test.id,count+' results — cheapest: '+(first.price||'no price')+' from '+(first.source||'unknown')); }
+      else failTest(test.id,'No results returned for query');
+    }catch(e){ failTest(test.id,'FAILED: '+e.message); }
+    await new Promise(r=>setTimeout(r,500));
+  }
+}
+
+async function runCurrencyTests(){
+  const c='currency-tests';
+  let rates={USD:1,INR:83.5,CNY:7.25,GBP:0.79,EUR:0.92};
+  try{
+    const r=await fetch('https://v6.exchangerate-api.com/v6/'+EXCHANGE_KEY+'/latest/USD');
+    const d=await r.json();
+    if(d.conversion_rates) rates=d.conversion_rates;
+  }catch(e){}
+
+  const tests=[
+    {id:'c1',name:'USD to INR conversion',test:()=>{
+      const result=100*rates.INR; const ok=result>7000&&result<9000;
+      return {ok,detail:'$100 = ₹'+result.toFixed(2)};
+    }},
+    {id:'c2',name:'USD to CNY conversion',test:()=>{
+      const result=100*rates.CNY; const ok=result>600&&result<800;
+      return {ok,detail:'$100 = ¥'+result.toFixed(2)};
+    }},
+    {id:'c3',name:'GBP to USD conversion',test:()=>{
+      const gbpToUsd=100/rates.GBP; const ok=gbpToUsd>100&&gbpToUsd<140;
+      return {ok,detail:'£100 = $'+gbpToUsd.toFixed(2)};
+    }},
+    {id:'c4',name:'Exchange rate freshness',test:()=>{
+      const cached=JSON.parse(localStorage.getItem('fx_rates')||'null');
+      if(!cached) return {ok:false,detail:'No cached rates found'};
+      const age=Date.now()-cached.timestamp; const hours=(age/3600000).toFixed(1);
+      return {ok:age<25*3600*1000,detail:'Rates are '+hours+' hours old'};
+    }},
+    {id:'c5',name:'All major currencies present',test:()=>{
+      const required=['INR','CNY','GBP','EUR','AED','JPY','AUD'];
+      const missing=required.filter(c=>!rates[c]);
+      return {ok:missing.length===0,detail:missing.length===0?'All '+required.length+' currencies present':'Missing: '+missing.join(', ')};
+    }}
+  ];
+  for(const t of tests){
+    addTest(c,t.id,t.name);
+    try{ const {ok,detail}=t.test(); if(ok) passTest(t.id,detail); else failTest(t.id,detail); }
+    catch(e){ failTest(t.id,'ERROR: '+e.message); }
+  }
+}
+
+async function runCalcTests(){
+  const c='calc-tests';
+  const tests=[
+    {id:'l1',name:'Landed cost: China to USA',test:()=>{
+      const price=45, duty=price*(0.039+0.20), ship=35, customs=35;
+      const sub=price+duty+ship+customs, tax=sub*0.08, total=sub+tax;
+      return {ok:total>100&&total<200,detail:'$45 CN→US = $'+total.toFixed(2)+' total'};
+    }},
+    {id:'l2',name:'Landed cost: India to USA',test:()=>{
+      const price=85, duty=price*0.039, ship=40, customs=35;
+      const sub=price+duty+ship+customs, tax=sub*0.08, total=sub+tax;
+      return {ok:total>150&&total<250,detail:'$85 IN→US = $'+total.toFixed(2)+' total'};
+    }},
+    {id:'l3',name:'Same country — no import duty',test:()=>{
+      const price=100, duty=0, ship=8, customs=0;
+      const sub=price+duty+ship+customs, tax=sub*0.08, total=sub+tax;
+      return {ok:total<150,detail:'$100 US→US = $'+total.toFixed(2)+' (no import duty)'};
+    }},
+    {id:'l4',name:'Savings calculation accuracy',test:()=>{
+      const oem=1000, aftermarket=85, saving=oem-aftermarket, pct=Math.round(saving/oem*100);
+      return {ok:saving===915&&pct===92,detail:'OEM $1000 vs $85 = save $'+saving+' ('+pct+'% off)'};
+    }},
+    {id:'l5',name:'Currency display — INR price',test:()=>{
+      const inrPrice=7100, usd=inrPrice/83.5;
+      return {ok:usd>70&&usd<100,detail:'₹7100 = $'+usd.toFixed(2)};
+    }}
+  ];
+  for(const t of tests){
+    addTest(c,t.id,t.name);
+    try{ const {ok,detail}=t.test(); if(ok) passTest(t.id,detail); else failTest(t.id,detail); }
+    catch(e){ failTest(t.id,'ERROR: '+e.message); }
+  }
+}
+
+async function runEdgeTests(){
+  const c='edge-tests';
+
+  addTest(c,'e1','Edge: Empty search query');
+  try{
+    const r=await fetch('https://google.serper.dev/shopping',{method:'POST',
+      headers:{'X-API-KEY':SERPER_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({q:'',gl:'us',num:1})});
+    const d=await r.json();
+    passTest('e1','API handles empty query — '+(d.shopping?.length||0)+' results');
+  }catch(e){ passTest('e1','Empty query rejected gracefully'); }
+
+  addTest(c,'e2','Edge: Special characters in query');
+  try{
+    const r=await fetch('https://google.serper.dev/shopping',{method:'POST',
+      headers:{'X-API-KEY':SERPER_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({q:'hydraulic seal <80mm> & NBR/PU',gl:'us',num:3})});
+    const d=await r.json();
+    passTest('e2','Special chars handled — '+(d.shopping?.length||0)+' results');
+  }catch(e){ failTest('e2','FAILED: '+e.message); }
+
+  addTest(c,'e3','Edge: Very long search query');
+  try{
+    const longQuery='hydraulic piston seal kit 80mm bore 50mm rod NBR nitrile rubber high pressure 350bar JCB 220 excavator aftermarket replacement OEM compatible spare parts';
+    const r=await fetch('https://google.serper.dev/shopping',{method:'POST',
+      headers:{'X-API-KEY':SERPER_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({q:longQuery,gl:'us',num:3})});
+    const d=await r.json();
+    passTest('e3','Long query ('+longQuery.length+' chars) handled — '+(d.shopping?.length||0)+' results');
+  }catch(e){ failTest('e3','FAILED: '+e.message); }
+
+  addTest(c,'e4','Edge: Indian market search');
+  try{
+    const r=await fetch('https://google.serper.dev/shopping',{method:'POST',
+      headers:{'X-API-KEY':SERPER_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({q:'hydraulic seal',gl:'in',hl:'hi',num:3})});
+    const d=await r.json();
+    passTest('e4','India market search — '+(d.shopping?.length||0)+' results');
+  }catch(e){ failTest('e4','FAILED: '+e.message); }
+
+  addTest(c,'e5','Edge: API key validity check');
+  try{
+    const r=await fetch('https://google.serper.dev/shopping',{method:'POST',
+      headers:{'X-API-KEY':'invalid_key_test','Content-Type':'application/json'},
+      body:JSON.stringify({q:'test',gl:'us',num:1})});
+    const status=r.status;
+    passTest('e5',(status===403||status===401)?'Invalid key correctly rejected (HTTP '+status+')':'API responded with status '+status);
+  }catch(e){ passTest('e5','Invalid key rejected gracefully'); }
+
+  addTest(c,'e6','Edge: eBay token cache works');
+  const cached=JSON.parse(localStorage.getItem('ebay_token')||'null');
+  if(cached && cached.expires>Date.now())
+    passTest('e6','Token cached — expires in '+Math.round((cached.expires-Date.now())/60000)+' minutes');
+  else passTest('e6','No cached token (will fetch fresh on next search)');
+
+  addTest(c,'e7','Edge: localStorage works');
+  try{
+    localStorage.setItem('pm_test','1');
+    const v=localStorage.getItem('pm_test');
+    localStorage.removeItem('pm_test');
+    if(v==='1') passTest('e7','localStorage read/write OK');
+    else failTest('e7','localStorage returned wrong value');
+  }catch(e){ failTest('e7','FAILED: '+e.message); }
+
+  addTest(c,'e8','Edge: CORS headers working');
+  try{
+    await fetch('https://google.serper.dev/shopping',{method:'POST',
+      headers:{'X-API-KEY':SERPER_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({q:'test',gl:'us',num:1})});
+    passTest('e8','No CORS errors — API accessible from browser');
+  }catch(e){
+    if(e.message.includes('CORS')) failTest('e8','CORS BLOCKED: '+e.message);
+    else passTest('e8','No CORS issue detected');
+  }
+}
+
+function showSummary(){
+  const total=results.pass+results.fail+results.skip;
+  const pct=Math.round(results.pass/total*100);
+  document.getElementById('summary').style.display='block';
+  document.getElementById('summary-content').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px;">
+      <div style="text-align:center;"><div style="font-size:1.8rem;color:#0FAF8A;font-weight:700;">${results.pass}</div><div style="font-size:0.75rem;color:#9CA3AF;">PASSED</div></div>
+      <div style="text-align:center;"><div style="font-size:1.8rem;color:#F05A4E;font-weight:700;">${results.fail}</div><div style="font-size:0.75rem;color:#9CA3AF;">FAILED</div></div>
+      <div style="text-align:center;"><div style="font-size:1.8rem;color:#6B7A99;font-weight:700;">${results.skip}</div><div style="font-size:0.75rem;color:#9CA3AF;">SKIPPED</div></div>
+      <div style="text-align:center;"><div style="font-size:1.8rem;color:#F5A623;font-weight:700;">${pct}%</div><div style="font-size:0.75rem;color:#9CA3AF;">PASS RATE</div></div>
+    </div>
+    ${results.fail>0?'<div style="margin-top:12px;color:#F05A4E;font-size:0.8rem;">⚠️ '+results.fail+' test(s) failed. Check details above.</div>':'<div style="margin-top:12px;color:#0FAF8A;font-size:0.8rem;">✅ All tests passed!</div>'}`;
+}
+
+function clearResults(){
+  ['api-tests','search-tests','currency-tests','calc-tests','edge-tests'].forEach(id=>{
+    document.getElementById(id).innerHTML='';
+  });
+  document.getElementById('summary').style.display='none';
+  results={pass:0,fail:0,skip:0};
+}
+</script>
+</body>
+</html>

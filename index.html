@@ -552,6 +552,7 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
       <button class="mf-btn" onclick="filterMarket('UAE',this)">🇦🇪 UAE</button>
       <button class="mf-btn" onclick="filterMarket('Japan',this)">🇯🇵 Japan</button>
       <button class="mf-btn" onclick="filterMarket('Australia',this)">🇦🇺 AU</button>
+      <button class="mf-btn" onclick="filterMarket('eBay Global',this)">🛒 eBay</button>
     </div>
     <div id="results-container"></div>
 
@@ -605,6 +606,10 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
       <div class="sidebar-panel">
         <div class="sidebar-title" id="top10-local-title">📍 Top 10 Local</div>
         <div id="top10-local" class="sidebar-list"><div class="sidebar-loading">Searching…</div></div>
+      </div>
+      <div style="font-size:0.63rem;color:#9CA3AF;text-align:center;padding:4px 2px;line-height:1.6">
+        <div id="rates-updated">Loading rates…</div>
+        <div id="tax-updated"></div>
       </div>
     </div><!-- /results-sidebar -->
   </div><!-- /results-layout -->
@@ -861,6 +866,62 @@ function parsePrice(priceStr){
   return isNaN(n) ? null : n;
 }
 
+/* ── EBAY BROWSE API ── */
+const EBAY_APP_ID = 'VENKATAR-PartMatc-PRD-bdcf40d80-cc6c3904';
+const EBAY_CLIENT_SECRET = 'PRD-dcf40d80bd9b-63e0-4c51-a4a2-ff72';
+const EBAY_BASE_URL = 'https://api.ebay.com';
+
+async function getEbayToken(){
+  const cached=JSON.parse(localStorage.getItem('ebay_token')||'null');
+  if(cached && cached.expires > Date.now()) return cached.token;
+  try{
+    const credentials=btoa(EBAY_APP_ID+':'+EBAY_CLIENT_SECRET);
+    const resp=await fetch(EBAY_BASE_URL+'/identity/v1/oauth2/token',{
+      method:'POST',
+      headers:{'Authorization':'Basic '+credentials,'Content-Type':'application/x-www-form-urlencoded'},
+      body:'grant_type=client_credentials&scope=https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope'
+    });
+    if(!resp.ok){ console.log('eBay token failed:',resp.status); return null; }
+    const data=await resp.json();
+    const token=data.access_token;
+    const expires=Date.now()+(data.expires_in-300)*1000;
+    localStorage.setItem('ebay_token',JSON.stringify({token,expires}));
+    return token;
+  }catch(e){ console.log('eBay token error:',e); return null; }
+}
+
+async function searchEbay(query){
+  const token=await getEbayToken();
+  if(!token) return [];
+  try{
+    const q=encodeURIComponent(query);
+    const resp=await fetch(
+      EBAY_BASE_URL+'/buy/browse/v1/item_summary/search?q='+q+'&limit=20&sort=price&filter=buyingOptions:{FIXED_PRICE}',
+      {headers:{'Authorization':'Bearer '+token,'X-EBAY-C-MARKETPLACE-ID':'EBAY_US','Content-Type':'application/json'}}
+    );
+    if(!resp.ok){ console.log('eBay search failed:',resp.status); return []; }
+    const data=await resp.json();
+    return (data.itemSummaries||[]).map(item=>({
+      title:item.title,
+      price:item.price?'$'+item.price.value:null,
+      priceValue:item.price?parseFloat(item.price.value):null,
+      link:item.itemWebUrl,
+      imageUrl:item.image?.imageUrl||null,
+      source:item.seller?.username||'eBay Seller',
+      market:'eBay Global',
+      marketFlag:'🛒',
+      marketCode:'us',
+      rating:item.feedbackScore?Math.min(5,item.feedbackScore/100):null,
+      ratingCount:item.feedbackScore||0,
+      delivery:item.shippingOptions?.[0]?.shippingCost?.value==='0.00'?'Free shipping':null,
+      condition:item.condition,
+      location:item.itemLocation?.country,
+      deliveryDays:getDeliveryDays('us',userLocation.countryCode||'US'),
+      isEbay:true
+    }));
+  }catch(e){ console.log('eBay search error:',e); return []; }
+}
+
 async function searchProducts(query){
   showLoading();
   const cat = (el('cat-select')||{}).value || '';
@@ -881,18 +942,25 @@ async function searchProducts(query){
   markets.sort((a,b) => a.gl===userGl ? -1 : b.gl===userGl ? 1 : 0);
 
   try{
-    const allResults = await Promise.all(
-      markets.map(m => searchOneMarket(fullQuery, m.gl, m.hl, m.name, m.flag))
-    );
-    const merged = allResults.flat();
-    if(merged.length === 0){ showNoResults(query); return; }
-    merged.sort((a,b) => {
+    const [serperResults, ebayResults] = await Promise.all([
+      Promise.all(markets.map(m => searchOneMarket(fullQuery, m.gl, m.hl, m.name, m.flag))),
+      searchEbay(fullQuery)
+    ]);
+    const combined = [...serperResults.flat(), ...ebayResults];
+    if(combined.length === 0){ showNoResults(query); return; }
+    // Deduplicate by link
+    const seen = new Set();
+    const deduped = combined.filter(item => {
+      if(!item.link || seen.has(item.link)) return false;
+      seen.add(item.link); return true;
+    });
+    deduped.sort((a,b) => {
       if(a.marketCode===userGl && b.marketCode!==userGl) return -1;
       if(b.marketCode===userGl && a.marketCode!==userGl) return 1;
       const pa=parsePrice(a.price), pb=parsePrice(b.price);
       return (pa&&pb) ? pa-pb : 0;
     });
-    renderResults(merged, query);
+    renderResults(deduped, query);
   } catch(err){
     showError('Search failed. Please try again.');
   }
@@ -1103,8 +1171,38 @@ const MARKET_CURRENCY = {
   'UK':{symbol:'£',code:'GBP'},'Germany':{symbol:'€',code:'EUR'},'UAE':{symbol:'AED ',code:'AED'},
   'Australia':{symbol:'A$',code:'AUD'},'Japan':{symbol:'¥',code:'JPY'}
 };
-const FX_TO_USD = {USD:1,INR:0.012,CNY:0.138,GBP:1.27,EUR:1.09,AED:0.272,AUD:0.647,JPY:0.0067};
-const USD_TO   = {USD:1,INR:83.5,CNY:7.25,GBP:0.787,EUR:0.918,AED:3.67,AUD:1.545,JPY:149.5};
+/* ── LIVE EXCHANGE RATES ── */
+const EXCHANGE_KEY = '5e57228c67493ddedefa8a33';
+const EXCHANGE_URL = 'https://v6.exchangerate-api.com/v6/'+EXCHANGE_KEY+'/latest/USD';
+let FX_RATES = {
+  USD:1,INR:83.5,CNY:7.25,GBP:0.787,EUR:0.918,AED:3.67,
+  JPY:149.5,AUD:1.545,CAD:1.36,SGD:1.34,ZAR:18.6,BRL:4.97,
+  MXN:17.2,SAR:3.75,KWD:0.31,MYR:4.72,THB:36.1,IDR:15900,
+  PKR:278.5,BDT:109.5,NGN:1580,KES:130.5,EGP:48.9
+};
+let fxLastUpdated = null;
+
+async function updateFXRates(){
+  const cached=JSON.parse(localStorage.getItem('fx_rates')||'null');
+  if(cached && cached.timestamp && Date.now()-cached.timestamp < 24*3600*1000){
+    FX_RATES=cached.rates; fxLastUpdated=new Date(cached.timestamp); updateRatesDisplay(); return;
+  }
+  try{
+    const resp=await fetch(EXCHANGE_URL);
+    if(!resp.ok) throw new Error('FX fetch failed');
+    const data=await resp.json();
+    if(data.result==='success'){
+      FX_RATES=data.conversion_rates; fxLastUpdated=new Date();
+      localStorage.setItem('fx_rates',JSON.stringify({rates:FX_RATES,timestamp:Date.now()}));
+      updateRatesDisplay();
+    }
+  }catch(e){ console.log('FX update failed, using fallback rates'); }
+}
+function updateRatesDisplay(){
+  const rEl=document.getElementById('rates-updated');
+  if(rEl && fxLastUpdated) rEl.textContent='Rates: '+fxLastUpdated.toLocaleDateString();
+}
+
 const CURRENCY_BY_CC = {
   US:{symbol:'$',code:'USD'},IN:{symbol:'₹',code:'INR'},CN:{symbol:'¥',code:'CNY'},
   GB:{symbol:'£',code:'GBP'},DE:{symbol:'€',code:'EUR'},AE:{symbol:'AED ',code:'AED'},
@@ -1114,11 +1212,13 @@ function getBuyerCurrency(cc){ return CURRENCY_BY_CC[(cc||'US').toUpperCase()]||
 function toUSD(priceStr, market){
   const n=parsePrice(priceStr); if(!n) return null;
   const mc=MARKET_CURRENCY[market]; if(!mc) return n;
-  return n*(FX_TO_USD[mc.code]||1);
+  const rate=FX_RATES[mc.code]||1;
+  return n/rate;
 }
 function toBuyerCurrency(usdAmount, cc){
   const cur=getBuyerCurrency(cc);
-  return {amount:usdAmount*(USD_TO[cur.code]||1), symbol:cur.symbol, code:cur.code};
+  const rate=FX_RATES[cur.code]||1;
+  return {amount:usdAmount*rate, symbol:cur.symbol, code:cur.code};
 }
 function fmtNum(n, d=0){ return Number(n).toFixed(d).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
 function getShipping(sellerGl, buyerGl){
@@ -1126,18 +1226,48 @@ function getShipping(sellerGl, buyerGl){
   if(s===b) return 8;
   return (SHIPPING_RATES[s]||{})[b]||40;
 }
+/* ── GITHUB TAX RATES (24h cache) ── */
+const TAX_RATES_URL = 'https://raw.githubusercontent.com/Venkatallu11/partmatch-ai/main/tax-rates.json';
+let TAX_DATA = null;
+
+async function loadTaxRates(){
+  const cached=JSON.parse(localStorage.getItem('tax_rates')||'null');
+  if(cached && cached.timestamp && Date.now()-cached.timestamp < 24*3600*1000){
+    TAX_DATA=cached.data; updateTaxDisplay(cached.timestamp); return;
+  }
+  try{
+    const resp=await fetch(TAX_RATES_URL+'?t='+Date.now());
+    if(!resp.ok) throw new Error('Tax fetch failed');
+    TAX_DATA=await resp.json();
+    localStorage.setItem('tax_rates',JSON.stringify({data:TAX_DATA,timestamp:Date.now()}));
+    updateTaxDisplay(Date.now());
+    console.log('Tax rates loaded from GitHub');
+  }catch(e){ console.log('Tax rates fetch failed, using hardcoded fallback'); }
+}
+function updateTaxDisplay(timestamp){
+  const tEl=document.getElementById('tax-updated');
+  if(tEl) tEl.textContent='Tax: '+new Date(timestamp).toLocaleDateString();
+}
+
 function calcLanded(priceUSD, sellerGl, buyerGl, category){
   if(!priceUSD) return null;
-  const buyer=(buyerGl||'US').toUpperCase(), seller=(sellerGl||'US').toUpperCase(), cat=category||'general';
-  const dutyRates=IMPORT_DUTIES[buyer]||IMPORT_DUTIES['US'];
-  const dutyRate=dutyRates[cat]||dutyRates['general']||0.035;
-  const importDuty=seller===buyer?0:priceUSD*dutyRate;
-  const shipping=getShipping(seller,buyer);
-  const customsFee=seller===buyer?0:CUSTOMS_FEE;
+  const b=(buyerGl||'US').toUpperCase(), s=(sellerGl||'US').toUpperCase(), cat=category||'general';
+  const same=s===b;
+  const duties   = TAX_DATA ? TAX_DATA.import_duties  : IMPORT_DUTIES;
+  const localTaxes= TAX_DATA ? TAX_DATA.local_tax      : LOCAL_TAX;
+  const shipMap  = TAX_DATA ? TAX_DATA.shipping_air_usd: SHIPPING_RATES;
+  const dutyRates=duties[b]||duties['US']||{};
+  let dutyRate=dutyRates[cat]||dutyRates['general']||0.035;
+  if(s==='CN' && b==='US' && TAX_DATA?.import_duties?.US?._china_extra)
+    dutyRate+=TAX_DATA.import_duties.US._china_extra;
+  const importDuty=same?0:priceUSD*dutyRate;
+  const sMap=shipMap[s]||shipMap['default']||{};
+  const shipping=same?8:(sMap[b]||sMap['default']||40);
+  const customsFee=same?0:CUSTOMS_FEE;
   const sub=priceUSD+importDuty+shipping+customsFee;
-  const taxData=LOCAL_TAX[buyer]||{rate:0.08,name:'Tax'};
+  const taxData=localTaxes[b]||{rate:0.08,name:'Tax'};
   const localTax=sub*taxData.rate;
-  return {productPrice:priceUSD,shipping,importDuty,dutyRate,customsFee,localTax,localTaxName:taxData.name,localTaxRate:taxData.rate,total:sub+localTax,sameCountry:seller===buyer};
+  return {productPrice:priceUSD,shipping,importDuty,dutyRate,customsFee,localTax,localTaxName:taxData.name,localTaxRate:taxData.rate,total:sub+localTax,sameCountry:same};
 }
 function buildPriceBlock(item, buyerCode, category){
   const mc=MARKET_CURRENCY[item.market]||{symbol:'$',code:'USD'};
@@ -1491,6 +1621,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if(lq) lq.addEventListener('input', e => checkForPartNumber(e.target.value));
   const rq = el('results-q');
   if(rq) rq.addEventListener('input', e => checkForPartNumber(e.target.value));
+
+  updateFXRates();
+  loadTaxRates();
+  setInterval(updateFXRates, 24*3600*1000);
+  setInterval(loadTaxRates, 24*3600*1000);
 });
 </script>
 </body>

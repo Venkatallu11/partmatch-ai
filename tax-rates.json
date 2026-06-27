@@ -1,0 +1,123 @@
+{
+  "_updated": "2026-06-27",
+  "_note": "Update this file when tax rates change. App fetches every 24 hours.",
+  "import_duties": {
+    "US": {
+      "hydraulic": 0.039,
+      "bearings": 0.045,
+      "fasteners": 0.058,
+      "filters": 0.035,
+      "electrical": 0.027,
+      "cables": 0.053,
+      "seals": 0.039,
+      "mining_drilling": 0.035,
+      "construction": 0.040,
+      "engines": 0.025,
+      "pneumatic": 0.035,
+      "compressors": 0.030,
+      "general": 0.035,
+      "_china_extra": 0.20,
+      "_note": "Add _china_extra for CN origin"
+    },
+    "IN": {
+      "hydraulic": 0.075,
+      "bearings": 0.075,
+      "fasteners": 0.100,
+      "filters": 0.075,
+      "electrical": 0.100,
+      "cables": 0.100,
+      "seals": 0.075,
+      "mining_drilling": 0.075,
+      "construction": 0.075,
+      "engines": 0.075,
+      "pneumatic": 0.075,
+      "general": 0.075
+    },
+    "GB": {
+      "hydraulic": 0.035,
+      "bearings": 0.040,
+      "fasteners": 0.037,
+      "filters": 0.030,
+      "electrical": 0.032,
+      "cables": 0.028,
+      "seals": 0.035,
+      "general": 0.035
+    },
+    "DE": {
+      "hydraulic": 0.017,
+      "bearings": 0.025,
+      "fasteners": 0.037,
+      "filters": 0.017,
+      "electrical": 0.027,
+      "cables": 0.028,
+      "seals": 0.020,
+      "general": 0.025
+    },
+    "AU": {"general": 0.05},
+    "AE": {"general": 0.05},
+    "SG": {"general": 0.00},
+    "JP": {"general": 0.00},
+    "CN": {"general": 0.00},
+    "CA": {"general": 0.00},
+    "FR": {"general": 0.025},
+    "NL": {"general": 0.025}
+  },
+  "local_tax": {
+    "US": {"rate": 0.08, "name": "Sales Tax"},
+    "IN": {"rate": 0.18, "name": "GST"},
+    "GB": {"rate": 0.20, "name": "VAT"},
+    "DE": {"rate": 0.19, "name": "VAT"},
+    "AU": {"rate": 0.10, "name": "GST"},
+    "AE": {"rate": 0.05, "name": "VAT"},
+    "SG": {"rate": 0.09, "name": "GST"},
+    "JP": {"rate": 0.10, "name": "Tax"},
+    "CN": {"rate": 0.13, "name": "VAT"},
+    "FR": {"rate": 0.20, "name": "TVA"},
+    "NL": {"rate": 0.21, "name": "BTW"},
+    "CA": {"rate": 0.13, "name": "HST"},
+    "ZA": {"rate": 0.15, "name": "VAT"},
+    "BR": {"rate": 0.17, "name": "ICMS"},
+    "MX": {"rate": 0.16, "name": "IVA"},
+    "SA": {"rate": 0.15, "name": "VAT"},
+    "MY": {"rate": 0.10, "name": "SST"},
+    "TH": {"rate": 0.07, "name": "VAT"},
+    "ID": {"rate": 0.11, "name": "PPN"},
+    "PH": {"rate": 0.12, "name": "VAT"},
+    "NG": {"rate": 0.075, "name": "VAT"},
+    "KE": {"rate": 0.16, "name": "VAT"},
+    "EG": {"rate": 0.14, "name": "VAT"}
+  },
+  "shipping_air_usd": {
+    "CN": {
+      "US": 35, "IN": 25, "GB": 30,
+      "DE": 28, "AU": 40, "AE": 25,
+      "default": 35
+    },
+    "IN": {
+      "US": 40, "GB": 35, "DE": 35,
+      "AU": 45, "AE": 20, "CN": 30,
+      "default": 40
+    },
+    "US": {
+      "IN": 45, "GB": 25, "DE": 28,
+      "AU": 35, "AE": 30, "CN": 40,
+      "default": 35
+    },
+    "GB": {
+      "IN": 35, "US": 25, "DE": 15,
+      "AU": 40, "AE": 25, "CN": 35,
+      "default": 30
+    },
+    "DE": {
+      "IN": 35, "US": 28, "GB": 15,
+      "AU": 40, "AE": 25,
+      "default": 30
+    },
+    "AE": {
+      "IN": 20, "US": 30, "GB": 25,
+      "DE": 25, "AU": 35,
+      "default": 30
+    },
+    "default": {"default": 40}
+  }
+}
