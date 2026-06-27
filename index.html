@@ -148,7 +148,6 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
 
 /* ── RESULTS ── */
 #view-results{background:var(--bg)}
-.results-layout{max-width:1280px;margin:0 auto;padding:24px 20px 60px}
 
 .results-search-bar{
   display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;
@@ -379,17 +378,17 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
 .item-savings{font-size:0.75rem;color:var(--green);font-weight:500;background:#DCFCE7;border-radius:4px;padding:3px 8px}
 .card-cheapest{border:2px solid var(--teal) !important}
 .cheapest-badge{background:var(--teal);color:#fff;text-align:center;padding:4px;font-size:0.72rem;font-weight:600;letter-spacing:0.5px}
-.landed-cost-btn{width:100%;padding:7px;background:transparent;border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--muted);cursor:pointer;margin-bottom:6px;transition:all 0.2s}
-.landed-cost-btn:hover{border-color:var(--teal);color:var(--teal)}
-
-/* ── LANDED COST BREAKDOWN ── */
-.landed-breakdown{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px;font-size:0.78rem}
-.landed-title{font-weight:600;color:var(--navy);margin-bottom:8px;font-size:0.82rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
-.landed-dest{font-size:0.72rem;color:var(--muted);font-weight:400}
-.landed-rows{display:flex;flex-direction:column;gap:4px}
-.landed-row{display:flex;justify-content:space-between;color:#374151;padding:3px 0;border-bottom:1px solid #F1F5F9}
-.landed-total{font-weight:700;color:var(--navy);font-size:0.88rem;border-bottom:none;border-top:2px solid var(--navy);padding-top:6px;margin-top:2px}
-.landed-disclaimer{font-size:0.68rem;color:#9CA3AF;margin-top:8px;line-height:1.5}
+/* ── PRICE BLOCK (inline landed cost) ── */
+.price-block{margin:6px 0}
+.price-original{font-size:1.05rem;font-weight:700;color:var(--navy)}
+.price-code{font-size:0.72rem;color:var(--muted);margin-top:1px}
+.price-converted{font-size:0.8rem;color:#374151;margin-top:1px}
+.price-label{color:var(--muted)}
+.landed-inline{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;margin-top:6px;font-size:0.72rem}
+.li-rows{display:flex;flex-direction:column;gap:2px}
+.li-row{display:flex;justify-content:space-between;color:#6B7A99;padding:1px 0}
+.li-total{display:flex;justify-content:space-between;font-weight:700;color:var(--navy);border-top:1px solid var(--border);padding-top:4px;margin-top:3px;font-size:0.78rem}
+.li-note{font-size:0.67rem;color:#9CA3AF;margin-top:4px}
 
 /* ── SORT BAR ── */
 .sort-bar{display:none;align-items:center;gap:8px;margin-bottom:10px;font-size:0.8rem;color:var(--muted)}
@@ -419,7 +418,29 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
 .scope-text{font-size:0.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.6}
 .scope-examples{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1rem;font-size:0.78rem;color:var(--muted)}
 
+/* ── RESULTS TWO-COLUMN LAYOUT ── */
+.results-layout{display:grid;grid-template-columns:1fr 290px;gap:20px;max-width:1280px;margin:0 auto;padding:24px 20px 60px;align-items:start}
+.results-main{min-width:0}
+.results-sidebar{position:sticky;top:70px}
+.sidebar-panel{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px}
+.sidebar-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.85rem;color:var(--navy);margin-bottom:10px}
+.sidebar-list{display:flex;flex-direction:column;gap:6px}
+.sidebar-loading{text-align:center;color:var(--muted);font-size:0.78rem;padding:16px 0}
+.sidebar-item{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border)}
+.sidebar-item:last-child{border-bottom:none}
+.sidebar-rank{min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0;background:#F1F5F9;color:var(--muted)}
+.sidebar-rank.rank-1{background:#FFD700;color:#78350F}
+.sidebar-rank.rank-2{background:#C0C0C0;color:#374151}
+.sidebar-rank.rank-3{background:#CD7F32;color:#fff}
+.sidebar-info{flex:1;min-width:0}
+.sidebar-product-title{font-size:0.71rem;font-weight:600;color:var(--navy);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.sidebar-seller{font-size:0.67rem;color:var(--muted);margin-top:1px}
+.sidebar-price{font-size:0.76rem;font-weight:700;color:var(--teal);margin-top:2px}
+.sidebar-flag{font-size:0.82rem;flex-shrink:0}
+.sidebar-empty{text-align:center;color:var(--muted);font-size:0.78rem;padding:12px 0}
+
 /* ── RESPONSIVE ── */
+@media(max-width:860px){.results-layout{grid-template-columns:1fr}.results-sidebar{display:none!important}}
 @media(max-width:640px){
   .hero-stats{gap:20px}
   .results-search-bar{flex-direction:column}
@@ -495,6 +516,7 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
 <!-- RESULTS VIEW -->
 <div id="view-results" class="view" style="display:none">
   <div class="results-layout">
+    <div class="results-main">
     <div class="results-search-bar">
       <div class="results-input-wrap">
         <input type="text" id="results-q" placeholder="Search products…"
@@ -574,7 +596,18 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
         <div id="q-confirm"></div>
       </div>
     </div>
-  </div>
+    </div><!-- /results-main -->
+    <div class="results-sidebar" id="results-sidebar" style="display:none">
+      <div class="sidebar-panel">
+        <div class="sidebar-title">🌍 Top 10 Global</div>
+        <div id="top10-global" class="sidebar-list"><div class="sidebar-loading">Searching…</div></div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-title" id="top10-local-title">📍 Top 10 Local</div>
+        <div id="top10-local" class="sidebar-list"><div class="sidebar-loading">Searching…</div></div>
+      </div>
+    </div><!-- /results-sidebar -->
+  </div><!-- /results-layout -->
 </div>
 
 <!-- SIGNUP VIEW -->
@@ -888,9 +921,7 @@ function makeProductCard(item){
     </div>
     <div class="product-info">
       <div class="product-title">${safeTitle}</div>
-      <div class="product-price-row">
-        <span class="product-price">${esc(item.price||'Get Quote')}</span>
-      </div>
+      ${buildPriceBlock(item, userLocation.countryCode, 'general')}
       ${item.source ? `<div class="product-seller">🏪 ${safeSource}</div>` : ''}
       ${stars ? `<div class="product-rating">${stars} <span class="rating-count">(${item.ratingCount||0} reviews)</span></div>` : ''}
       ${item.delivery ? `<div class="product-delivery-info">🚚 ${esc(item.delivery)}</div>` : ''}
@@ -917,6 +948,7 @@ function renderResults(items, query){
 
   const qs = el('quote-section');
   if(qs){ qs.style.display='block'; const qp=el('q-part'); if(qp) qp.value=query; }
+  buildTop10Lists(items, query);
 }
 
 function filterMarket(market, btn){
@@ -939,6 +971,9 @@ function showLoading(){
     <div class="loading-text">Searching USA · India · China · UK · Germany · UAE · Japan · Australia…</div>
   </div>`;
   const qs = el('quote-section'); if(qs) qs.style.display='none';
+  const sb=el('results-sidebar'); if(sb) sb.style.display='none';
+  const g=el('top10-global'); if(g) g.innerHTML='<div class="sidebar-loading">Searching…</div>';
+  const l=el('top10-local'); if(l) l.innerHTML='<div class="sidebar-loading">Searching…</div>';
 }
 
 function showNoResults(query){
@@ -1062,13 +1097,71 @@ async function searchAftermarket(query, detection){
   } catch(e){ showError('Search failed. Please try again.'); }
 }
 
-/* ── OEM vs AFTERMARKET RENDER ── */
+/* ── CURRENCY & LANDED COST HELPERS ── */
 const MARKET_CURRENCY = {
   'USA':{symbol:'$',code:'USD'},'India':{symbol:'₹',code:'INR'},'China':{symbol:'¥',code:'CNY'},
-  'UK':{symbol:'£',code:'GBP'},'Germany':{symbol:'€',code:'EUR'},'UAE':{symbol:'AED',code:'AED'},
+  'UK':{symbol:'£',code:'GBP'},'Germany':{symbol:'€',code:'EUR'},'UAE':{symbol:'AED ',code:'AED'},
   'Australia':{symbol:'A$',code:'AUD'},'Japan':{symbol:'¥',code:'JPY'}
 };
-function formatPriceWithUSD(price){ return esc(price||'Get Quote'); }
+const FX_TO_USD = {USD:1,INR:0.012,CNY:0.138,GBP:1.27,EUR:1.09,AED:0.272,AUD:0.647,JPY:0.0067};
+const USD_TO   = {USD:1,INR:83.5,CNY:7.25,GBP:0.787,EUR:0.918,AED:3.67,AUD:1.545,JPY:149.5};
+const CURRENCY_BY_CC = {
+  US:{symbol:'$',code:'USD'},IN:{symbol:'₹',code:'INR'},CN:{symbol:'¥',code:'CNY'},
+  GB:{symbol:'£',code:'GBP'},DE:{symbol:'€',code:'EUR'},AE:{symbol:'AED ',code:'AED'},
+  AU:{symbol:'A$',code:'AUD'},JP:{symbol:'¥',code:'JPY'}
+};
+function getBuyerCurrency(cc){ return CURRENCY_BY_CC[(cc||'US').toUpperCase()]||{symbol:'$',code:'USD'}; }
+function toUSD(priceStr, market){
+  const n=parsePrice(priceStr); if(!n) return null;
+  const mc=MARKET_CURRENCY[market]; if(!mc) return n;
+  return n*(FX_TO_USD[mc.code]||1);
+}
+function toBuyerCurrency(usdAmount, cc){
+  const cur=getBuyerCurrency(cc);
+  return {amount:usdAmount*(USD_TO[cur.code]||1), symbol:cur.symbol, code:cur.code};
+}
+function fmtNum(n, d=0){ return Number(n).toFixed(d).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+function getShipping(sellerGl, buyerGl){
+  const s=(sellerGl||'').toUpperCase(), b=(buyerGl||'').toUpperCase();
+  if(s===b) return 8;
+  return (SHIPPING_RATES[s]||{})[b]||40;
+}
+function calcLanded(priceUSD, sellerGl, buyerGl, category){
+  if(!priceUSD) return null;
+  const buyer=(buyerGl||'US').toUpperCase(), seller=(sellerGl||'US').toUpperCase(), cat=category||'general';
+  const dutyRates=IMPORT_DUTIES[buyer]||IMPORT_DUTIES['US'];
+  const dutyRate=dutyRates[cat]||dutyRates['general']||0.035;
+  const importDuty=seller===buyer?0:priceUSD*dutyRate;
+  const shipping=getShipping(seller,buyer);
+  const customsFee=seller===buyer?0:CUSTOMS_FEE;
+  const sub=priceUSD+importDuty+shipping+customsFee;
+  const taxData=LOCAL_TAX[buyer]||{rate:0.08,name:'Tax'};
+  const localTax=sub*taxData.rate;
+  return {productPrice:priceUSD,shipping,importDuty,dutyRate,customsFee,localTax,localTaxName:taxData.name,localTaxRate:taxData.rate,total:sub+localTax,sameCountry:seller===buyer};
+}
+function buildPriceBlock(item, buyerCode, category){
+  const mc=MARKET_CURRENCY[item.market]||{symbol:'$',code:'USD'};
+  const priceUSD=toUSD(item.price,item.market);
+  const buyer=(buyerCode||'US').toUpperCase();
+  const sellerGl=(item.marketCode||'us').toUpperCase();
+  if(!priceUSD) return `<div class="price-block"><div class="price-original">Get Quote</div></div>`;
+  const calc=calcLanded(priceUSD,sellerGl,buyer,category);
+  const buyerC=getBuyerCurrency(buyer);
+  let html=`<div class="price-block"><div class="price-original">${esc(item.price||'')}</div>`;
+  if(mc.code!=='USD') html+=`<div class="price-code">≈ $${fmtNum(priceUSD,2)} USD</div>`;
+  if(buyerC.code!=='USD'&&buyerC.code!==mc.code){const conv=toBuyerCurrency(priceUSD,buyer);html+=`<div class="price-converted"><span class="price-label">≈ </span>${esc(conv.symbol)}${fmtNum(conv.amount,0)} ${esc(conv.code)}</div>`;}
+  if(calc){
+    html+=`<div class="landed-inline"><div class="li-rows">`;
+    html+=`<div class="li-row"><span>+ Shipping</span><span>$${fmtNum(calc.shipping,2)}</span></div>`;
+    if(!calc.sameCountry){html+=`<div class="li-row"><span>+ Duty (${(calc.dutyRate*100).toFixed(1)}%)</span><span>$${fmtNum(calc.importDuty,2)}</span></div><div class="li-row"><span>+ Customs</span><span>$${fmtNum(calc.customsFee,2)}</span></div>`;}
+    html+=`<div class="li-row"><span>+ ${esc(calc.localTaxName)} (${(calc.localTaxRate*100).toFixed(0)}%)</span><span>$${fmtNum(calc.localTax,2)}</span></div>`;
+    html+=`<div class="li-total"><span>Total Landed</span><span>$${fmtNum(calc.total,2)}</span></div>`;
+    html+=`</div><div class="li-note">Est. to ${userLocation.flag} ${esc(userLocation.country)}</div></div>`;
+  }
+  return html+'</div>';
+}
+
+/* ── OEM vs AFTERMARKET RENDER ── */
 
 function renderAftermarketResults(items, query, detection){
   allSearchResults = items;
@@ -1125,22 +1218,58 @@ function renderAftermarketResults(items, query, detection){
       </div>
       <div class="product-info">
         <div class="product-title">${safeTitle}</div>
-        <div class="product-price-row"><span class="product-price">${formatPriceWithUSD(item.price)}</span></div>
+        ${buildPriceBlock(item, userLocation.countryCode, detection.category||'general')}
         ${savingsTag}
         ${item.source?`<div class="product-seller">🏪 ${safeSource}</div>`:''}
         ${stars?`<div class="product-rating">${stars} <span class="rating-count">(${item.ratingCount||0})</span></div>`:''}
         ${item.delivery?`<div class="product-delivery-info">🚚 ${esc(item.delivery)}</div>`:''}
         <div class="delivery-estimate" style="color:${delivery.color}">⏱ ${delivery.label} · ${esc(item.market||'')} → ${destFlag} ${destCountry}</div>
-        <button class="landed-cost-btn" onclick="showLandedCost('${(item.price||'').replace(/'/g,"\\'")}','${item.marketCode||'us'}','${esc(item.market||'')}','${item.marketFlag||''}','${detection.category||'general'}',this)">📊 Calculate Total Landed Cost</button>
         <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="product-btn" onclick="trackClick('${shortSource}','aftermarket')">View Product →</a>
       </div>
     </div>`;
   }).join('');
 
   const qs=el('quote-section'); if(qs){qs.style.display='block'; const qp=el('q-part'); if(qp) qp.value=query;}
+  buildTop10Lists(items, query);
 }
 
-/* ── LANDED COST CALCULATOR ── */
+/* ── TOP-10 SIDEBAR ── */
+function buildTop10Lists(allItems, query){
+  const sb=el('results-sidebar'); if(!sb) return;
+  sb.style.display='block';
+
+  const byUSD = allItems
+    .map(i=>({...i, _usd: toUSD(i.price, i.market)}))
+    .filter(i=>i._usd)
+    .sort((a,b)=>a._usd-b._usd);
+
+  const localCode = (userLocation.country||'').slice(0,20);
+  const localItems = byUSD.filter(i=>i.market===localCode || i.marketCode===(userLocation.countryCode||'').toLowerCase());
+
+  function renderList(items, max){
+    if(!items.length) return `<div class="sidebar-empty">No results found</div>`;
+    return items.slice(0,max).map((item,idx)=>{
+      const rank=idx+1;
+      const rankClass=rank<=3?` rank-${rank}`:'';
+      return `<div class="sidebar-item">
+        <div class="sidebar-rank${rankClass}">${rank}</div>
+        <div class="sidebar-info">
+          <div class="sidebar-product-title">${esc((item.title||'').substring(0,60))}</div>
+          <div class="sidebar-seller">${esc(item.source||'')}</div>
+          <div class="sidebar-price">$${fmtNum(item._usd,2)} USD</div>
+        </div>
+        <span class="sidebar-flag">${item.marketFlag||'🌍'}</span>
+      </div>`;
+    }).join('');
+  }
+
+  const g=el('top10-global'); if(g) g.innerHTML=renderList(byUSD,10);
+  const localTitle=el('top10-local-title');
+  if(localTitle) localTitle.textContent=`📍 Top 10 · ${userLocation.flag} ${localCode||'Local'}`;
+  const l=el('top10-local'); if(l) l.innerHTML=localItems.length?renderList(localItems,10):`<div class="sidebar-empty">No local results. Showing global only.</div>`;
+}
+
+/* ── LANDED COST DATA ── */
 const IMPORT_DUTIES = {
   'US':{hydraulic:0.039,bearings:0.045,fasteners:0.058,filters:0.035,electrical:0.027,cables:0.053,seals:0.039,mining_drilling:0.035,construction:0.040,engines:0.025,pneumatic:0.035,compressors:0.030,general:0.035},
   'IN':{hydraulic:0.075,bearings:0.075,fasteners:0.100,filters:0.075,electrical:0.100,cables:0.100,seals:0.075,mining_drilling:0.075,construction:0.075,engines:0.075,pneumatic:0.075,compressors:0.075,general:0.075},
@@ -1155,7 +1284,7 @@ const LOCAL_TAX = {
   'FR':{rate:0.20,name:'TVA'},'NL':{rate:0.21,name:'BTW'},'CA':{rate:0.13,name:'HST'},
   'ZA':{rate:0.15,name:'VAT'},'BR':{rate:0.17,name:'ICMS'},'MX':{rate:0.16,name:'IVA'}
 };
-const SHIPPING_EST = {
+const SHIPPING_RATES = {
   CN:{US:35,IN:25,GB:30,DE:28,AU:40,AE:25},
   IN:{US:40,GB:35,DE:35,AU:45,AE:20,CN:30},
   US:{IN:45,GB:25,DE:28,AU:35,AE:30,CN:40},
@@ -1164,45 +1293,6 @@ const SHIPPING_EST = {
   AE:{IN:20,US:30,GB:25,DE:25,AU:35,CN:28}
 };
 const CUSTOMS_FEE = 35;
-
-function getShippingCost(sellerGl, buyerCode){
-  const s=sellerGl.toUpperCase(), b=buyerCode.toUpperCase();
-  if(s===b) return 8;
-  return (SHIPPING_EST[s]||{})[b] || 40;
-}
-
-function calculateLandedCost(priceStr, sellerGl, buyerCode, category){
-  const price = parsePrice(priceStr); if(!price) return null;
-  const buyer=buyerCode.toUpperCase(), seller=sellerGl.toUpperCase();
-  const cat = category||'general';
-  const dutyRates = IMPORT_DUTIES[buyer]||IMPORT_DUTIES['US'];
-  const dutyRate = dutyRates[cat]||dutyRates['general']||0.035;
-  const dutyAmount = seller===buyer ? 0 : price*dutyRate;
-  const shipping = getShippingCost(seller, buyer);
-  const customsFee = seller===buyer ? 0 : CUSTOMS_FEE;
-  const subtotal = price+dutyAmount+shipping+customsFee;
-  const taxData = LOCAL_TAX[buyer]||{rate:0.08,name:'Tax'};
-  const taxAmount = subtotal*taxData.rate;
-  return { productPrice:price, shipping, importDuty:dutyAmount, dutyRate, customsFee, localTax:taxAmount, localTaxName:taxData.name, localTaxRate:taxData.rate, total:subtotal+taxAmount, sameCountry:seller===buyer };
-}
-
-function showLandedCost(priceStr, sellerGl, sellerName, sellerFlag, category, btn){
-  const calc = calculateLandedCost(priceStr, sellerGl, userLocation.countryCode, category);
-  if(!calc){ btn.textContent='Price not available for calculation'; return; }
-  const breakdown = document.createElement('div');
-  breakdown.className='landed-breakdown';
-  breakdown.innerHTML=`<div class="landed-title">📊 Total Landed Cost Estimate <span class="landed-dest">${esc(sellerFlag)} ${esc(sellerName)} → ${userLocation.flag} ${esc(userLocation.country)}</span></div>
-    <div class="landed-rows">
-      <div class="landed-row"><span>Product price</span><span>$${calc.productPrice.toFixed(2)}</span></div>
-      <div class="landed-row"><span>Shipping (air, est.)</span><span>$${calc.shipping.toFixed(2)}</span></div>
-      ${!calc.sameCountry?`<div class="landed-row"><span>Import duty (${(calc.dutyRate*100).toFixed(1)}%)</span><span>$${calc.importDuty.toFixed(2)}</span></div>
-      <div class="landed-row"><span>Customs clearance</span><span>$${calc.customsFee.toFixed(2)}</span></div>`:''}
-      <div class="landed-row"><span>${esc(calc.localTaxName)} (${(calc.localTaxRate*100).toFixed(0)}%)</span><span>$${calc.localTax.toFixed(2)}</span></div>
-      <div class="landed-row landed-total"><span>TOTAL LANDED COST</span><span>$${calc.total.toFixed(2)}</span></div>
-    </div>
-    <div class="landed-disclaimer">⚠️ Estimated only. Actual duties and taxes may vary. Verify with your supplier and customs broker before ordering.</div>`;
-  btn.parentElement.replaceChild(breakdown, btn);
-}
 
 /* ── SCOPE CHECK ── */
 function isRelevantQuery(query){
