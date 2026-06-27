@@ -110,17 +110,18 @@ partmatch-ai/
 
 ## Test Suite
 
-Run all 18 tests at **[partmatch-ai.vercel.app/test.html](https://partmatch-ai.vercel.app/test.html)**
+Run all 36 tests at **[partmatch-ai.vercel.app/test.html](https://partmatch-ai.vercel.app/test.html)**
 
 | Category | Tests |
 |----------|-------|
-| API Connectivity | Serper, ExchangeRate, eBay OAuth, eBay Search, GitHub tax JSON |
-| Search Accuracy | 5 industrial query types |
+| API Connectivity | Serper, ExchangeRate, eBay OAuth, eBay Search, GitHub tax JSON, ebay-notify endpoint |
+| Search Accuracy | 7 industrial query types incl. OEM part numbers + food-processing pump |
 | Currency Math | USD↔INR, CNY, GBP, EUR; all currencies present |
-| Landed Cost | CN→US, IN→US, same-country, savings calc, INR→USD |
-| Edge Cases | Invalid key, special chars, long query, India market, CORS |
+| Landed Cost | CN→US (+20% China surcharge), IN→US, same-country, savings calc, INR→USD |
+| Scope Filter | 4 allowed (pillow block, food pump, machine bedding, dispenser valve) + 4 blocked |
+| Edge Cases | Invalid key, special chars, India market, app live, test.html live |
 
-**Last run: 18/18 PASS (100%)**
+**Last run: 36/36 PASS (100%)**
 
 ---
 
