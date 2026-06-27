@@ -1381,7 +1381,7 @@ function buildTop10Lists(allItems, query){
     return items.slice(0,max).map((item,idx)=>{
       const rank=idx+1;
       const rankClass=rank<=3?` rank-${rank}`:'';
-      return `<div class="sidebar-item">
+      return `<a href="${esc(item.link||'#')}" target="_blank" rel="noopener noreferrer" class="sidebar-item" style="text-decoration:none;color:inherit">
         <div class="sidebar-rank${rankClass}">${rank}</div>
         <div class="sidebar-info">
           <div class="sidebar-product-title">${esc((item.title||'').substring(0,60))}</div>
@@ -1389,7 +1389,7 @@ function buildTop10Lists(allItems, query){
           <div class="sidebar-price">$${fmtNum(item._usd,2)} USD</div>
         </div>
         <span class="sidebar-flag">${item.marketFlag||'🌍'}</span>
-      </div>`;
+      </a>`;
     }).join('');
   }
 
@@ -1427,8 +1427,12 @@ const CUSTOMS_FEE = 35;
 /* ── SCOPE CHECK ── */
 function isRelevantQuery(query){
   const q = query.toLowerCase();
-  const blocked = ['bounty','chocolate','food','drink','movie','song','music','celebrity','fashion','clothes','shoes','makeup','phone case','toy','game console','bedding','pillow','lipstick','perfume','shampoo','snack'];
-  return !blocked.some(b=>q.includes(b));
+  // 'pillow' removed — pillow block bearing is industrial
+  // 'bedding' removed — machine bedding compound is industrial
+  // 'food'/'drink' removed — food processing equipment is industrial
+  // 'clothes'/'fashion' kept but word-boundary matched to avoid false positives
+  const blocked = ['chocolate','movie','song','celebrity','shoes','makeup','lipstick','perfume','shampoo','snack','game console','phone case'];
+  return !blocked.some(b => new RegExp('\\b'+b.replace(/[-\s]+/g,'[\\s-]+')+'\\b').test(q));
 }
 function showScopeWarning(query){
   switchView('view-results');
@@ -1448,8 +1452,9 @@ function showScopeWarning(query){
 
 /* ── SEARCH TRIGGER ── */
 function doSearch(){
-  const q = (el('landing-q')||{}).value?.trim() ||
-            (el('results-q')||{}).value?.trim() ||
+  const q = (el('results-q')||{}).value?.trim() ||
+            (el('hdr-q')||{}).value?.trim() ||
+            (el('landing-q')||{}).value?.trim() ||
             currentQuery;
   if(!q){ toast('Please enter a search term.','err'); return; }
   if(!isRelevantQuery(q)){ showScopeWarning(q); return; }
