@@ -358,6 +358,43 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
 .settings-desc{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5}
 .settings-info{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:12px;font-size:12px;color:#166534;line-height:1.6}
 
+/* ── OEM BANNER ── */
+.oem-banner{background:linear-gradient(135deg,#FEF3C7,#FFFBEB);border:1px solid #F5A623;border-radius:8px;padding:10px 16px;margin-top:8px;display:none}
+.oem-banner-content{display:flex;align-items:center;gap:12px}
+.oem-logo{font-size:1.5rem;flex-shrink:0}
+.oem-banner-text{display:flex;flex-direction:column;gap:2px;flex:1}
+.oem-banner-text strong{font-size:0.88rem;color:#92400E}
+.oem-banner-text span{font-size:0.75rem;color:#B45309}
+.oem-price-hint{margin-left:auto;background:#FEF3C7;border:1px solid #F5A623;padding:4px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;color:#92400E;white-space:nowrap;flex-shrink:0}
+
+/* ── SAVINGS & AFTERMARKET ── */
+.savings-banner{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#DCFCE7,#F0FDF4);border:1px solid #86EFAC;border-radius:8px;padding:12px 16px;margin-top:10px;flex-wrap:wrap;gap:10px}
+.savings-oem{font-size:0.78rem;color:var(--muted);margin-bottom:4px}
+.savings-best{font-size:0.85rem;color:var(--navy)}
+.savings-price{color:var(--teal);font-size:1rem}
+.savings-right{text-align:center;background:var(--teal);color:#fff;border-radius:8px;padding:8px 16px}
+.savings-amount{font-size:0.65rem;letter-spacing:1px;opacity:0.8}
+.savings-number{font-size:1.5rem;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.savings-pct{font-size:0.72rem;opacity:0.9}
+.item-savings{font-size:0.75rem;color:var(--green);font-weight:500;background:#DCFCE7;border-radius:4px;padding:3px 8px}
+.card-cheapest{border:2px solid var(--teal) !important}
+.cheapest-badge{background:var(--teal);color:#fff;text-align:center;padding:4px;font-size:0.72rem;font-weight:600;letter-spacing:0.5px}
+.landed-cost-btn{width:100%;padding:7px;background:transparent;border:1px solid var(--border);border-radius:6px;font-size:0.78rem;color:var(--muted);cursor:pointer;margin-bottom:6px;transition:all 0.2s}
+.landed-cost-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ── LANDED COST BREAKDOWN ── */
+.landed-breakdown{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px;font-size:0.78rem}
+.landed-title{font-weight:600;color:var(--navy);margin-bottom:8px;font-size:0.82rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.landed-dest{font-size:0.72rem;color:var(--muted);font-weight:400}
+.landed-rows{display:flex;flex-direction:column;gap:4px}
+.landed-row{display:flex;justify-content:space-between;color:#374151;padding:3px 0;border-bottom:1px solid #F1F5F9}
+.landed-total{font-weight:700;color:var(--navy);font-size:0.88rem;border-bottom:none;border-top:2px solid var(--navy);padding-top:6px;margin-top:2px}
+.landed-disclaimer{font-size:0.68rem;color:#9CA3AF;margin-top:8px;line-height:1.5}
+
+/* ── SORT BAR ── */
+.sort-bar{display:none;align-items:center;gap:8px;margin-bottom:10px;font-size:0.8rem;color:var(--muted)}
+.sort-bar span{font-size:0.78rem}
+
 /* ── MARKET TAGS & DELIVERY ── */
 .product-market-tag{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg);border-bottom:1px solid var(--border);font-size:0.75rem}
 .market-flag{font-size:1rem}
@@ -434,14 +471,17 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
         onkeydown="if(event.key==='Enter')doSearch()">
       <button class="landing-search-btn" onclick="doSearch()">Search →</button>
     </div>
+    <div id="oem-detection-banner" class="oem-banner"></div>
     <div class="quick-searches">
-      <span class="qs-label">Try:</span>
+      <span class="qs-label">Popular:</span>
+      <button class="qs-pill" onclick="quickSearch('Atlas Copco 57788856')">Atlas Copco 57788856</button>
+      <button class="qs-pill" onclick="quickSearch('Donaldson P553000')">Donaldson P553000</button>
+      <button class="qs-pill" onclick="quickSearch('JCB 332/C4803 seal kit')">JCB 332/C4803</button>
+      <button class="qs-pill" onclick="quickSearch('Parker hydraulic seal kit')">Parker seal kit</button>
+      <button class="qs-pill" onclick="quickSearch('SKF 6205 bearing')">SKF 6205 bearing</button>
+      <button class="qs-pill" onclick="quickSearch('Caterpillar hydraulic filter')">CAT hydraulic filter</button>
       <button class="qs-pill" onclick="quickSearch('hydraulic piston seal 80mm NBR')">Hydraulic seal 80mm</button>
-      <button class="qs-pill" onclick="quickSearch('M8 hex bolt grade 8.8 stainless steel')">M8 bolt grade 8.8</button>
-      <button class="qs-pill" onclick="quickSearch('6205 deep groove ball bearing')">6205 bearing</button>
-      <button class="qs-pill" onclick="quickSearch('Donaldson hydraulic filter P553000')">Donaldson filter</button>
-      <button class="qs-pill" onclick="quickSearch('JCB excavator brake pads')">JCB brake pads</button>
-      <button class="qs-pill" onclick="quickSearch('LAPP flexible cable 3G2.5')">LAPP cable</button>
+      <button class="qs-pill" onclick="quickSearch('M8 hex bolt grade 8.8 stainless')">M8 bolt grade 8.8</button>
     </div>
   </div>
 
@@ -479,6 +519,7 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
     </div>
 
     <div id="results-count"></div>
+    <div class="sort-bar" id="sort-bar"><span>Sorted: lowest price first</span></div>
     <div class="market-filters" id="market-filters" style="display:none">
       <button class="mf-btn active" onclick="filterMarket('all',this)">🌍 All</button>
       <button class="mf-btn" onclick="filterMarket('USA',this)">🇺🇸 USA</button>
@@ -923,6 +964,246 @@ function showError(msg){
   </div>`;
 }
 
+/* ── OEM BRAND DETECTION ── */
+const OEM_BRANDS = {
+  'Atlas Copco':{patterns:[/\b\d{8}\b/,/\b[A-Z]{2}\d{6}\b/,/\batlas\s*copco\b/i,/\bepiroc\b/i],category:'mining_drilling',avgPrice:800,logo:'⛏️'},
+  'Sandvik':{patterns:[/\bsandvik\b/i,/\b[A-Z]\d{2}[A-Z]\d{4}\b/],category:'mining_drilling',avgPrice:600,logo:'⛏️'},
+  'JCB':{patterns:[/\bjcb\b/i,/\b\d{3}\/\d{5}\b/,/\b\d{3}\/\d{4}\b/],category:'construction',avgPrice:400,logo:'🏗️'},
+  'Caterpillar':{patterns:[/\bcat\b|\bcaterpillar\b/i,/\b\d{7}-\d{2}\b/,/\b\d{3}-\d{4}\b/],category:'construction',avgPrice:500,logo:'🏗️'},
+  'Komatsu':{patterns:[/\bkomatsu\b/i,/\b\d{2}[A-Z]-\d{2}-\d{5}\b/],category:'construction',avgPrice:450,logo:'🏗️'},
+  'Parker':{patterns:[/\bparker\b/i,/\b\d{2}[A-Z]\d{3}[A-Z]?\b/],category:'hydraulic',avgPrice:200,logo:'⚙️'},
+  'Bosch Rexroth':{patterns:[/\brexroth\b/i,/\bbosch\b/i,/\bR\d{10}\b/],category:'hydraulic',avgPrice:350,logo:'⚙️'},
+  'SKF':{patterns:[/\bskf\b/i,/\b[0-9]{4}[A-Z]{1,3}\b/],category:'bearings',avgPrice:150,logo:'🔩'},
+  'Timken':{patterns:[/\btimken\b/i],category:'bearings',avgPrice:180,logo:'🔩'},
+  'NSK':{patterns:[/\bnsk\b/i],category:'bearings',avgPrice:120,logo:'🔩'},
+  'Donaldson':{patterns:[/\bdonaldson\b/i,/\bP\d{6}\b/],category:'filters',avgPrice:80,logo:'🔧'},
+  'Fleetguard':{patterns:[/\bfleetguard\b/i],category:'filters',avgPrice:60,logo:'🔧'},
+  'Baldwin':{patterns:[/\bbaldwin\b/i],category:'filters',avgPrice:50,logo:'🔧'},
+  'LAPP':{patterns:[/\blapp\b/i],category:'cables',avgPrice:100,logo:'🔌'},
+  'SMC':{patterns:[/\bsmc\b/i],category:'pneumatic',avgPrice:120,logo:'💨'},
+  'Festo':{patterns:[/\bfesto\b/i],category:'pneumatic',avgPrice:150,logo:'💨'},
+  'Norgren':{patterns:[/\bnorgren\b/i],category:'pneumatic',avgPrice:100,logo:'💨'},
+  'Volvo':{patterns:[/\bvolvo\b/i,/\b[A-Z]{2}\d{7}\b/],category:'construction',avgPrice:400,logo:'🏗️'},
+  'Hitachi':{patterns:[/\bhitachi\b/i],category:'construction',avgPrice:350,logo:'🏗️'},
+  'Liebherr':{patterns:[/\bliebherr\b/i],category:'construction',avgPrice:600,logo:'🏗️'},
+  'Cummins':{patterns:[/\bcummins\b/i],category:'engines',avgPrice:300,logo:'⚙️'},
+  'Perkins':{patterns:[/\bperkins\b/i],category:'engines',avgPrice:280,logo:'⚙️'},
+  'Eaton':{patterns:[/\beaton\b/i],category:'hydraulic',avgPrice:250,logo:'⚙️'},
+  'Danfoss':{patterns:[/\bdanfoss\b/i],category:'hydraulic',avgPrice:300,logo:'⚙️'},
+  'Trelleborg':{patterns:[/\btrelleborg\b/i],category:'seals',avgPrice:200,logo:'🔩'},
+  'Hallite':{patterns:[/\bhallite\b/i],category:'seals',avgPrice:150,logo:'🔩'},
+  'Freudenberg':{patterns:[/\bfreudenberg\b/i],category:'seals',avgPrice:180,logo:'🔩'},
+  'Kaeser':{patterns:[/\bkaeser\b/i],category:'compressors',avgPrice:400,logo:'⚙️'},
+  'Ingersoll Rand':{patterns:[/\bingersoll\b/i],category:'compressors',avgPrice:350,logo:'⚙️'}
+};
+const GENERIC_PART_PATTERN = /\b([A-Z]{1,4}[-\/]?\d{4,10}|\d{4,10}[-\/]?[A-Z]{1,4}|\d{8,12})\b/;
+
+function extractPartNumber(query){
+  const m = query.match(/\b([A-Z0-9]{4,}[-\/]?[A-Z0-9]*)\b/i);
+  return m ? m[1] : query.trim();
+}
+function detectPartNumber(query){
+  const q = query.trim();
+  for(const [brand, data] of Object.entries(OEM_BRANDS)){
+    for(const pattern of data.patterns){
+      if(pattern.test(q)) return { isPartNumber:true, brand, category:data.category, oemAvgPrice:data.avgPrice, logo:data.logo, partNumber:extractPartNumber(q) };
+    }
+  }
+  if(GENERIC_PART_PATTERN.test(q)) return { isPartNumber:true, brand:'Unknown OEM', category:'general', oemAvgPrice:null, logo:'🔩', partNumber:extractPartNumber(q) };
+  return { isPartNumber:false };
+}
+function checkForPartNumber(query){
+  const banner = el('oem-detection-banner'); if(!banner) return;
+  const d = detectPartNumber(query);
+  if(d.isPartNumber){
+    banner.innerHTML = `<div class="oem-banner-content">
+      <span class="oem-logo">${d.logo}</span>
+      <div class="oem-banner-text">
+        <strong>OEM Part Detected: ${esc(d.brand)}</strong>
+        <span>We'll search for aftermarket alternatives at a fraction of OEM price</span>
+      </div>
+      ${d.oemAvgPrice ? `<div class="oem-price-hint">OEM avg: ~$${d.oemAvgPrice}</div>` : ''}
+    </div>`;
+    banner.style.display='block';
+  } else { banner.style.display='none'; }
+}
+
+/* ── AFTERMARKET SEARCH ── */
+async function searchAftermarket(query, detection){
+  showLoading();
+  const pn = detection.partNumber || query;
+  const brand = detection.brand !== 'Unknown OEM' ? detection.brand : '';
+  const searchQueries = [
+    `"${pn}" aftermarket replacement`,
+    `${brand} ${pn} compatible alternative`.trim()
+  ];
+  const markets = [
+    {gl:'us',hl:'en',name:'USA',flag:'🇺🇸'},
+    {gl:'in',hl:'en',name:'India',flag:'🇮🇳'},
+    {gl:'cn',hl:'zh-cn',name:'China',flag:'🇨🇳'},
+    {gl:'gb',hl:'en',name:'UK',flag:'🇬🇧'},
+    {gl:'de',hl:'de',name:'Germany',flag:'🇩🇪'},
+    {gl:'ae',hl:'en',name:'UAE',flag:'🇦🇪'}
+  ];
+  try{
+    const promises = [];
+    for(const m of markets){
+      for(const sq of searchQueries){
+        promises.push(searchOneMarket(sq, m.gl, m.hl, m.name, m.flag));
+      }
+    }
+    const all = await Promise.all(promises);
+    const seen = new Set();
+    const merged = [];
+    all.flat().forEach(item=>{ if(item.link && !seen.has(item.link)){ seen.add(item.link); merged.push(item); } });
+    if(!merged.length){ showNoResults(query); return; }
+    merged.sort((a,b)=>{ const pa=parsePrice(a.price),pb=parsePrice(b.price); if(!pa&&!pb)return 0; if(!pa)return 1; if(!pb)return -1; return pa-pb; });
+    renderAftermarketResults(merged, query, detection);
+  } catch(e){ showError('Search failed. Please try again.'); }
+}
+
+/* ── OEM vs AFTERMARKET RENDER ── */
+const MARKET_CURRENCY = {
+  'USA':{symbol:'$',code:'USD'},'India':{symbol:'₹',code:'INR'},'China':{symbol:'¥',code:'CNY'},
+  'UK':{symbol:'£',code:'GBP'},'Germany':{symbol:'€',code:'EUR'},'UAE':{symbol:'AED',code:'AED'},
+  'Australia':{symbol:'A$',code:'AUD'},'Japan':{symbol:'¥',code:'JPY'}
+};
+function formatPriceWithUSD(price){ return esc(price||'Get Quote'); }
+
+function renderAftermarketResults(items, query, detection){
+  allSearchResults = items;
+  const mf = el('market-filters'); if(mf) mf.style.display='flex';
+  const sb = el('sort-bar'); if(sb) sb.style.display='flex';
+  document.querySelectorAll('.mf-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+
+  const prices = items.map(i=>parsePrice(i.price)).filter(Boolean);
+  const cheapest = prices.length ? Math.min(...prices) : null;
+  const oemPrice = detection.oemAvgPrice;
+
+  let savingsSummary = '';
+  if(cheapest && oemPrice){
+    const saving = oemPrice - cheapest;
+    const pct = Math.max(0, Math.round(saving/oemPrice*100));
+    if(saving > 0) savingsSummary = `<div class="savings-banner">
+      <div class="savings-left">
+        <div class="savings-oem">OEM Reference Price: <strong>~$${oemPrice}</strong></div>
+        <div class="savings-best">Best Aftermarket Found: <strong class="savings-price">$${cheapest.toFixed(2)}</strong></div>
+      </div>
+      <div class="savings-right">
+        <div class="savings-amount">SAVE UP TO</div>
+        <div class="savings-number">$${saving.toFixed(0)}</div>
+        <div class="savings-pct">${pct}% off OEM price</div>
+      </div>
+    </div>`;
+  }
+
+  const countEl = el('results-count');
+  if(countEl) countEl.innerHTML = `<strong>${items.length} aftermarket alternatives</strong> for "${esc(detection.brand)} ${esc(detection.partNumber)}"${savingsSummary}`;
+
+  el('results-container').innerHTML = items.map((item,idx)=>{
+    const delivery = item.deliveryDays || {label:'Check seller',color:'#6B7A99'};
+    const itemPrice = parsePrice(item.price);
+    const isCheapest = idx===0 && itemPrice && prices.length>1;
+    let savingsTag = '';
+    if(itemPrice && oemPrice && (oemPrice-itemPrice)>0){
+      const saved=oemPrice-itemPrice, pct=Math.round(saved/oemPrice*100);
+      savingsTag=`<div class="item-savings">💰 Save $${saved.toFixed(0)} vs OEM (${pct}% off)</div>`;
+    }
+    const safeLink=esc(item.link||'#'), safeImg=esc(item.imageUrl||''), safeTitle=esc(item.title||'');
+    const safeSource=esc(item.source||''), shortSource=(item.source||'').replace(/'/g,"\\'").substring(0,40);
+    const destFlag=userLocation.flag, destCountry=esc(userLocation.city||userLocation.country);
+    const stars=item.rating?('★'.repeat(Math.round(item.rating))+'☆'.repeat(5-Math.round(item.rating))):'';
+    return `<div class="product-card${isCheapest?' card-cheapest':''}">
+      ${isCheapest?'<div class="cheapest-badge">🏆 LOWEST PRICE</div>':''}
+      <div class="product-market-tag">
+        <span class="market-flag">${item.marketFlag||'🌍'}</span>
+        <span class="market-name">${esc(item.market||'')}</span>
+        <span class="delivery-badge" style="color:${delivery.color};border-color:${delivery.color}">📦 ${delivery.label}</span>
+      </div>
+      <div class="product-image-wrap">
+        ${safeImg?`<img src="${safeImg}" alt="${safeTitle}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=product-image-placeholder>🔩</div>'">`:'<div class="product-image-placeholder">🔩</div>'}
+      </div>
+      <div class="product-info">
+        <div class="product-title">${safeTitle}</div>
+        <div class="product-price-row"><span class="product-price">${formatPriceWithUSD(item.price)}</span></div>
+        ${savingsTag}
+        ${item.source?`<div class="product-seller">🏪 ${safeSource}</div>`:''}
+        ${stars?`<div class="product-rating">${stars} <span class="rating-count">(${item.ratingCount||0})</span></div>`:''}
+        ${item.delivery?`<div class="product-delivery-info">🚚 ${esc(item.delivery)}</div>`:''}
+        <div class="delivery-estimate" style="color:${delivery.color}">⏱ ${delivery.label} · ${esc(item.market||'')} → ${destFlag} ${destCountry}</div>
+        <button class="landed-cost-btn" onclick="showLandedCost('${(item.price||'').replace(/'/g,"\\'")}','${item.marketCode||'us'}','${esc(item.market||'')}','${item.marketFlag||''}','${detection.category||'general'}',this)">📊 Calculate Total Landed Cost</button>
+        <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="product-btn" onclick="trackClick('${shortSource}','aftermarket')">View Product →</a>
+      </div>
+    </div>`;
+  }).join('');
+
+  const qs=el('quote-section'); if(qs){qs.style.display='block'; const qp=el('q-part'); if(qp) qp.value=query;}
+}
+
+/* ── LANDED COST CALCULATOR ── */
+const IMPORT_DUTIES = {
+  'US':{hydraulic:0.039,bearings:0.045,fasteners:0.058,filters:0.035,electrical:0.027,cables:0.053,seals:0.039,mining_drilling:0.035,construction:0.040,engines:0.025,pneumatic:0.035,compressors:0.030,general:0.035},
+  'IN':{hydraulic:0.075,bearings:0.075,fasteners:0.100,filters:0.075,electrical:0.100,cables:0.100,seals:0.075,mining_drilling:0.075,construction:0.075,engines:0.075,pneumatic:0.075,compressors:0.075,general:0.075},
+  'GB':{hydraulic:0.035,bearings:0.040,fasteners:0.037,filters:0.030,electrical:0.032,cables:0.028,seals:0.035,general:0.035},
+  'DE':{hydraulic:0.017,bearings:0.025,fasteners:0.037,filters:0.017,electrical:0.027,cables:0.028,seals:0.020,general:0.025},
+  'AU':{general:0.05},'AE':{general:0.05},'SG':{general:0.0},'JP':{general:0.0},'CN':{general:0.0}
+};
+const LOCAL_TAX = {
+  'US':{rate:0.08,name:'Sales Tax'},'IN':{rate:0.18,name:'GST'},'GB':{rate:0.20,name:'VAT'},
+  'DE':{rate:0.19,name:'VAT'},'AU':{rate:0.10,name:'GST'},'AE':{rate:0.05,name:'VAT'},
+  'SG':{rate:0.09,name:'GST'},'JP':{rate:0.10,name:'Tax'},'CN':{rate:0.13,name:'VAT'},
+  'FR':{rate:0.20,name:'TVA'},'NL':{rate:0.21,name:'BTW'},'CA':{rate:0.13,name:'HST'},
+  'ZA':{rate:0.15,name:'VAT'},'BR':{rate:0.17,name:'ICMS'},'MX':{rate:0.16,name:'IVA'}
+};
+const SHIPPING_EST = {
+  CN:{US:35,IN:25,GB:30,DE:28,AU:40,AE:25},
+  IN:{US:40,GB:35,DE:35,AU:45,AE:20,CN:30},
+  US:{IN:45,GB:25,DE:28,AU:35,AE:30,CN:40},
+  GB:{IN:35,US:25,DE:15,AU:40,AE:25,CN:35},
+  DE:{IN:35,US:28,GB:15,AU:40,AE:25,CN:35},
+  AE:{IN:20,US:30,GB:25,DE:25,AU:35,CN:28}
+};
+const CUSTOMS_FEE = 35;
+
+function getShippingCost(sellerGl, buyerCode){
+  const s=sellerGl.toUpperCase(), b=buyerCode.toUpperCase();
+  if(s===b) return 8;
+  return (SHIPPING_EST[s]||{})[b] || 40;
+}
+
+function calculateLandedCost(priceStr, sellerGl, buyerCode, category){
+  const price = parsePrice(priceStr); if(!price) return null;
+  const buyer=buyerCode.toUpperCase(), seller=sellerGl.toUpperCase();
+  const cat = category||'general';
+  const dutyRates = IMPORT_DUTIES[buyer]||IMPORT_DUTIES['US'];
+  const dutyRate = dutyRates[cat]||dutyRates['general']||0.035;
+  const dutyAmount = seller===buyer ? 0 : price*dutyRate;
+  const shipping = getShippingCost(seller, buyer);
+  const customsFee = seller===buyer ? 0 : CUSTOMS_FEE;
+  const subtotal = price+dutyAmount+shipping+customsFee;
+  const taxData = LOCAL_TAX[buyer]||{rate:0.08,name:'Tax'};
+  const taxAmount = subtotal*taxData.rate;
+  return { productPrice:price, shipping, importDuty:dutyAmount, dutyRate, customsFee, localTax:taxAmount, localTaxName:taxData.name, localTaxRate:taxData.rate, total:subtotal+taxAmount, sameCountry:seller===buyer };
+}
+
+function showLandedCost(priceStr, sellerGl, sellerName, sellerFlag, category, btn){
+  const calc = calculateLandedCost(priceStr, sellerGl, userLocation.countryCode, category);
+  if(!calc){ btn.textContent='Price not available for calculation'; return; }
+  const breakdown = document.createElement('div');
+  breakdown.className='landed-breakdown';
+  breakdown.innerHTML=`<div class="landed-title">📊 Total Landed Cost Estimate <span class="landed-dest">${esc(sellerFlag)} ${esc(sellerName)} → ${userLocation.flag} ${esc(userLocation.country)}</span></div>
+    <div class="landed-rows">
+      <div class="landed-row"><span>Product price</span><span>$${calc.productPrice.toFixed(2)}</span></div>
+      <div class="landed-row"><span>Shipping (air, est.)</span><span>$${calc.shipping.toFixed(2)}</span></div>
+      ${!calc.sameCountry?`<div class="landed-row"><span>Import duty (${(calc.dutyRate*100).toFixed(1)}%)</span><span>$${calc.importDuty.toFixed(2)}</span></div>
+      <div class="landed-row"><span>Customs clearance</span><span>$${calc.customsFee.toFixed(2)}</span></div>`:''}
+      <div class="landed-row"><span>${esc(calc.localTaxName)} (${(calc.localTaxRate*100).toFixed(0)}%)</span><span>$${calc.localTax.toFixed(2)}</span></div>
+      <div class="landed-row landed-total"><span>TOTAL LANDED COST</span><span>$${calc.total.toFixed(2)}</span></div>
+    </div>
+    <div class="landed-disclaimer">⚠️ Estimated only. Actual duties and taxes may vary. Verify with your supplier and customs broker before ordering.</div>`;
+  btn.parentElement.replaceChild(breakdown, btn);
+}
+
 /* ── SCOPE CHECK ── */
 function isRelevantQuery(query){
   const q = query.toLowerCase();
@@ -956,7 +1237,9 @@ function doSearch(){
   ['landing-q','results-q','hdr-q'].forEach(id=>{ const i=el(id); if(i) i.value=q; });
   switchView('view-results');
   saveSearchHistory(q);
-  searchProducts(q);
+  const detection = detectPartNumber(q);
+  if(detection.isPartNumber){ searchAftermarket(q, detection); }
+  else { searchProducts(q); }
 }
 
 function handleSearch(){
@@ -1113,6 +1396,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const locEl = el('user-location');
     if(locEl){ locEl.textContent = loc.flag + ' ' + (loc.city || loc.country); locEl.style.display=''; }
   });
+
+  const lq = el('landing-q');
+  if(lq) lq.addEventListener('input', e => checkForPartNumber(e.target.value));
+  const rq = el('results-q');
+  if(rq) rq.addEventListener('input', e => checkForPartNumber(e.target.value));
 });
 </script>
 </body>
