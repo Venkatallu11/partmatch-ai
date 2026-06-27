@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PartMatch AI — Industrial Parts Search Engine</title>
-<meta name="description" content="Find any industrial part instantly. 37 global suppliers across 6 continents. Free forever.">
+<title>PartMatch AI — Real Products. Real Prices. Worldwide.</title>
+<meta name="description" content="Search real products with real prices from Google Shopping. Industrial parts, auto parts, hardware — anything. Free forever.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -28,7 +28,6 @@ a{cursor:pointer;text-decoration:none;color:var(--teal)}
 a:hover{text-decoration:underline}
 button{font-family:'Inter',sans-serif;cursor:pointer;border:none;outline:none}
 input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none}
-select option{color:var(--text)}
 
 /* ── HEADER ── */
 #app-header{
@@ -42,7 +41,7 @@ select option{color:var(--text)}
 }
 .logo{
   display:flex;align-items:center;gap:8px;
-  text-decoration:none;flex-shrink:0;
+  text-decoration:none;flex-shrink:0;cursor:pointer;
 }
 .logo-icon{font-size:20px}
 .logo-text{
@@ -53,7 +52,7 @@ select option{color:var(--text)}
 .logo-ai{color:var(--teal)}
 
 .hdr-search{
-  flex:1;max-width:480px;display:flex;
+  flex:1;max-width:500px;display:none;
   background:rgba(255,255,255,.1);
   border:1px solid rgba(255,255,255,.15);
   border-radius:8px;overflow:hidden;
@@ -62,7 +61,7 @@ select option{color:var(--text)}
 .hdr-search:focus-within{background:rgba(255,255,255,.18)}
 .hdr-search input{
   flex:1;background:transparent;border:none;
-  padding:0 14px;color:#fff;font-size:13px;height:36px;
+  padding:0 14px;color:#fff;font-size:13px;height:36px;width:100%;
 }
 .hdr-search input::placeholder{color:rgba(255,255,255,.45)}
 .hdr-search button{
@@ -73,617 +72,306 @@ select option{color:var(--text)}
 .hdr-search button:hover{background:var(--teal-dark)}
 
 .hdr-nav{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
-.hdr-greeting{
-  font-size:13px;color:rgba(255,255,255,.75);
-  padding-right:4px;white-space:nowrap;
-}
-.btn-ghost{
-  background:transparent;border:1px solid rgba(255,255,255,.22);
-  color:rgba(255,255,255,.85);padding:7px 14px;border-radius:7px;
-  font-size:13px;font-weight:500;transition:all var(--ease);
-}
+.hdr-greeting{font-size:13px;color:rgba(255,255,255,.75);padding-right:4px;white-space:nowrap}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);padding:6px 14px;border-radius:6px;font-size:13px;font-weight:500;transition:all var(--ease)}
 .btn-ghost:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4)}
-.btn-primary-sm{
-  background:var(--teal);color:var(--navy);
-  padding:7px 16px;border-radius:7px;font-size:13px;
-  font-weight:700;border:none;transition:background var(--ease);
-}
+.btn-primary-sm{background:var(--teal);color:var(--navy);padding:6px 16px;border-radius:6px;font-size:13px;font-weight:700;transition:background var(--ease)}
 .btn-primary-sm:hover{background:var(--teal-dark)}
+.settings-btn{background:transparent;border:none;color:rgba(255,255,255,.7);font-size:18px;padding:4px 8px;transition:color var(--ease);cursor:pointer}
+.settings-btn:hover{color:#fff}
 
 /* ── VIEWS ── */
-.view{padding-top:var(--hdr)}
+.view{padding-top:var(--hdr);min-height:100vh}
 
-/* ── HERO ── */
-.hero{
-  min-height:calc(100vh - var(--hdr));
-  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;padding:60px 20px;
-}
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),
-    linear-gradient(60deg,rgba(15,175,138,.05) 1px,transparent 1px),
-    linear-gradient(-60deg,rgba(15,175,138,.05) 1px,transparent 1px);
-  background-size:50px 50px,50px 50px,86px 50px,86px 50px;
-  pointer-events:none;
-}
-.hero::after{
-  content:'';position:absolute;
-  width:600px;height:600px;border-radius:50%;
-  background:radial-gradient(circle,rgba(15,175,138,.08) 0%,transparent 70%);
-  top:-100px;right:-100px;pointer-events:none;
-}
-.hero-inner{
-  position:relative;z-index:1;
-  max-width:720px;width:100%;text-align:center;
+/* ── LANDING ── */
+#view-landing{
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy-mid) 55%,#1a3a6b 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:80px 20px 60px;text-align:center;min-height:100vh;
 }
 .hero-badge{
   display:inline-flex;align-items:center;gap:6px;
-  background:rgba(15,175,138,.15);
-  border:1px solid rgba(15,175,138,.35);
-  color:var(--teal);border-radius:40px;
-  padding:6px 18px;font-size:13px;font-weight:600;
-  margin-bottom:28px;letter-spacing:.2px;
+  background:rgba(15,175,138,.15);border:1px solid rgba(15,175,138,.3);
+  color:var(--teal);padding:5px 14px;border-radius:20px;font-size:12px;
+  font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:24px;
 }
-.hero-h1{
-  font-size:clamp(36px,6vw,62px);font-weight:800;
-  color:#fff;letter-spacing:-1.5px;margin-bottom:6px;
+.hero-title{
+  font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;
+  letter-spacing:-.5px;margin-bottom:12px;line-height:1.1;
 }
-.hero-h2{
-  font-size:clamp(22px,4vw,38px);font-weight:700;
-  color:var(--teal);letter-spacing:-.5px;margin-bottom:20px;
-}
-.hero-p{
-  font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.65);
-  margin-bottom:36px;max-width:560px;margin-left:auto;margin-right:auto;
+.hero-title span{color:var(--teal)}
+.hero-sub{
+  font-size:clamp(1rem,2.5vw,1.2rem);color:rgba(255,255,255,.65);
+  max-width:520px;margin:0 auto 40px;
 }
 
-/* ── SEARCH BAR ── */
-.search-wrap{
-  position:relative;margin-bottom:16px;
-  background:#fff;border-radius:12px;
-  box-shadow:0 4px 24px rgba(0,0,0,.2);overflow:hidden;
-  display:flex;
+.landing-search-wrap{
+  width:100%;max-width:680px;margin:0 auto;
 }
-.search-input{
-  flex:1;height:56px;border:none;background:transparent;
-  padding:0 60px 0 20px;font-size:16px;color:var(--text);
+.landing-search-box{
+  display:flex;background:#fff;border-radius:12px;
+  overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.3);
+  border:2px solid transparent;transition:border-color var(--ease);
 }
-.search-input::placeholder{color:#aab}
-.search-btn{
-  position:absolute;right:0;top:0;height:56px;width:56px;
-  background:var(--teal);border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--navy);transition:background var(--ease);flex-shrink:0;
+.landing-search-box:focus-within{border-color:var(--teal)}
+#landing-q{
+  flex:1;border:none;padding:18px 20px;font-size:16px;
+  color:var(--text);background:transparent;
 }
-.search-btn:hover{background:var(--teal-dark)}
-.search-btn svg{width:20px;height:20px}
+#landing-q::placeholder{color:#9AA5BE}
+.landing-search-btn{
+  background:var(--teal);color:#fff;border:none;
+  padding:0 28px;font-size:15px;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;
+  transition:background var(--ease);white-space:nowrap;cursor:pointer;
+}
+.landing-search-btn:hover{background:var(--teal-dark)}
 
-/* ── CONTROLS ── */
-.controls-row{margin-bottom:14px}
-.cat-select{
-  width:100%;padding:12px 16px;border-radius:9px;
-  border:1.5px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.1);color:#fff;
-  font-size:14px;font-family:'Inter',sans-serif;
-  appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;
-  padding-right:36px;cursor:pointer;transition:border-color var(--ease);
+.quick-searches{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin-top:16px;justify-content:center;
 }
-.cat-select:focus{border-color:var(--teal)}
-.cat-select option,.cat-select optgroup{background:var(--navy);color:#fff}
+.qs-label{font-size:0.78rem;color:rgba(255,255,255,.5)}
+.qs-pill{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.8);padding:5px 13px;border-radius:20px;
+  font-size:0.78rem;cursor:pointer;transition:all 0.2s;
+}
+.qs-pill:hover{background:var(--teal);border-color:var(--teal);color:#fff}
 
-/* ── PILLS ── */
-.pill-group{
-  display:flex;flex-wrap:nowrap;gap:8px;
-  overflow-x:auto;padding-bottom:4px;margin-bottom:12px;
-  scrollbar-width:none;-ms-overflow-style:none;
+.hero-stats{
+  display:flex;gap:40px;margin-top:48px;
+  flex-wrap:wrap;justify-content:center;
 }
-.pill-group::-webkit-scrollbar{display:none}
-.pill{
-  flex-shrink:0;padding:8px 16px;border-radius:40px;
-  font-size:13px;font-weight:500;cursor:pointer;
-  border:1.5px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);
-  transition:all var(--ease);white-space:nowrap;
-}
-.pill:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4)}
-.pill.active{
-  background:var(--teal);border-color:var(--teal);
-  color:var(--navy);font-weight:700;
-}
-.pills-label{
-  font-size:12px;color:rgba(255,255,255,.45);
-  text-transform:uppercase;letter-spacing:.8px;
-  margin-bottom:8px;text-align:left;
-}
+.hero-stat{color:rgba(255,255,255,.7);font-size:13px;text-align:center}
+.hero-stat strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:#fff}
 
-/* ── SEARCH BUTTON ── */
-.btn-search-main{
-  width:100%;height:52px;background:var(--teal);
-  color:var(--navy);font-size:16px;font-weight:800;
-  border:none;border-radius:10px;cursor:pointer;
-  letter-spacing:.2px;transition:all var(--ease);
-  font-family:'Space Grotesk',sans-serif;margin-top:8px;
-  box-shadow:0 4px 16px rgba(15,175,138,.35);
-}
-.btn-search-main:hover{
-  background:var(--teal-dark);
-  box-shadow:0 6px 24px rgba(15,175,138,.45);
-  transform:translateY(-1px);
-}
+/* ── RESULTS ── */
+#view-results{background:var(--bg)}
+.results-layout{max-width:1280px;margin:0 auto;padding:24px 20px 60px}
 
-/* ── STATS BAR ── */
-.stats-bar{
-  background:var(--card);border-top:1px solid var(--border);
-  padding:20px;
+.results-search-bar{
+  display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;
 }
-.stats-inner{
-  max-width:640px;margin:0 auto;
-  display:flex;align-items:center;justify-content:center;
-  gap:0;flex-wrap:wrap;
+.results-input-wrap{
+  flex:1;min-width:240px;display:flex;
+  background:#fff;border:2px solid var(--border);border-radius:10px;
+  overflow:hidden;transition:border-color var(--ease);
 }
-.stat-item{
-  padding:8px 28px;font-size:14px;color:var(--muted);
-  text-align:center;
+.results-input-wrap:focus-within{border-color:var(--teal)}
+#results-q{
+  flex:1;border:none;padding:12px 16px;font-size:15px;color:var(--text);background:transparent;
 }
-.stat-item strong{color:var(--navy);font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:16px}
-.stat-div{width:1px;height:24px;background:var(--border)}
-
-/* ── AUTH FORMS ── */
-.auth-wrap{
-  min-height:calc(100vh - var(--hdr));
-  display:flex;align-items:center;justify-content:center;
-  padding:40px 20px;background:var(--bg);
-}
-.auth-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:16px;padding:40px;width:100%;max-width:420px;
-  box-shadow:var(--shadow-lg);
-}
-.auth-logo{
-  font-size:36px;text-align:center;margin-bottom:8px;
-}
-.auth-title{
-  font-size:24px;font-weight:800;color:var(--navy);
-  text-align:center;margin-bottom:6px;
-}
-.auth-sub{
-  font-size:13px;color:var(--muted);text-align:center;
-  margin-bottom:28px;
-}
-.form-group{margin-bottom:16px}
-.form-group label{
-  display:block;font-size:13px;font-weight:600;
-  color:var(--text);margin-bottom:6px;
-}
-.form-input{
-  width:100%;padding:11px 14px;border:1.5px solid var(--border);
-  border-radius:9px;font-size:14px;color:var(--text);
-  background:#fff;transition:border-color var(--ease);
-}
-.form-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,175,138,.12)}
-.form-input::placeholder{color:#bbc}
-.auth-err{
-  font-size:13px;color:var(--coral);margin-bottom:14px;
-  padding:10px 14px;background:#FEF2F2;border-radius:8px;
-  border:1px solid #FECACA;display:none;
-}
-.auth-err.show{display:block}
-.btn-auth{
-  width:100%;height:48px;background:var(--teal);color:var(--navy);
-  font-size:15px;font-weight:800;border:none;border-radius:9px;
-  cursor:pointer;font-family:'Space Grotesk',sans-serif;
-  transition:background var(--ease);margin-bottom:16px;
-}
-.btn-auth:hover{background:var(--teal-dark)}
-.auth-link{font-size:13px;color:var(--muted);text-align:center}
-.auth-link a{color:var(--teal);font-weight:600}
-
-/* ── RESULTS VIEW ── */
-.results-header{
-  position:sticky;top:var(--hdr);z-index:100;
-  background:var(--card);border-bottom:1px solid var(--border);
-  box-shadow:0 2px 8px rgba(0,0,0,.05);padding:12px 20px;
-}
-.results-hdr-inner{max-width:1280px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.results-search-wrap{display:flex;gap:0;flex:1;min-width:240px;border:1.5px solid var(--border);border-radius:9px;overflow:hidden}
-.results-q-input{flex:1;padding:9px 14px;border:none;font-size:14px;color:var(--text);background:#fff}
 .results-search-btn{
-  background:var(--teal);color:var(--navy);border:none;
-  padding:0 18px;font-size:13px;font-weight:700;cursor:pointer;
-  transition:background var(--ease);
+  background:var(--teal);color:#fff;border:none;padding:0 22px;
+  font-weight:700;font-size:14px;cursor:pointer;transition:background var(--ease);
 }
 .results-search-btn:hover{background:var(--teal-dark)}
-.results-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.res-filter-sel{
-  padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;
-  font-size:13px;color:var(--text);background:#fff;cursor:pointer;
-}
-.res-pills-mini{display:flex;gap:6px;flex-wrap:wrap}
-.res-pill{
-  padding:5px 12px;border-radius:30px;font-size:12px;font-weight:500;
-  border:1.5px solid var(--border);background:#fff;color:var(--muted);
-  cursor:pointer;transition:all var(--ease);
-}
-.res-pill.active{background:var(--teal);border-color:var(--teal);color:var(--navy);font-weight:700}
 
-.results-main{max-width:1280px;margin:0 auto;padding:24px 20px 60px}
+.cat-select{
+  padding:12px 14px;border:2px solid var(--border);border-radius:10px;
+  background:#fff;color:var(--text);font-size:14px;cursor:pointer;
+  transition:border-color var(--ease);
+}
+.cat-select:focus{border-color:var(--teal)}
 
-/* Understanding card */
-.understanding-card{
-  background:#fff;border:1px solid var(--border);
-  border-left:4px solid var(--teal);border-radius:var(--r);
-  padding:20px 24px;margin-bottom:20px;
-  box-shadow:var(--shadow);
-}
-.understanding-title{
-  font-size:14px;font-weight:700;color:var(--teal);
-  text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;
-}
-.understanding-grid{
-  display:flex;flex-wrap:wrap;gap:8px;
-}
-.u-chip{
-  background:var(--bg);border:1px solid var(--border);
-  border-radius:6px;padding:5px 12px;font-size:13px;
-}
-.u-chip strong{color:var(--navy);font-weight:600}
-.u-chip span{color:var(--muted)}
+#results-count{font-size:0.85rem;color:var(--muted);margin-bottom:16px;padding:0 2px}
 
-/* Loading */
-.results-loading{text-align:center;padding:60px 20px}
+#results-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:1rem;
+}
+
+/* ── PRODUCT CARDS ── */
+.product-card{
+  background:#fff;border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;
+  display:flex;flex-direction:column;
+}
+.product-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);transform:translateY(-2px)}
+.product-image-wrap{
+  width:100%;height:160px;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.product-image{width:100%;height:100%;object-fit:contain;padding:8px}
+.product-image-placeholder{font-size:3rem;color:#CBD5E1}
+.product-info{padding:1rem;display:flex;flex-direction:column;gap:6px;flex:1}
+.product-title{
+  font-size:0.85rem;font-weight:500;color:var(--navy);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.product-price{font-size:1.2rem;font-weight:700;color:var(--teal);font-family:'Space Grotesk',sans-serif}
+.product-seller{font-size:0.78rem;color:var(--muted)}
+.product-rating{font-size:0.75rem;color:var(--amber)}
+.rating-count{color:var(--muted);font-size:0.72rem}
+.product-delivery{font-size:0.75rem;color:var(--green)}
+.product-btn{
+  margin-top:auto;display:block;text-align:center;
+  background:var(--navy);color:#fff;padding:9px 16px;
+  border-radius:6px;text-decoration:none;font-size:0.82rem;
+  font-weight:500;transition:background 0.2s;margin-top:10px;
+}
+.product-btn:hover{background:var(--teal);text-decoration:none;color:#fff}
+
+/* ── STATES ── */
+.loading-state{
+  display:flex;flex-direction:column;align-items:center;
+  padding:4rem 2rem;gap:1rem;color:var(--muted);grid-column:1/-1;
+}
 .loading-spinner{
-  width:40px;height:40px;border:3px solid var(--border);
+  width:44px;height:44px;border:3px solid var(--border);
   border-top-color:var(--teal);border-radius:50%;
-  animation:spin .8s linear infinite;margin:0 auto 16px;
+  animation:spin 0.8s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:15px;color:var(--muted);margin-bottom:16px}
-.loading-bar-wrap{
-  max-width:300px;margin:0 auto;height:4px;
-  background:var(--border);border-radius:4px;overflow:hidden;
-}
-.loading-bar{
-  height:100%;width:0%;background:var(--teal);
-  border-radius:4px;transition:width 2s ease;
-}
+.loading-text{font-size:0.9rem}
+.no-results{text-align:center;padding:4rem 2rem;grid-column:1/-1;color:var(--muted)}
+.no-results-icon{font-size:3rem;margin-bottom:1rem}
+.no-results-title{font-weight:600;color:var(--navy);margin-bottom:8px;font-size:1.1rem}
+.no-results-text{font-size:0.9rem;line-height:1.8}
+.error-state{text-align:center;padding:2rem;color:var(--coral);grid-column:1/-1}
 
-/* Results sections */
-.section-hdr{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 18px;border-radius:10px;
-  margin:28px 0 16px;
+/* ── QUOTE SECTION ── */
+.quote-section{
+  background:#fff;border:1px solid var(--border);border-radius:var(--r);
+  padding:2rem;margin-top:2.5rem;
 }
-.section-hdr.fastest{background:linear-gradient(90deg,#1e3a5f,#0d2444)}
-.section-hdr.best-match{background:linear-gradient(90deg,#0a3020,#082a1a)}
-.section-hdr.best-price{background:linear-gradient(90deg,#3d2a00,#2d1f00)}
-.section-hdr-title{
-  font-family:'Space Grotesk',sans-serif;font-size:16px;
-  font-weight:700;color:#fff;
+.quote-section h3{font-size:1.1rem;margin-bottom:4px;color:var(--navy)}
+.quote-section p{font-size:0.85rem;color:var(--muted);margin-bottom:1.2rem}
+.quote-form{display:grid;gap:12px}
+.quote-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.quote-row{grid-template-columns:1fr}}
+.q-input{
+  width:100%;padding:11px 14px;border:1.5px solid var(--border);
+  border-radius:8px;font-size:14px;transition:border-color var(--ease);
 }
-.section-hdr-count{
-  background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);
-  border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;
-}
-.section-hdr-desc{font-size:12px;color:rgba(255,255,255,.55);margin-left:auto}
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:16px;margin-bottom:8px;
-}
-
-/* Quote banner */
-.quote-banner{
-  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);
-  border-radius:var(--r);padding:28px;margin-top:32px;
-}
-.quote-banner-inner{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:20px;flex-wrap:wrap;
-}
-.quote-banner-title{
-  font-family:'Space Grotesk',sans-serif;font-size:18px;
-  font-weight:700;color:#fff;margin-bottom:4px;
-}
-.quote-banner-sub{font-size:13px;color:rgba(255,255,255,.65)}
-.btn-quote-banner{
-  background:var(--teal);color:var(--navy);border:none;
-  padding:12px 24px;border-radius:9px;font-size:14px;
-  font-weight:800;cursor:pointer;white-space:nowrap;
+.q-input:focus{border-color:var(--teal)}
+.q-textarea{resize:vertical;min-height:90px}
+.quote-submit-btn{
+  background:var(--navy);color:#fff;padding:13px 28px;
+  border-radius:8px;font-size:15px;font-weight:600;
+  border:none;cursor:pointer;transition:background var(--ease);
   font-family:'Space Grotesk',sans-serif;
-  transition:all var(--ease);
 }
-.btn-quote-banner:hover{background:var(--teal-dark);transform:translateY(-1px)}
+.quote-submit-btn:hover{background:var(--teal)}
+#q-confirm{display:none;padding:14px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;font-size:14px;color:var(--green);margin-top:8px}
+
+/* ── AUTH VIEWS ── */
+#view-signup,#view-login{
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy-mid) 100%);
+  display:flex;align-items:center;justify-content:center;padding:40px 20px;
+}
+.auth-box{
+  background:#fff;border-radius:var(--r);padding:2.5rem;
+  width:100%;max-width:420px;box-shadow:var(--shadow-lg);
+}
+.auth-title{font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.auth-sub{font-size:0.85rem;color:var(--muted);margin-bottom:1.8rem}
+.auth-form{display:flex;flex-direction:column;gap:14px}
+.auth-label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.auth-input{
+  width:100%;padding:12px 14px;border:1.5px solid var(--border);
+  border-radius:8px;font-size:15px;transition:border-color var(--ease);
+}
+.auth-input:focus{border-color:var(--teal)}
+.auth-err{font-size:13px;color:var(--coral);min-height:18px;margin-top:-6px}
+.btn-auth{
+  background:var(--teal);color:#fff;padding:13px;border-radius:8px;
+  font-size:15px;font-weight:700;border:none;cursor:pointer;
+  transition:background var(--ease);font-family:'Space Grotesk',sans-serif;
+  text-align:center;
+}
+.btn-auth:hover{background:var(--teal-dark)}
+.auth-link{font-size:13px;color:var(--muted);text-align:center;margin-top:4px}
+.auth-link a{color:var(--teal);font-weight:600}
 
 /* ── DASHBOARD ── */
-.dash-wrap{max-width:960px;margin:0 auto;padding:40px 20px 60px}
-.dash-header{margin-bottom:28px}
-.dash-title{font-size:28px;font-weight:800;color:var(--navy)}
-.dash-sub{font-size:14px;color:var(--muted);margin-top:4px}
-.dash-search-wrap{
-  display:flex;gap:10px;margin-bottom:32px;
+#view-dashboard{background:var(--bg)}
+.dash-layout{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+.dash-header{margin-bottom:24px}
+.dash-title{font-size:1.6rem;font-weight:700;color:var(--navy)}
+.dash-sub{font-size:0.9rem;color:var(--muted);margin-top:4px}
+.dash-section{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem}
+.dash-section-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:1rem}
+.history-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border);gap:12px;
 }
-.dash-search-input{
-  flex:1;padding:12px 16px;border:1.5px solid var(--border);
-  border-radius:9px;font-size:14px;color:var(--text);
-  background:#fff;transition:border-color var(--ease);
-}
-.dash-search-input:focus{border-color:var(--teal)}
-.btn-teal{
-  background:var(--teal);color:var(--navy);border:none;
-  padding:12px 20px;border-radius:9px;font-size:14px;
-  font-weight:700;cursor:pointer;white-space:nowrap;
+.history-item:last-child{border-bottom:none}
+.history-query{font-size:14px;color:var(--text);flex:1}
+.history-time{font-size:12px;color:var(--muted);white-space:nowrap}
+.history-btn{
+  background:var(--teal);color:#fff;padding:5px 12px;border-radius:6px;
+  font-size:12px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;
   transition:background var(--ease);
 }
-.btn-teal:hover{background:var(--teal-dark)}
-.dash-tabs{
-  display:flex;gap:0;border-bottom:2px solid var(--border);
-  margin-bottom:24px;
+.history-btn:hover{background:var(--teal-dark)}
+.dash-empty{color:var(--muted);font-size:14px;text-align:center;padding:1rem 0}
+.clicks-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;
 }
-.dash-tab{
-  padding:10px 20px;font-size:14px;font-weight:600;
-  color:var(--muted);background:transparent;border:none;
-  border-bottom:2px solid transparent;margin-bottom:-2px;
-  cursor:pointer;transition:all var(--ease);
-}
-.dash-tab:hover{color:var(--navy)}
-.dash-tab.active{color:var(--teal);border-bottom-color:var(--teal)}
-.dash-panel{}
-.dash-panel-content{}
-.dash-empty{
-  text-align:center;padding:48px 20px;color:var(--muted);
-  font-size:14px;border:1.5px dashed var(--border);
-  border-radius:var(--r);
-}
-.dash-empty a{color:var(--teal);font-weight:600}
-.dash-search-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:10px;padding:14px 18px;margin-bottom:10px;
-  display:flex;align-items:center;gap:14px;cursor:pointer;
-  transition:all var(--ease);box-shadow:var(--shadow);
-}
-.dash-search-card:hover{border-color:var(--teal);transform:translateY(-1px)}
-.dash-search-icon{
-  width:36px;height:36px;background:var(--bg);
-  border-radius:8px;display:flex;align-items:center;
-  justify-content:center;font-size:16px;flex-shrink:0;
-}
-.dash-search-q{font-size:14px;font-weight:600;color:var(--text)}
-.dash-search-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.clicks-item:last-child{border-bottom:none}
+.clicks-seller{font-weight:600;color:var(--navy)}
+.clicks-product{color:var(--muted);font-size:12px;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clicks-time{font-size:11px;color:var(--muted);white-space:nowrap}
+.btn-logout{background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;transition:all var(--ease)}
+.btn-logout:hover{border-color:var(--coral);color:var(--coral)}
 
 /* ── TOAST ── */
-.toast-container{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  z-index:9999;display:flex;flex-direction:column;gap:8px;
-  pointer-events:none;
+#toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--navy);color:#fff;padding:11px 22px;border-radius:8px;
+  font-size:14px;font-weight:500;z-index:9999;opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
 }
-.toast{
-  background:var(--navy);color:#fff;padding:12px 20px;
-  border-radius:9px;font-size:13px;font-weight:500;
-  box-shadow:0 4px 20px rgba(0,0,0,.3);
-  animation:toastIn .2s ease;min-width:200px;text-align:center;
-}
-.toast.ok{background:var(--green)}
-.toast.err{background:var(--coral)}
-@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--coral)}
+#toast.ok{background:var(--green)}
 
-/* ── BACK TO TOP ── */
-.back-top{
-  position:fixed;bottom:24px;right:24px;z-index:500;
-  width:44px;height:44px;background:var(--navy);color:var(--teal);
-  border:2px solid var(--teal);border-radius:50%;font-size:18px;
-  font-weight:700;cursor:pointer;display:none;
-  align-items:center;justify-content:center;
-  transition:all var(--ease);box-shadow:var(--shadow);
+/* ── SETTINGS PANEL ── */
+.settings-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1100;
+  opacity:0;pointer-events:none;transition:opacity .25s;
 }
-.back-top:hover{background:var(--teal);color:var(--navy);transform:translateY(-2px)}
-.back-top.show{display:flex}
-
-/* ── MISC BUTTONS ── */
-.btn-navy{
-  background:var(--navy);color:#fff;border:none;
-  padding:10px 20px;border-radius:9px;font-size:14px;
-  font-weight:600;cursor:pointer;transition:background var(--ease);
+.settings-overlay.open{opacity:1;pointer-events:all}
+.settings-panel{
+  position:fixed;top:0;right:0;bottom:0;width:340px;max-width:100vw;
+  background:#fff;z-index:1101;transform:translateX(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;display:flex;flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,.18);
 }
-.btn-navy:hover{background:var(--navy-mid)}
-.no-results{
-  text-align:center;padding:60px 20px;color:var(--muted);
+.settings-panel.open{transform:translateX(0)}
+.settings-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 20px 16px;border-bottom:1px solid var(--border);
+  background:var(--navy);color:#fff;
 }
-.no-results-icon{font-size:48px;margin-bottom:16px}
-.no-results-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px}
+.settings-header h3{font-size:15px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.settings-close{background:transparent;border:none;color:rgba(255,255,255,.7);font-size:22px;cursor:pointer;line-height:1;padding:2px 6px}
+.settings-close:hover{color:#fff}
+.settings-body{padding:20px;display:flex;flex-direction:column;gap:20px;flex:1}
+.settings-section-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.settings-desc{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.settings-info{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:12px;font-size:12px;color:#166534;line-height:1.6}
 
 /* ── RESPONSIVE ── */
-@media(max-width:768px){
-  .hdr-search{display:none}
-  .hero{padding:40px 16px}
-  .hero-h1{font-size:32px}
-  .hero-h2{font-size:22px}
-  .stat-item{padding:8px 14px}
-  .stat-div{display:none}
-  .auth-card{padding:28px 20px}
-  .results-hdr-inner{flex-direction:column}
-  .results-search-wrap{width:100%}
-  .cards-grid{grid-template-columns:1fr}
-  .quote-banner-inner{flex-direction:column;text-align:center}
-  .dash-wrap{padding:24px 16px 60px}
-  .dash-tabs{overflow-x:auto}
+@media(max-width:640px){
+  .hero-stats{gap:20px}
+  .results-search-bar{flex-direction:column}
+  .results-input-wrap{min-width:0}
+  .settings-panel{width:100vw}
+  #results-container{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .product-image-wrap{height:120px}
 }
-@media(max-width:480px){
-  .hdr-inner{padding:0 12px;gap:8px}
-  .logo-text{font-size:15px}
-  .btn-ghost{padding:6px 10px;font-size:12px}
-  .btn-primary-sm{padding:6px 12px;font-size:12px}
-}
-
-/* ══ PART 2: UNDERSTANDING CARD ══ */
-.und-card{border-left:4px solid var(--teal);background:#f0fdf9;padding:16px 20px;border-radius:9px}
-.und-header{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--navy);margin-bottom:12px;font-size:14px}
-.und-grid{display:flex;flex-wrap:wrap;gap:8px}
-.und-row{background:#fff;border:1px solid #BBF7D0;border-radius:20px;padding:5px 13px;font-size:12.5px}
-.und-label{color:var(--muted);margin-right:4px}
-.und-value{color:var(--navy);font-weight:600}
-.und-query{font-size:12px;color:var(--muted);margin-top:10px;font-style:italic}
-
-/* ══ PART 2: PRICE TABLE ══ */
-.ptable-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:22px}
-.ptable-hdr{background:var(--navy);color:#fff;padding:12px 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
-.ptable-hdr span{color:var(--teal);font-size:12px;font-family:'Inter',sans-serif;font-weight:500}
-.ptable{width:100%;border-collapse:collapse}
-.ptable th{background:var(--bg);padding:9px 14px;text-align:left;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--border)}
-.ptable td{padding:10px 14px;font-size:13px;border-bottom:1px solid #F1F5F9;color:var(--text)}
-.ptable tr:last-child td{border-bottom:none}
-.ptable tr:nth-child(even) td{background:#FAFBFD}
-.price-low{color:var(--green);font-weight:700}
-.ptable-tip{padding:11px 14px;background:#FFFBEB;font-size:12.5px;color:#92400E;border-top:1px solid #FDE68A}
-
-/* ══ PART 2: RESULTS SECTIONS ══ */
-.results-section{margin-bottom:32px}
-.section-header{background:var(--navy);color:#fff;padding:12px 18px;border-radius:9px 9px 0 0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;gap:10px}
-.section-note{font-size:11.5px;color:rgba(255,255,255,.5);margin-left:auto}
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:14px 0}
-
-/* ══ PART 2: RESULT CARDS ══ */
-.result-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;border-left:4px solid var(--teal);transition:box-shadow var(--ease),transform var(--ease)}
-.result-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-2px)}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.card-flag-name{display:flex;align-items:center;gap:8px}
-.card-flag{font-size:18px;flex-shrink:0}
-.card-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--navy)}
-.google-badge{font-size:10px;color:var(--muted);background:var(--bg);border:1px solid var(--border);padding:2px 7px;border-radius:10px;margin-left:4px;vertical-align:middle}
-.card-stars{color:var(--amber);font-size:13px;letter-spacing:1px;flex-shrink:0}
-.card-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.card-delivery,.card-price{font-size:12px;background:var(--bg);padding:3px 9px;border-radius:12px;color:var(--text);border:1px solid var(--border)}
-.in-stock{font-size:12px;color:var(--green);font-weight:600}
-.made-to-order{font-size:12px;color:var(--amber);font-weight:600}
-.card-specialty{font-size:12.5px;color:var(--teal);font-weight:600;margin-bottom:6px}
-.card-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:14px}
-.card-actions{display:flex;gap:8px}
-.btn-view{background:var(--navy);color:#fff;padding:8px 14px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:600;transition:background var(--ease);flex:1;text-align:center;display:inline-block;line-height:1.4}
-.btn-view:hover{background:var(--navy-mid);text-decoration:none;color:#fff}
-.btn-save{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:8px 12px;border-radius:7px;cursor:pointer;font-size:12.5px;font-family:'Inter',sans-serif;transition:all var(--ease);flex-shrink:0}
-.btn-save:hover{border-color:var(--teal);color:var(--teal)}
-.btn-save[disabled]{border-color:var(--green);color:var(--green);cursor:default}
-
-/* ══ PART 2: SEARCH TIPS + COUNT ══ */
-.tips-card{background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--r);padding:16px 20px;margin-top:8px}
-.tips-title{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#92400E;margin-bottom:8px;font-size:13px}
-.tips-list{padding-left:18px;font-size:13px;color:#78350F;line-height:1.9}
-#results-count{font-size:13.5px;color:var(--muted);margin-bottom:18px;padding:4px 0}
-.no-results{color:var(--muted);font-size:14px;padding:24px;text-align:center}
-
-/* ══ PART 3: QUOTE SECTION ══ */
-.quote-section{background:linear-gradient(135deg,#0B1C3D,#152B5C);border-radius:12px;padding:2rem;margin-top:2rem;color:#fff}
-.quote-inner{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
-.quote-icon{font-size:2rem;margin-bottom:8px}
-.quote-section h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:600;margin-bottom:8px;color:#fff}
-.quote-section p{font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:1rem}
-.quote-benefits{list-style:none;padding:0}
-.quote-benefits li{font-size:0.82rem;color:rgba(255,255,255,0.8);padding:4px 0}
-.quote-form-title{font-weight:600;font-size:0.9rem;color:#0FAF8A;margin-bottom:12px}
-.q-input{width:100%;padding:9px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:0.82rem;margin-bottom:8px;font-family:'Inter',sans-serif;box-sizing:border-box}
-.q-input::placeholder{color:rgba(255,255,255,0.4)}
-.q-input:focus{outline:none;border-color:#0FAF8A}
-.q-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.q-half{margin-bottom:0}
-.q-textarea{resize:vertical;min-height:80px}
-select.q-input option{background:#0B1C3D;color:#fff}
-.q-submit{width:100%;padding:11px;background:#0FAF8A;color:#fff;border:none;border-radius:6px;font-weight:600;font-size:0.9rem;cursor:pointer;margin-top:4px;transition:background 0.2s;font-family:'Inter',sans-serif}
-.q-submit:hover{background:#0A9076}
-.q-confirm{background:rgba(15,175,138,0.2);border:1px solid #0FAF8A;border-radius:6px;padding:12px;margin-top:8px;font-size:0.82rem;color:#0FAF8A;line-height:1.6}
-.q-confirm a{color:#0FAF8A;font-weight:600}
-@media(max-width:680px){.quote-inner{grid-template-columns:1fr}}
-
-/* ══ PART 4: SETTINGS PANEL ══ */
-.settings-btn{background:transparent;border:1px solid rgba(255,255,255,0.3);color:#fff;padding:6px 12px;border-radius:6px;font-size:0.8rem;cursor:pointer;margin-right:4px;font-family:'Inter',sans-serif}
-.settings-btn:hover{border-color:#0FAF8A;color:#0FAF8A}
-.settings-panel{position:fixed;top:0;right:-400px;width:380px;height:100vh;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,0.15);z-index:10000;overflow-y:auto;transition:right 0.3s ease;font-family:'Inter',sans-serif}
-.settings-panel.open{right:0}
-.settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;display:none}
-.settings-overlay.open{display:block}
-.settings-header{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;border-bottom:1px solid #E2E8F0;background:#0B1C3D;color:#fff;position:sticky;top:0}
-.settings-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem}
-.settings-close{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px;line-height:1}
-.settings-section{padding:1.25rem 1.5rem;border-bottom:1px solid #F1F5F9}
-.settings-section-title{font-weight:600;font-size:0.88rem;color:#0B1C3D;margin-bottom:8px}
-.settings-desc{font-size:0.78rem;color:#6B7A99;line-height:1.6;margin-bottom:8px}
-.settings-link{font-size:0.78rem;color:#0FAF8A;display:block;margin-bottom:8px;text-decoration:none}
-.settings-link:hover{text-decoration:underline}
-.settings-input{width:100%;padding:9px 12px;border:1px solid #E2E8F0;border-radius:6px;font-size:0.82rem;margin-bottom:8px;color:#1A2340;font-family:'Inter',sans-serif;box-sizing:border-box}
-.settings-input:focus{outline:none;border-color:#0FAF8A}
-.settings-row{display:flex;gap:8px;margin-bottom:8px}
-.settings-save-btn{flex:1;padding:8px;background:#0FAF8A;color:#fff;border:none;border-radius:6px;font-size:0.82rem;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif}
-.settings-save-btn:hover{background:#0A9076}
-.settings-remove-btn{padding:8px 12px;background:transparent;border:1px solid #E2E8F0;color:#6B7A99;border-radius:6px;font-size:0.82rem;cursor:pointer;font-family:'Inter',sans-serif}
-.settings-status{font-size:0.75rem;color:#0FAF8A;min-height:18px}
-.settings-ai-pick{display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-.ai-option{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:#374151;cursor:pointer}
-.settings-ai-links{margin-bottom:8px}
-
-/* ══ PART 4: BRAVE RESULTS ══ */
-.layer-header{display:flex;align-items:center;gap:10px;padding:10px 0;margin-bottom:12px;border-bottom:1px solid #E2E8F0}
-.layer-icon{font-size:1.1rem}
-.layer-title{font-weight:600;font-size:0.9rem;color:#0B1C3D}
-.layer-badge{font-size:0.7rem;background:#E0F2FE;color:#0284C7;padding:2px 8px;border-radius:10px}
-.layer-count{font-size:0.75rem;color:#6B7A99;margin-left:auto}
-.brave-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.brave-card{background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:12px;border-left:3px solid #38BDF8;transition:box-shadow 0.2s}
-.brave-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08)}
-.brave-card-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.brave-domain{font-size:0.72rem;color:#0FAF8A;font-weight:500}
-.brave-price{font-size:0.72rem;background:#DCFCE7;color:#166534;padding:2px 8px;border-radius:10px;font-weight:600}
-.brave-card-title{display:block;font-size:0.82rem;font-weight:500;color:#0B1C3D;text-decoration:none;line-height:1.4;margin-bottom:6px}
-.brave-card-title:hover{color:#0FAF8A}
-.brave-card-snippet{font-size:0.75rem;color:#6B7A99;line-height:1.5}
-.brave-loading{display:flex;align-items:center;gap:12px;padding:1rem;font-size:0.82rem;color:#6B7A99}
-.loading-dots{display:flex;gap:4px}
-.loading-dots span{width:6px;height:6px;background:#0FAF8A;border-radius:50%;animation:dot-bounce 1.4s infinite}
-.loading-dots span:nth-child(2){animation-delay:.2s}
-.loading-dots span:nth-child(3){animation-delay:.4s}
-@keyframes dot-bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
-.brave-prompt{display:flex;align-items:flex-start;gap:16px;background:#F0FDF9;border:1px solid #A7F3D0;border-radius:10px;padding:1.25rem}
-.brave-prompt-icon{font-size:2rem;flex-shrink:0}
-.brave-prompt-text strong{font-size:0.9rem;color:#0B1C3D;display:block;margin-bottom:4px}
-.brave-prompt-text p{font-size:0.78rem;color:#6B7A99;line-height:1.5;margin-bottom:4px}
-.brave-prompt-btn{background:#0FAF8A;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:0.82rem;font-weight:500;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Inter',sans-serif}
-
-/* ══ PART 4: AI ANALYSIS ══ */
-.ai-badge{background:#EDE9FE;color:#6D28D9}
-.ai-confidence{font-size:0.75rem;color:#6B7A99;margin-left:auto}
-.ai-card{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:1.25rem;border-left:3px solid #6C63FF}
-.ai-identified{margin-bottom:1rem}
-.ai-label{font-size:0.72rem;font-weight:600;color:#6B7A99;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.ai-value{font-size:1rem;font-weight:600;color:#0B1C3D}
-.ai-section{margin-bottom:1rem}
-.ai-oem-list{display:flex;flex-wrap:wrap;gap:6px}
-.ai-oem-item{background:#F7F9FC;border:1px solid #E2E8F0;border-radius:6px;padding:4px 10px;font-size:0.78rem}
-.ai-oem-brand{color:#6B7A99;margin-right:6px}
-.ai-oem-no{color:#0B1C3D;font-weight:500;font-family:monospace}
-.ai-alt-list{display:flex;flex-direction:column;gap:8px}
-.ai-alt-item{background:#F7F9FC;border-radius:6px;padding:10px 12px}
-.ai-alt-name{font-weight:500;font-size:0.85rem;color:#0B1C3D;margin-bottom:2px}
-.ai-alt-spec{font-size:0.78rem;color:#6B7A99;margin-bottom:4px}
-.ai-alt-meta{display:flex;justify-content:space-between;font-size:0.75rem;color:#6B7A99}
-.ai-alt-price{color:#16A34A;font-weight:500}
-.ai-price-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.ai-price-item{display:flex;justify-content:space-between;background:#F7F9FC;border-radius:6px;padding:6px 10px;font-size:0.78rem}
-.ai-price-item span:first-child{color:#6B7A99}
-.ai-price-item span:last-child{font-weight:500;color:#0B1C3D}
-.ai-tip{background:#FEF3C7;border-left:3px solid #F5A623;border-radius:0 6px 6px 0;padding:10px 12px;font-size:0.82rem;color:#92400E;margin-bottom:1rem}
-.ai-terms{display:flex;flex-wrap:wrap;gap:6px}
-.ai-term-btn{background:#EDE9FE;color:#6D28D9;border:none;border-radius:16px;padding:4px 12px;font-size:0.78rem;cursor:pointer;transition:background .2s;font-family:'Inter',sans-serif}
-.ai-term-btn:hover{background:#DDD6FE}
-.card-availability{font-size:0.72rem;color:#6B7A99;margin:4px 0}
 </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
+<!-- HEADER -->
 <header id="app-header">
   <div class="hdr-inner">
     <a class="logo" onclick="switchView('view-landing')">
@@ -691,750 +379,485 @@ select.q-input option{background:#0B1C3D;color:#fff}
       <span class="logo-text">PartMatch <span class="logo-ai">AI</span></span>
     </a>
     <div class="hdr-search" id="hdr-search">
-      <input type="text" id="hdr-q" placeholder="Search parts..."
+      <input type="text" id="hdr-q" placeholder="Search products…"
         onkeydown="if(event.key==='Enter')headerSearch()">
-      <button onclick="headerSearch()">→</button>
+      <button onclick="headerSearch()">🔍</button>
     </div>
-    <nav class="hdr-nav" id="hdr-nav-guest">
-      <button class="settings-btn" onclick="openSettings()">⚙ Settings</button>
-      <button class="btn-ghost" onclick="switchView('view-login')">Login</button>
-      <button class="btn-primary-sm" onclick="switchView('view-signup')">Sign Up</button>
-    </nav>
-    <nav class="hdr-nav" id="hdr-nav-user" style="display:none">
-      <span class="hdr-greeting" id="hdr-greeting"></span>
-      <button class="settings-btn" onclick="openSettings()">⚙</button>
-      <button class="btn-ghost" onclick="switchView('view-dashboard')">Dashboard</button>
-      <button class="btn-ghost" onclick="doLogout()">Logout</button>
+    <nav class="hdr-nav">
+      <span class="hdr-greeting" id="hdr-greeting" style="display:none"></span>
+      <div id="nav-guest">
+        <button class="btn-ghost" onclick="switchView('view-login')" style="margin-right:6px">Login</button>
+        <button class="btn-primary-sm" onclick="switchView('view-signup')">Sign Up</button>
+      </div>
+      <div id="nav-user" style="display:none">
+        <button class="btn-ghost" onclick="switchView('view-dashboard')" style="margin-right:6px">Dashboard</button>
+      </div>
+      <button class="settings-btn" onclick="openSettings()" title="Settings">⚙</button>
     </nav>
   </div>
 </header>
 
-<!-- ── VIEW: LANDING ── -->
+<!-- LANDING VIEW -->
 <div id="view-landing" class="view">
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">🌍 Free Global Industrial Parts Search</div>
-      <h1 class="hero-h1">Find Any Industrial Part</h1>
-      <h2 class="hero-h2">Instantly. Worldwide.</h2>
-      <p class="hero-p">Bolts to bearings, seals to steel beams — search 37 suppliers across 6 continents</p>
+  <div class="hero-badge">🌍 Google Shopping · Real Products · Real Prices</div>
+  <h1 class="hero-title">Find Any Part.<br><span>Real Prices. Worldwide.</span></h1>
+  <p class="hero-sub">Search Google Shopping in real time. Industrial parts, auto parts, hardware — anything. No fake suppliers. No fake prices.</p>
 
-      <div class="search-wrap">
-        <input type="text" id="landing-q" class="search-input"
-          onkeydown="if(event.key==='Enter')doSearch()"
-          oninput="currentQuery=this.value">
-        <button class="search-btn" onclick="doSearch()" aria-label="Search">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </button>
-      </div>
-
-      <div class="controls-row">
-        <select id="cat-select" class="cat-select" onchange="selectedCat=this.value">
-          <option value="all">🔍 All Categories</option>
-          <optgroup label="── FASTENERS ──">
-            <option value="bolts">Bolts &amp; Hex Bolts</option>
-            <option value="screws">Screws (All Types)</option>
-            <option value="nuts">Nuts &amp; Washers</option>
-            <option value="threaded-rod">Threaded Rod &amp; Studs</option>
-            <option value="anchors">Anchors &amp; Fixings</option>
-            <option value="rivets">Rivets &amp; Pins</option>
-          </optgroup>
-          <optgroup label="── BEARINGS ──">
-            <option value="ball-bearings">Ball Bearings</option>
-            <option value="roller-bearings">Roller Bearings</option>
-            <option value="needle-bearings">Needle Bearings</option>
-            <option value="thrust-bearings">Thrust Bearings</option>
-            <option value="slewing-rings">Slewing Rings</option>
-            <option value="bushings">Bushings &amp; Plain Bearings</option>
-          </optgroup>
-          <optgroup label="── SEALS &amp; GASKETS ──">
-            <option value="hydraulic-seal-kits">Hydraulic Seal Kits</option>
-            <option value="piston-rod-seals">Piston &amp; Rod Seals</option>
-            <option value="orings">O-Rings</option>
-            <option value="wiper-seals">Wiper &amp; Scraper Seals</option>
-            <option value="gaskets">Gaskets</option>
-            <option value="rotary-seals">Rotary Seals</option>
-            <option value="pneumatic-seals">Pneumatic Seals</option>
-          </optgroup>
-          <optgroup label="── HYDRAULIC SYSTEMS ──">
-            <option value="hydraulic-pumps">Hydraulic Pumps &amp; Motors</option>
-            <option value="hydraulic-cylinders">Hydraulic Cylinders</option>
-            <option value="hydraulic-valves">Hydraulic Valves</option>
-            <option value="hydraulic-hoses">Hydraulic Hoses &amp; Fittings</option>
-            <option value="hydraulic-filters">Hydraulic Filters</option>
-            <option value="hpu">Hydraulic Power Units</option>
-          </optgroup>
-          <optgroup label="── PNEUMATIC SYSTEMS ──">
-            <option value="pneumatic-cylinders">Pneumatic Cylinders</option>
-            <option value="pneumatic-valves">Pneumatic Valves</option>
-            <option value="frl-units">FRL Units</option>
-            <option value="pneumatic-fittings">Pneumatic Fittings</option>
-            <option value="pneumatic-actuators">Pneumatic Actuators</option>
-          </optgroup>
-          <optgroup label="── POWER TRANSMISSION ──">
-            <option value="gears">Gears &amp; Gearboxes</option>
-            <option value="shafts">Shafts &amp; Couplings</option>
-            <option value="belts">V-Belts &amp; Timing Belts</option>
-            <option value="chains">Roller Chains &amp; Sprockets</option>
-            <option value="pulleys">Pulleys</option>
-            <option value="brakes">Brakes &amp; Clutches</option>
-          </optgroup>
-          <optgroup label="── MECHANICAL ──">
-            <option value="springs">Springs</option>
-            <option value="industrial-filters">Industrial Filters</option>
-            <option value="industrial-pumps">Industrial Pumps</option>
-            <option value="motors">Electric Motors &amp; Drives</option>
-            <option value="compressors">Compressors</option>
-            <option value="heat-exchangers">Heat Exchangers</option>
-          </optgroup>
-          <optgroup label="── PIPES &amp; FITTINGS ──">
-            <option value="steel-pipes">Steel Pipes</option>
-            <option value="plastic-pipes">PVC &amp; HDPE Pipes</option>
-            <option value="pipe-fittings">Pipe Fittings &amp; Flanges</option>
-            <option value="industrial-valves-piping">Industrial Valves (Piping)</option>
-            <option value="hoses">Hoses</option>
-          </optgroup>
-          <optgroup label="── CIVIL &amp; CONSTRUCTION ──">
-            <option value="cement">Cement &amp; Concrete</option>
-            <option value="structural-steel">Structural Steel</option>
-            <option value="rebar">Rebar &amp; Reinforcement</option>
-            <option value="roofing">Roofing &amp; Cladding</option>
-            <option value="waterproofing">Waterproofing</option>
-            <option value="scaffolding">Scaffolding</option>
-            <option value="concrete-blocks">Concrete Blocks</option>
-          </optgroup>
-          <optgroup label="── ELECTRICAL ──">
-            <option value="electric-motors">Electric Motors</option>
-            <option value="vfd-drives">VFD Drives</option>
-            <option value="sensors">Sensors &amp; Transmitters</option>
-            <option value="control-panels">Control Panels</option>
-            <option value="cables">Cables &amp; Cable Trays</option>
-          </optgroup>
-          <optgroup label="── MRO &amp; MAINTENANCE ──">
-            <option value="lubricants">Lubricants &amp; Greases</option>
-            <option value="welding">Welding Supplies</option>
-            <option value="tools">Hand &amp; Power Tools</option>
-            <option value="safety">Safety &amp; PPE</option>
-            <option value="consumables">Workshop Consumables</option>
-          </optgroup>
-          <optgroup label="── OTHER ──">
-            <option value="hard-to-find">Hard to Find Parts</option>
-            <option value="custom">Custom Parts</option>
-            <option value="emergency">Emergency Any Category</option>
-          </optgroup>
-        </select>
-      </div>
-
-      <div class="pills-label">Supplier Region</div>
-      <div class="pill-group" id="region-pills">
-        <button class="pill active" data-val="all"        onclick="setPill(this,'region')">🌍 All</button>
-        <button class="pill"        data-val="usa"        onclick="setPill(this,'region')">🇺🇸 USA</button>
-        <button class="pill"        data-val="india"      onclick="setPill(this,'region')">🇮🇳 India</button>
-        <button class="pill"        data-val="china"      onclick="setPill(this,'region')">🇨🇳 China</button>
-        <button class="pill"        data-val="europe"     onclick="setPill(this,'region')">🇪🇺 Europe</button>
-        <button class="pill"        data-val="africa"     onclick="setPill(this,'region')">🌍 Africa</button>
-        <button class="pill"        data-val="middleeast" onclick="setPill(this,'region')">🇦🇪 ME</button>
-        <button class="pill"        data-val="russia"     onclick="setPill(this,'region')">🇷🇺 Russia</button>
-      </div>
-
-      <div class="pills-label">Delivery Speed</div>
-      <div class="pill-group" id="delivery-pills">
-        <button class="pill"        data-val="today"   onclick="setPill(this,'delivery')">⚡ Today</button>
-        <button class="pill"        data-val="1-3days" onclick="setPill(this,'delivery')">🚀 1-3 Days</button>
-        <button class="pill"        data-val="4-7days" onclick="setPill(this,'delivery')">📦 4-7 Days</button>
-        <button class="pill active" data-val="any"     onclick="setPill(this,'delivery')">🌍 Any</button>
-      </div>
-
-      <button class="btn-search-main" onclick="doSearch()">Search Parts →</button>
+  <div class="landing-search-wrap">
+    <div class="landing-search-box">
+      <input type="text" id="landing-q" placeholder="Search: hydraulic piston seal 80mm NBR…"
+        onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="landing-search-btn" onclick="doSearch()">Search →</button>
     </div>
-  </section>
+    <div class="quick-searches">
+      <span class="qs-label">Try:</span>
+      <button class="qs-pill" onclick="quickSearch('hydraulic piston seal 80mm NBR')">Hydraulic seal 80mm</button>
+      <button class="qs-pill" onclick="quickSearch('M8 hex bolt grade 8.8 stainless steel')">M8 bolt grade 8.8</button>
+      <button class="qs-pill" onclick="quickSearch('6205 deep groove ball bearing')">6205 bearing</button>
+      <button class="qs-pill" onclick="quickSearch('Donaldson hydraulic filter P553000')">Donaldson filter</button>
+      <button class="qs-pill" onclick="quickSearch('JCB excavator brake pads')">JCB brake pads</button>
+      <button class="qs-pill" onclick="quickSearch('LAPP flexible cable 3G2.5')">LAPP cable</button>
+    </div>
+  </div>
 
-  <div class="stats-bar">
-    <div class="stats-inner">
-      <div class="stat-item"><strong>37</strong> Suppliers</div>
-      <div class="stat-div"></div>
-      <div class="stat-item"><strong>6</strong> Continents</div>
-      <div class="stat-div"></div>
-      <div class="stat-item"><strong>Every</strong> Part Type</div>
-      <div class="stat-div"></div>
-      <div class="stat-item"><strong>Always</strong> Free</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>Live</strong>Google Shopping</div>
+    <div class="hero-stat"><strong>Real</strong>Prices &amp; Sellers</div>
+    <div class="hero-stat"><strong>Free</strong>Forever</div>
+  </div>
+</div>
+
+<!-- RESULTS VIEW -->
+<div id="view-results" class="view" style="display:none">
+  <div class="results-layout">
+    <div class="results-search-bar">
+      <div class="results-input-wrap">
+        <input type="text" id="results-q" placeholder="Search products…"
+          onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="results-search-btn" onclick="doSearch()">Search</button>
+      </div>
+      <select class="cat-select" id="cat-select" onchange="doSearch()">
+        <option value="">All categories</option>
+        <option value="industrial parts">Industrial Parts</option>
+        <option value="hydraulic parts">Hydraulic</option>
+        <option value="pneumatic parts">Pneumatic</option>
+        <option value="bearings">Bearings</option>
+        <option value="fasteners bolts">Fasteners</option>
+        <option value="seals gaskets">Seals &amp; Gaskets</option>
+        <option value="valves">Valves</option>
+        <option value="filters">Filters</option>
+        <option value="auto parts">Auto Parts</option>
+        <option value="electrical parts">Electrical</option>
+        <option value="pipes fittings">Pipes &amp; Fittings</option>
+        <option value="tools hardware">Tools &amp; Hardware</option>
+      </select>
+    </div>
+
+    <div id="results-count"></div>
+    <div id="results-container"></div>
+
+    <!-- QUOTE SECTION -->
+    <div class="quote-section" id="quote-section" style="display:none">
+      <h3>Can't find exactly what you need?</h3>
+      <p>Submit a sourcing request — we respond within 24 hours with global options.</p>
+      <div class="quote-form">
+        <div class="quote-row">
+          <div>
+            <label class="auth-label">Your Name</label>
+            <input class="q-input" id="q-name" type="text" placeholder="John Smith">
+          </div>
+          <div>
+            <label class="auth-label">Email</label>
+            <input class="q-input" id="q-email" type="email" placeholder="john@company.com">
+          </div>
+        </div>
+        <div>
+          <label class="auth-label">Part / Product Needed</label>
+          <input class="q-input" id="q-part" type="text" placeholder="Describe the part…">
+        </div>
+        <div class="quote-row">
+          <div>
+            <label class="auth-label">Quantity</label>
+            <input class="q-input" id="q-qty" type="text" placeholder="e.g. 50 units">
+          </div>
+          <div>
+            <label class="auth-label">Urgency</label>
+            <select class="q-input" id="q-urgency">
+              <option>Standard (1-2 weeks)</option>
+              <option>Urgent (3-5 days)</option>
+              <option>Emergency (24-48 hrs)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="auth-label">Additional Notes</label>
+          <textarea class="q-input q-textarea" id="q-notes" placeholder="Brand preference, specifications, country of origin…"></textarea>
+        </div>
+        <button class="quote-submit-btn" onclick="submitQuote()">Send Sourcing Request →</button>
+        <div id="q-confirm"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ── VIEW: SIGN UP ── -->
+<!-- SIGNUP VIEW -->
 <div id="view-signup" class="view" style="display:none">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-logo">⚙</div>
-      <h2 class="auth-title">Create Account</h2>
-      <p class="auth-sub">Save searches, get priority quotes, track suppliers</p>
-      <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" id="su-name" class="form-input" placeholder="Your full name"
-          onkeydown="if(event.key==='Enter')doSignup()">
+  <div class="auth-box">
+    <div class="auth-title">Create Account</div>
+    <div class="auth-sub">Save searches, track clicks, request quotes.</div>
+    <div class="auth-form">
+      <div>
+        <label class="auth-label">Full Name</label>
+        <input class="auth-input" id="su-name" type="text" placeholder="Venkata Rao Allu"
+          onkeydown="if(event.key==='Enter')signup()">
       </div>
-      <div class="form-group">
-        <label>Email *</label>
-        <input type="email" id="su-email" class="form-input" placeholder="your@email.com"
-          onkeydown="if(event.key==='Enter')doSignup()">
+      <div>
+        <label class="auth-label">Email</label>
+        <input class="auth-input" id="su-email" type="email" placeholder="you@company.com"
+          onkeydown="if(event.key==='Enter')signup()">
       </div>
-      <div class="form-group">
-        <label>Password *</label>
-        <input type="password" id="su-pass" class="form-input" placeholder="Minimum 6 characters"
-          onkeydown="if(event.key==='Enter')doSignup()">
+      <div>
+        <label class="auth-label">Password</label>
+        <input class="auth-input" id="su-pass" type="password" placeholder="Min 6 characters"
+          onkeydown="if(event.key==='Enter')signup()">
       </div>
-      <div class="form-group">
-        <label>Country *</label>
-        <select id="su-country" class="form-input">
-          <option value="">Select country...</option>
-          <option>Australia</option><option>Brazil</option><option>Canada</option>
-          <option>China</option><option>Egypt</option><option>Germany</option>
-          <option>India</option><option>Indonesia</option><option>Japan</option>
-          <option>Kenya</option><option>Malaysia</option><option>Mexico</option>
-          <option>Netherlands</option><option>Nigeria</option><option>Philippines</option>
-          <option>Russia</option><option>Saudi Arabia</option><option>Singapore</option>
-          <option>South Africa</option><option>South Korea</option><option>Sweden</option>
-          <option>Thailand</option><option>Turkey</option><option>UAE</option>
-          <option>United Kingdom</option><option>United States</option>
-          <option>Vietnam</option><option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Industry *</label>
-        <select id="su-industry" class="form-input">
-          <option value="">Select industry...</option>
-          <option>Mining &amp; Resources</option>
-          <option>Construction</option>
-          <option>Manufacturing</option>
-          <option>Agriculture</option>
-          <option>Oil &amp; Gas</option>
-          <option>Marine &amp; Offshore</option>
-          <option>Aerospace</option>
-          <option>Logistics &amp; Transport</option>
-          <option>Energy &amp; Utilities</option>
-          <option>Food &amp; Beverage</option>
-          <option>Chemical &amp; Process</option>
-          <option>Automotive</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="auth-err" id="su-err"></div>
-      <button class="btn-auth" onclick="doSignup()">Create Account</button>
+      <div id="su-err" class="auth-err"></div>
+      <button class="btn-auth" onclick="signup()">Create Account</button>
       <p class="auth-link">Already have an account? <a onclick="switchView('view-login')">Login</a></p>
     </div>
   </div>
 </div>
 
-<!-- ── VIEW: LOGIN ── -->
+<!-- LOGIN VIEW -->
 <div id="view-login" class="view" style="display:none">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-logo">⚙</div>
-      <h2 class="auth-title">Welcome Back</h2>
-      <p class="auth-sub">Login to access your searches and quotes</p>
-      <div class="form-group">
-        <label>Email *</label>
-        <input type="email" id="li-email" class="form-input" placeholder="your@email.com"
-          onkeydown="if(event.key==='Enter')doLogin()">
+  <div class="auth-box">
+    <div class="auth-title">Welcome Back</div>
+    <div class="auth-sub">Log in to see your search history.</div>
+    <div class="auth-form">
+      <div>
+        <label class="auth-label">Email</label>
+        <input class="auth-input" id="li-email" type="email" placeholder="you@company.com"
+          onkeydown="if(event.key==='Enter')login()">
       </div>
-      <div class="form-group">
-        <label>Password *</label>
-        <input type="password" id="li-pass" class="form-input" placeholder="Your password"
-          onkeydown="if(event.key==='Enter')doLogin()">
+      <div>
+        <label class="auth-label">Password</label>
+        <input class="auth-input" id="li-pass" type="password" placeholder="Password"
+          onkeydown="if(event.key==='Enter')login()">
       </div>
-      <div class="auth-err" id="li-err"></div>
-      <button class="btn-auth" onclick="doLogin()">Login</button>
+      <div id="li-err" class="auth-err"></div>
+      <button class="btn-auth" onclick="login()">Login</button>
       <p class="auth-link">New here? <a onclick="switchView('view-signup')">Create Account</a></p>
     </div>
   </div>
 </div>
 
-<!-- ── VIEW: RESULTS ── -->
-<div id="view-results" class="view" style="display:none">
-  <div class="results-header">
-    <div class="results-hdr-inner">
-      <div class="results-search-wrap">
-        <input type="text" id="results-q" class="results-q-input"
-          placeholder="Modify your search..."
-          onkeydown="if(event.key==='Enter'){currentQuery=this.value;doSearch()}">
-        <button class="results-search-btn"
-          onclick="currentQuery=document.getElementById('results-q').value;doSearch()">Search</button>
-      </div>
-      <div class="results-filters">
-        <select id="res-cat-sel" class="res-filter-sel" onchange="selectedCat=this.value;doSearch()">
-          <option value="all">All Categories</option>
-          <option value="bolts">Fasteners</option>
-          <option value="ball-bearings">Bearings</option>
-          <option value="hydraulic-seal-kits">Seals</option>
-          <option value="orings">O-Rings</option>
-          <option value="hydraulic-pumps">Hydraulics</option>
-          <option value="pneumatic-cylinders">Pneumatics</option>
-          <option value="gears">Power Trans.</option>
-          <option value="motors">Motors</option>
-          <option value="lubricants">Lubricants</option>
-        </select>
-        <div class="res-pills-mini" id="res-region-mini">
-          <button class="res-pill active" data-val="all"        onclick="setResPill(this,'region')">All</button>
-          <button class="res-pill"        data-val="usa"        onclick="setResPill(this,'region')">🇺🇸</button>
-          <button class="res-pill"        data-val="india"      onclick="setResPill(this,'region')">🇮🇳</button>
-          <button class="res-pill"        data-val="china"      onclick="setResPill(this,'region')">🇨🇳</button>
-          <button class="res-pill"        data-val="europe"     onclick="setResPill(this,'region')">🇪🇺</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="results-main">
-    <div id="brave-results-section" style="display:none;margin-bottom:1.5rem"></div>
-    <div id="ai-analysis-section" style="display:none;margin-bottom:1.5rem"></div>
-    <div id="understanding-card" class="understanding-card" style="display:none"></div>
-    <div id="price-table-wrap"></div>
-    <div id="results-loading" class="results-loading" style="display:none">
-      <div class="loading-spinner"></div>
-      <div class="loading-text" id="loading-text">Searching 37 suppliers worldwide...</div>
-      <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-    </div>
-    <div id="results-output"></div>
-    <div class="quote-banner" id="quote-banner" style="display:none">
-      <div class="quote-banner-inner">
-        <div>
-          <div class="quote-banner-title">Can't find exactly what you need?</div>
-          <div class="quote-banner-sub">Submit a quote request — we source globally and respond within 24 hours.</div>
-        </div>
-        <button class="btn-quote-banner" onclick="switchView('view-quote')">Request Global Quote →</button>
-      </div>
-    </div>
-    <div class="quote-section" id="quote-section" style="display:none">
-      <div class="quote-inner">
-        <div class="quote-left">
-          <div class="quote-icon">🔍</div>
-          <h3>Can't find exactly what you need?</h3>
-          <p>Our global sourcing team finds hard-to-find parts worldwide — from a single M3 screw to a complete hydraulic power unit.</p>
-          <ul class="quote-benefits">
-            <li>✅ Response within 24 hours</li>
-            <li>✅ Global supplier network</li>
-            <li>✅ Any quantity, any material</li>
-            <li>✅ Competitive pricing guaranteed</li>
-          </ul>
-        </div>
-        <div class="quote-right">
-          <div class="quote-form-title">Submit Sourcing Request</div>
-          <div class="quote-form">
-            <input type="text" id="q-part" placeholder="Part description" class="q-input">
-            <input type="text" id="q-partno" placeholder="Part number (if known)" class="q-input">
-            <div class="q-row">
-              <input type="number" id="q-qty" placeholder="Quantity" class="q-input q-half">
-              <select id="q-urgency" class="q-input q-half">
-                <option value="standard">Standard delivery</option>
-                <option value="fast">Fast (this week)</option>
-                <option value="emergency">Emergency (today)</option>
-              </select>
-            </div>
-            <input type="text" id="q-country" placeholder="Your country" class="q-input">
-            <input type="text" id="q-name" placeholder="Your name" class="q-input">
-            <input type="text" id="q-company" placeholder="Company (optional)" class="q-input">
-            <input type="email" id="q-email" placeholder="Email address *" class="q-input">
-            <input type="tel" id="q-whatsapp" placeholder="WhatsApp number (optional)" class="q-input">
-            <textarea id="q-specs" placeholder="Technical specs, dimensions, material, pressure rating, equipment brand..." class="q-input q-textarea" rows="3"></textarea>
-            <button class="q-submit" onclick="submitQuote()">Submit Sourcing Request →</button>
-            <div id="q-confirm" class="q-confirm" style="display:none"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── VIEW: DASHBOARD ── -->
+<!-- DASHBOARD VIEW -->
 <div id="view-dashboard" class="view" style="display:none">
-  <div class="dash-wrap">
+  <div class="dash-layout">
     <div class="dash-header">
-      <h2 class="dash-title" id="dash-title">Welcome back!</h2>
-      <p class="dash-sub">Your sourcing command center</p>
+      <div class="dash-title" id="dash-title">Dashboard</div>
+      <div class="dash-sub">Your search history and click activity</div>
     </div>
-    <div class="dash-search-wrap">
-      <input type="text" id="dash-q" class="dash-search-input"
-        placeholder="Search for any industrial part..."
-        onkeydown="if(event.key==='Enter'){currentQuery=this.value;doSearch()}">
-      <button class="btn-teal"
-        onclick="currentQuery=document.getElementById('dash-q').value;doSearch()">Search →</button>
+
+    <div class="dash-section">
+      <div class="dash-section-title">Recent Searches</div>
+      <div id="dash-history"></div>
     </div>
-    <div class="dash-tabs">
-      <button class="dash-tab active" onclick="showDashTab('searches',this)">My Searches</button>
-      <button class="dash-tab" onclick="showDashTab('saved',this)">Saved Suppliers</button>
-      <button class="dash-tab" onclick="showDashTab('quotes',this)">My Quotes</button>
+
+    <div class="dash-section">
+      <div class="dash-section-title">Products You Clicked</div>
+      <div id="dash-clicks"></div>
     </div>
-    <div id="dash-searches" class="dash-panel">
-      <div id="dash-searches-list">
-        <div class="dash-empty">No searches yet. <a onclick="switchView('view-landing')">Start searching →</a></div>
-      </div>
-    </div>
-    <div id="dash-saved" class="dash-panel" style="display:none">
-      <div id="dash-saved-list">
-        <div class="dash-empty">No saved suppliers yet. Save suppliers from search results.</div>
-      </div>
-    </div>
-    <div id="dash-quotes" class="dash-panel" style="display:none">
-      <div id="dash-quotes-list">
-        <div class="dash-empty">No quote requests yet. <a onclick="switchView('view-quote')">Submit a quote →</a></div>
-      </div>
-    </div>
+
+    <button class="btn-logout" onclick="logout()">Log Out</button>
   </div>
 </div>
 
-<!-- ── VIEW: QUOTE (placeholder for Part 3) ── -->
-<div id="view-quote" class="view" style="display:none">
-  <div class="auth-wrap">
-    <div class="auth-card" style="max-width:560px">
-      <h2 class="auth-title">Request Global Quote</h2>
-      <p class="auth-sub">Part 3 will add the full quote form here.</p>
-      <button class="btn-auth" onclick="switchView('view-results')">← Back to Results</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── TOAST ── -->
-<div id="toast-container" class="toast-container"></div>
-
-<!-- ── BACK TO TOP ── -->
-<button id="back-top" class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
-
-<!-- ── SETTINGS PANEL ── -->
-<div id="settings-overlay" class="settings-overlay" onclick="closeSettings()"></div>
-<div id="settings-panel" class="settings-panel">
+<!-- SETTINGS PANEL -->
+<div class="settings-overlay" id="settings-overlay" onclick="closeSettings()"></div>
+<div class="settings-panel" id="settings-panel">
   <div class="settings-header">
-    <div class="settings-title">⚙ My Settings</div>
+    <h3>⚙ Settings</h3>
     <button class="settings-close" onclick="closeSettings()">✕</button>
   </div>
-
-  <div class="settings-section">
-    <div class="settings-section-title">🔍 Live Web Search (Brave)</div>
-    <p class="settings-desc">Get real-time results from any website on the internet. Free API key gives you 2,000 searches/month.</p>
-    <a href="https://brave.com/search/api" target="_blank" class="settings-link">Get free key at brave.com/search/api →</a>
-    <input type="password" id="setting-brave-key" placeholder="Paste Brave API key here" class="settings-input">
-    <div class="settings-row">
-      <button onclick="saveKey('brave')" class="settings-save-btn">Save Key</button>
-      <button onclick="removeKey('brave')" class="settings-remove-btn">Remove</button>
+  <div class="settings-body">
+    <div>
+      <div class="settings-section-title">Search Engine</div>
+      <div class="settings-desc">PartMatch AI uses Google Shopping via Serper.dev to find real products with real prices worldwide.</div>
+      <div class="settings-info">🔐 Your searches are private. No data is stored on our servers. Search history lives in your browser only.</div>
     </div>
-    <div id="brave-key-status" class="settings-status"></div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-section-title">🤖 AI Part Analysis (Optional)</div>
-    <p class="settings-desc">Adds expert AI identification of parts, OEM cross-references, and compatibility notes. Use any ONE of these free options:</p>
-    <div class="settings-ai-pick">
-      <label class="ai-option"><input type="radio" name="ai-provider" value="anthropic" id="ai-anthropic" onchange="showAiLink('anthropic')"> Claude (Anthropic)</label>
-      <label class="ai-option"><input type="radio" name="ai-provider" value="openai" id="ai-openai" onchange="showAiLink('openai')"> GPT (OpenAI)</label>
-      <label class="ai-option"><input type="radio" name="ai-provider" value="gemini" id="ai-gemini" onchange="showAiLink('gemini')"> Gemini (Google)</label>
+    <div>
+      <div class="settings-section-title">About</div>
+      <div class="settings-desc">Built by <strong>Venkata Rao Allu</strong> — Mechanical Engineer &amp; AI Builder.<br>Questions? <a href="mailto:alluvenkat11@gmail.com">alluvenkat11@gmail.com</a></div>
     </div>
-    <div class="settings-ai-links">
-      <a href="https://console.anthropic.com" target="_blank" id="link-anthropic" class="settings-link">Get Claude key at console.anthropic.com →</a>
-      <a href="https://platform.openai.com/api-keys" target="_blank" id="link-openai" class="settings-link" style="display:none">Get GPT key at platform.openai.com →</a>
-      <a href="https://aistudio.google.com" target="_blank" id="link-gemini" class="settings-link" style="display:none">Get Gemini key at aistudio.google.com →</a>
-    </div>
-    <input type="password" id="setting-ai-key" placeholder="Paste AI API key here" class="settings-input">
-    <div class="settings-row">
-      <button onclick="saveKey('ai')" class="settings-save-btn">Save Key</button>
-      <button onclick="removeKey('ai')" class="settings-remove-btn">Remove</button>
-    </div>
-    <div id="ai-key-status" class="settings-status"></div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-section-title">🌍 My Preferences</div>
-    <select id="setting-region" class="settings-input" onchange="savePref('region',this.value)">
-      <option value="all">All Regions</option>
-      <option value="usa">USA</option>
-      <option value="india">India</option>
-      <option value="china">China</option>
-      <option value="europe">Europe</option>
-      <option value="africa">Africa</option>
-      <option value="middleeast">Middle East</option>
-      <option value="russia">Russia</option>
-    </select>
-    <select id="setting-delivery" class="settings-input" onchange="savePref('delivery',this.value)">
-      <option value="any">Any Delivery Time</option>
-      <option value="today">Today Only</option>
-      <option value="1-3days">1-3 Days</option>
-      <option value="4-7days">4-7 Days</option>
-    </select>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-section-title">ℹ️ About Your Keys</div>
-    <p class="settings-desc">Your API keys are stored ONLY in your browser's local storage. They never leave your device and are never sent to our servers. Each key uses your own free quota. You can remove them anytime.</p>
   </div>
 </div>
 
+<!-- TOAST -->
+<div id="toast"></div>
+
 <script>
-/* ═══════════════════════════════════════
-   PART 1 — STRUCTURE, AUTH, NAVIGATION
-   Part 2 will add: SUPPLIERS, SEARCH ENGINE, RESULTS
-   Part 3 will add: QUOTE FORM, AI, BRAVE SEARCH
-═══════════════════════════════════════ */
+/* ── SERPER API (not displayed in UI) ── */
+const SERPER_KEY = '58ef3d3145d814ffd17502ddce24a72ee5a6d7eb';
 
 /* ── STATE ── */
 let currentUser = null;
 let currentQuery = '';
-let selectedCat = 'all';
-let selectedRegion = 'all';
-let selectedDelivery = 'any';
-let lastResults = [];
-let currentParsed = null;
 
-/* ── SESSION ID ── */
-const SID = (()=>{
-  let s = sessionStorage.getItem('partmatch_sid');
-  if(!s){s=uuid();sessionStorage.setItem('partmatch_sid',s);}
-  return s;
-})();
+const el = id => document.getElementById(id);
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-/* ── INIT ── */
-document.addEventListener('DOMContentLoaded', ()=>{
-  // Restore session
-  const saved = sessionStorage.getItem('partmatch_user');
-  if(saved){ try{ currentUser=JSON.parse(saved); }catch(e){} }
-  updateHeader();
-  startPlaceholderRotation();
-  initBackToTop();
-});
+/* ── TOAST ── */
+let _toastTimer;
+function toast(msg, type=''){
+  const t = el('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type ? ' '+type : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>{ t.className=''; }, 3200);
+}
 
-/* ── VIEW MANAGEMENT ── */
+/* ── VIEWS ── */
 function switchView(id){
-  document.querySelectorAll('.view').forEach(v=>v.style.display='none');
-  const v = document.getElementById(id);
-  if(v) v.style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
-  // Show/hide header mini search
-  const hdrSearch = document.getElementById('hdr-search');
-  if(hdrSearch) hdrSearch.style.display = (id==='view-landing') ? 'none' : 'flex';
-  // Load dashboard data if needed
-  if(id==='view-dashboard') loadDashboard();
-}
+  ['view-landing','view-results','view-signup','view-login','view-dashboard'].forEach(v=>{
+    const e = el(v); if(e) e.style.display = 'none';
+  });
+  const target = el(id); if(target) target.style.display = '';
 
-/* ── PLACEHOLDER ROTATION ── */
-const PLACEHOLDERS = [
-  'Try: M8 hex bolt grade 8.8',
-  'Try: 6205 deep groove ball bearing',
-  'Try: 80mm piston seal NBR JCB',
-  'Try: hydraulic pump gear type',
-  'Try: DN50 ball valve stainless',
-  'Try: 5.5kw 3 phase electric motor',
-  'Try: timing belt 1500mm length',
-  'Try: roller chain 50B 2 meter',
-  'Try: pneumatic cylinder 63mm bore',
-  'Try: gate valve 2 inch PN16'
-];
-let phIdx = 0;
-function startPlaceholderRotation(){
-  const inp = document.getElementById('landing-q');
-  if(!inp) return;
-  inp.placeholder = PLACEHOLDERS[0];
-  setInterval(()=>{
-    phIdx = (phIdx+1) % PLACEHOLDERS.length;
-    inp.style.transition='opacity .3s';
-    inp.style.opacity='0';
-    setTimeout(()=>{
-      if(!inp.value) inp.placeholder = PLACEHOLDERS[phIdx];
-      inp.style.opacity='1';
-    },300);
-  }, 3000);
-}
+  const hdrSearch = el('hdr-search');
+  if(hdrSearch) hdrSearch.style.display = (id === 'view-landing') ? 'none' : 'flex';
 
-/* ── PILL SELECTION ── */
-function setPill(btn, group){
-  const groupEl = group==='region' ?
-    document.getElementById('region-pills') :
-    document.getElementById('delivery-pills');
-  if(groupEl) groupEl.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  if(group==='region') selectedRegion = btn.dataset.val;
-  else selectedDelivery = btn.dataset.val;
-}
-
-function setResPill(btn, group){
-  document.getElementById('res-region-mini')
-    ?.querySelectorAll('.res-pill').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  if(group==='region'){ selectedRegion=btn.dataset.val; doSearch(); }
+  if(id === 'view-dashboard') loadDashboard();
+  if(id === 'view-results'){
+    const qs = el('quote-section');
+    if(qs && currentQuery) qs.style.display = 'block';
+  }
+  window.scrollTo(0,0);
 }
 
 /* ── AUTH ── */
-function getUsers(){
-  try{ return JSON.parse(localStorage.getItem('partmatch_users')||'[]'); }
-  catch(e){ return []; }
-}
-function saveUsers(arr){ localStorage.setItem('partmatch_users',JSON.stringify(arr)); }
+function getUsers(){ try{ return JSON.parse(localStorage.getItem('partmatch_users')||'[]'); }catch(e){return[];} }
+function saveUsers(arr){ localStorage.setItem('partmatch_users', JSON.stringify(arr)); }
 
-function doSignup(){
-  const name  = v('su-name').trim();
-  const email = v('su-email').trim().toLowerCase();
-  const pass  = v('su-pass').trim();
-  const country  = v('su-country');
-  const industry = v('su-industry');
+function signup(){
+  const name  = (el('su-name')||{}).value?.trim();
+  const email = (el('su-email')||{}).value?.trim().toLowerCase();
+  const pass  = (el('su-pass')||{}).value;
   const errEl = el('su-err');
-  errEl.classList.remove('show');
-
-  if(!name||!email||!pass){ showErr('su-err','Please fill in Name, Email and Password.'); return; }
-  if(pass.length<6){ showErr('su-err','Password must be at least 6 characters.'); return; }
-  if(!country){ showErr('su-err','Please select your country.'); return; }
-  if(!industry){ showErr('su-err','Please select your industry.'); return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showErr('su-err','Please enter a valid email.'); return; }
-
+  if(errEl) errEl.textContent='';
+  if(!name){ if(errEl) errEl.textContent='Name is required.'; return; }
+  if(!email||!email.includes('@')){ if(errEl) errEl.textContent='Valid email required.'; return; }
+  if(!pass||pass.length<6){ if(errEl) errEl.textContent='Password must be 6+ characters.'; return; }
   const users = getUsers();
-  if(users.find(u=>u.email===email)){ showErr('su-err','This email is already registered. Please login.'); return; }
-
-  const user = {
-    id: uuid(), name, email, password: btoa(pass),
-    country, industry,
-    createdAt: new Date().toISOString(),
-    joinedAt: new Date().toISOString()
-  };
+  if(users.find(u=>u.email===email)){ if(errEl) errEl.textContent='Account already exists. Please login.'; return; }
+  const user = { name, email, pass, joinedAt: new Date().toISOString() };
   users.push(user);
   saveUsers(users);
   setCurrentUser(user);
-  toast('Welcome, '+name.split(' ')[0]+'! 🎉','ok');
+  toast('Welcome, '+name.split(' ')[0]+'!', 'ok');
   switchView('view-landing');
 }
 
-function doLogin(){
-  const email = v('li-email').trim().toLowerCase();
-  const pass  = v('li-pass').trim();
-  el('li-err').classList.remove('show');
-
-  if(!email||!pass){ showErr('li-err','Please enter email and password.'); return; }
+function login(){
+  const email = (el('li-email')||{}).value?.trim().toLowerCase();
+  const pass  = (el('li-pass')||{}).value;
+  const errEl = el('li-err');
+  if(errEl) errEl.textContent='';
   const users = getUsers();
-  const user = users.find(u=>u.email===email && u.password===btoa(pass));
-  if(!user){ showErr('li-err','Incorrect email or password. Please try again.'); return; }
-
+  const user = users.find(u=>u.email===email && u.pass===pass);
+  if(!user){ if(errEl) errEl.textContent='Incorrect email or password.'; return; }
   setCurrentUser(user);
-  toast('Welcome back, '+user.name.split(' ')[0]+'!','ok');
-  switchView('view-dashboard');
+  toast('Welcome back, '+user.name.split(' ')[0]+'!', 'ok');
+  switchView('view-landing');
 }
 
-function doLogout(){
+function logout(){
   currentUser = null;
   sessionStorage.removeItem('partmatch_user');
-  updateHeader();
-  toast('Logged out.','');
+  updateNavUI();
+  toast('Logged out.');
   switchView('view-landing');
 }
 
 function setCurrentUser(user){
   currentUser = user;
   sessionStorage.setItem('partmatch_user', JSON.stringify(user));
-  updateHeader();
+  updateNavUI();
 }
 
-function updateHeader(){
-  const guest = el('hdr-nav-guest');
-  const userNav = el('hdr-nav-user');
+function updateNavUI(){
+  const guest = el('nav-guest');
+  const userNav = el('nav-user');
   const greeting = el('hdr-greeting');
   if(currentUser){
     if(guest) guest.style.display='none';
     if(userNav) userNav.style.display='flex';
-    if(greeting) greeting.textContent = 'Hi '+currentUser.name.split(' ')[0];
+    if(greeting){ greeting.style.display=''; greeting.textContent='Hi '+currentUser.name.split(' ')[0]; }
   } else {
     if(guest) guest.style.display='flex';
     if(userNav) userNav.style.display='none';
+    if(greeting) greeting.style.display='none';
   }
 }
 
+/* ── SEARCH ── */
+async function searchProducts(query){
+  showLoading();
+  const cat = (el('cat-select')||{}).value || '';
+  const fullQuery = cat ? query + ' ' + cat : query;
+
+  try{
+    const response = await fetch('https://google.serper.dev/shopping', {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': SERPER_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ q: fullQuery, num: 20, gl: 'us', hl: 'en' })
+    });
+
+    if(!response.ok){
+      if(response.status === 401) throw new Error('API key invalid');
+      throw new Error('Search failed (status '+response.status+')');
+    }
+
+    const data = await response.json();
+    const results = data.shopping || [];
+
+    if(results.length === 0){ showNoResults(query); return; }
+    renderResults(results, query);
+
+  } catch(err){
+    showError(err.message);
+  }
+}
+
+function renderResults(items, query){
+  const countEl = el('results-count');
+  if(countEl) countEl.textContent = items.length + ' products found for "' + query + '"';
+
+  el('results-container').innerHTML = items.map(item => {
+    const stars = item.rating ? ('★'.repeat(Math.round(item.rating)) + '☆'.repeat(5 - Math.round(item.rating))) : '';
+    const safeTitle = esc(item.title || '');
+    const safeSource = esc(item.source || '');
+    const safeLink = esc(item.link || '#');
+    const safeImg = esc(item.imageUrl || '');
+    const shortTitle = (item.title||'').substring(0,30).replace(/'/g,"\\'");
+    const shortSource = (item.source||'').replace(/'/g,"\\'");
+
+    return `<div class="product-card">
+      <div class="product-image-wrap">
+        ${safeImg
+          ? `<img src="${safeImg}" alt="${safeTitle}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=product-image-placeholder>📦</div>'">`
+          : `<div class="product-image-placeholder">📦</div>`
+        }
+      </div>
+      <div class="product-info">
+        <div class="product-title">${safeTitle}</div>
+        <div class="product-price">${esc(item.price || 'Price on request')}</div>
+        ${item.source ? `<div class="product-seller">🏪 ${safeSource}</div>` : ''}
+        ${stars ? `<div class="product-rating">${stars} <span class="rating-count">(${item.ratingCount||0})</span></div>` : ''}
+        ${item.delivery ? `<div class="product-delivery">🚚 ${esc(item.delivery)}</div>` : ''}
+        <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="product-btn"
+           onclick="trackClick('${shortSource}','${shortTitle}')">View Product →</a>
+      </div>
+    </div>`;
+  }).join('');
+
+  const qs = el('quote-section');
+  if(qs){ qs.style.display='block'; const qp=el('q-part'); if(qp) qp.value=query; }
+}
+
+function showLoading(){
+  const countEl = el('results-count');
+  if(countEl) countEl.textContent = 'Searching Google Shopping…';
+  el('results-container').innerHTML = `<div class="loading-state">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Finding real products with real prices…</div>
+  </div>`;
+  const qs = el('quote-section'); if(qs) qs.style.display='none';
+}
+
+function showNoResults(query){
+  const countEl = el('results-count');
+  if(countEl) countEl.textContent = 'No products found for "'+query+'"';
+  el('results-container').innerHTML = `<div class="no-results">
+    <div class="no-results-icon">🔍</div>
+    <div class="no-results-title">No products found</div>
+    <div class="no-results-text">Try different search terms.<br>Example: "hydraulic seal 80mm" or "M8 bolt stainless steel"</div>
+  </div>`;
+  const qs = el('quote-section');
+  if(qs){ qs.style.display='block'; const qp=el('q-part'); if(qp) qp.value=query; }
+}
+
+function showError(msg){
+  const countEl = el('results-count');
+  if(countEl) countEl.textContent = '';
+  el('results-container').innerHTML = `<div class="error-state">
+    <div style="font-size:2rem;margin-bottom:8px">⚠️</div>
+    <div style="font-weight:600;margin-bottom:6px">Search error</div>
+    <div style="font-size:13px">${esc(msg)}</div>
+    <div style="font-size:13px;margin-top:8px">Please try again in a moment.</div>
+  </div>`;
+}
+
+/* ── SEARCH TRIGGER ── */
 function doSearch(){
-  const q = (el('landing-q')||{}).value ||
-            (el('results-q')||{}).value ||
-            (el('hdr-q')||{}).value ||
-            (el('dash-q')||{}).value ||
+  const q = (el('landing-q')||{}).value?.trim() ||
+            (el('results-q')||{}).value?.trim() ||
             currentQuery;
-  if(!q||!q.trim()){ toast('Please enter a part description.','err'); return; }
-  currentQuery = q.trim();
-  const prefRegion = localStorage.getItem('pm_pref_region'); if(prefRegion && prefRegion!=='all') selectedRegion=prefRegion;
-  const prefDelivery = localStorage.getItem('pm_pref_delivery'); if(prefDelivery && prefDelivery!=='any') selectedDelivery=prefDelivery;
-  ['landing-q','results-q','hdr-q','dash-q'].forEach(id=>{
-    const inp = el(id); if(inp) inp.value = currentQuery;
-  });
+  if(!q){ toast('Please enter a search term.','err'); return; }
+  currentQuery = q;
+  ['landing-q','results-q','hdr-q'].forEach(id=>{ const i=el(id); if(i) i.value=q; });
   switchView('view-results');
-  el('results-loading').style.display='block';
-  el('results-output').innerHTML='';
-  el('quote-banner').style.display='none';
-  const uc = el('understanding-card'); if(uc) uc.style.display='none';
-  const ptw = el('price-table-wrap'); if(ptw) ptw.innerHTML='';
-  ['brave-results-section','ai-analysis-section'].forEach(id=>{ const e=el(id); if(e){e.style.display='none';e.innerHTML='';} });
-  const bar = el('loading-bar');
-  if(bar){ bar.style.width='0'; setTimeout(()=>bar.style.width='80%',50); }
+  saveSearchHistory(q);
+  searchProducts(q);
+}
 
-  setTimeout(()=>{
-    const parsed = parseQuery(currentQuery);
-    currentParsed = parsed;
+function handleSearch(){
+  const input = el('search-input');
+  const q = input?.value?.trim();
+  if(!q) return;
+  currentQuery = q;
+  switchView('view-results');
+  saveSearchHistory(q);
+  searchProducts(q);
+}
 
-    // Pool by region
-    let pool = getSuppliersByRegion(selectedRegion);
+function headerSearch(){
+  const inp = el('hdr-q');
+  const q = inp?.value?.trim();
+  if(!q) return;
+  currentQuery = q;
+  ['landing-q','results-q'].forEach(id=>{ const i=el(id); if(i) i.value=q; });
+  switchView('view-results');
+  saveSearchHistory(q);
+  searchProducts(q);
+  window.scrollTo(0,0);
+}
 
-    // Filter by category (dropdown wins; else use parsed)
-    if(selectedCat !== 'all'){
-      const catKey = CAT_KEY_MAP[selectedCat] || selectedCat;
-      const cf = pool.filter(s=>s.categories&&s.categories.includes(catKey));
-      if(cf.length >= 2) pool = cf;
-    } else if(parsed.category && parsed.category !== 'general'){
-      const cf = pool.filter(s=>s.categories&&s.categories.includes(parsed.category));
-      if(cf.length >= 3) pool = cf;
-    }
+function quickSearch(term){
+  const li = el('landing-q'); if(li) li.value = term;
+  const ri = el('results-q'); if(ri) ri.value = term;
+  currentQuery = term;
+  switchView('view-results');
+  saveSearchHistory(term);
+  searchProducts(term);
+}
 
-    // Filter by delivery
-    if(selectedDelivery !== 'any'){
-      const allowed = DELIVERY_ALLOWED[selectedDelivery];
-      if(allowed){
-        const df = pool.filter(s=>allowed.includes(s.deliveryTier));
-        if(df.length >= 2) pool = df;
-      }
-    }
+/* ── HISTORY ── */
+function saveSearchHistory(query){
+  const key = currentUser ? 'partmatch_hist_'+currentUser.email : 'partmatch_history';
+  const history = JSON.parse(localStorage.getItem(key)||'[]');
+  history.unshift({ query, timestamp: new Date().toISOString() });
+  localStorage.setItem(key, JSON.stringify(history.slice(0,30)));
+}
 
-    // Score
-    const scored = pool.map(s=>{
-      const ds = DELIVERY_SCORE[s.deliveryTier]||5;
-      return {...s, score: s.reliability*40 + ds*3 + (s.inStock?20:0) + Math.random()*10};
-    }).sort((a,b)=>b.score-a.score);
-
-    // 3 sections
-    const fastest = scored.filter(s=>['same-day','next-day'].includes(s.deliveryTier)).slice(0,3);
-    const fastIds = new Set(fastest.map(s=>s.id));
-    const bestMatch = scored.filter(s=>!fastIds.has(s.id)).slice(0,8);
-    const bmIds = new Set(bestMatch.map(s=>s.id));
-    const bestPrice = scored.filter(s=>!fastIds.has(s.id)&&!bmIds.has(s.id)&&s.priceLevel==='$').slice(0,5);
-
-    // Save training record
-    const tid = uuid();
-    const rec = {
-      id:tid, sessionId:SID,
-      userId: currentUser ? currentUser.email : 'anonymous',
-      originalQuery:currentQuery,
-      detectedCategory:parsed.category,
-      detectedMaterial:parsed.material,
-      detectedBrand:parsed.brand,
-      urgency:parsed.urgency,
-      dimensions:parsed.dimensions,
-      region:selectedRegion, category:selectedCat, delivery:selectedDelivery,
-      resultsCount: fastest.length+bestMatch.length+bestPrice.length,
-      clickedSupplier:null, quoteRequested:false,
-      timestamp:new Date().toISOString()
-    };
-    const tr = JSON.parse(localStorage.getItem('partmatch_training')||'[]');
-    tr.push(rec);
-    localStorage.setItem('partmatch_training',JSON.stringify(tr));
-    sessionStorage.setItem('partmatch_tid',tid);
-
-    if(bar) bar.style.width='100%';
-    el('results-loading').style.display='none';
-
-    renderUnderstanding(parsed);
-    const priceInfo = PRICE_DATA[parsed.category] || PRICE_DATA['mro'];
-    renderPriceTable(priceInfo, parsed);
-    renderResults(fastest, bestMatch, bestPrice, parsed);
-
-    el('quote-banner').style.display='block';
-    if(currentUser) saveHistory(currentQuery);
-    runBraveSearch(currentQuery);
-    runAIAnalysis(currentQuery, parsed);
-  }, 1200);
+function trackClick(seller, productTitle){
+  const key = currentUser ? 'partmatch_clicks_'+currentUser.email : 'partmatch_clicks';
+  const log = JSON.parse(localStorage.getItem(key)||'[]');
+  log.unshift({ seller, product: productTitle, timestamp: new Date().toISOString() });
+  localStorage.setItem(key, JSON.stringify(log.slice(0,50)));
 }
 
 /* ── DASHBOARD ── */
@@ -1442,746 +865,102 @@ function loadDashboard(){
   if(!currentUser){ switchView('view-login'); return; }
   const titleEl = el('dash-title');
   if(titleEl) titleEl.textContent = 'Welcome back, '+currentUser.name.split(' ')[0]+'!';
-  loadSearchHistory();
-  loadSavedSuppliers();
-  loadQuoteHistory();
-}
 
-function showDashTab(tab, btn){
-  ['searches','saved','quotes'].forEach(t=>{
-    const panel = el('dash-'+t);
-    if(panel) panel.style.display = t===tab ? 'block' : 'none';
-  });
-  document.querySelectorAll('.dash-tab').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-}
-
-function loadSearchHistory(){
-  const key = 'partmatch_hist_'+currentUser.email;
-  const hist = JSON.parse(localStorage.getItem(key)||'[]');
-  const container = el('dash-searches-list');
-  if(!container) return;
-  if(!hist.length){
-    container.innerHTML='<div class="dash-empty">No searches yet. <a onclick="switchView(\'view-landing\')">Start searching →</a></div>';
-    return;
-  }
-  container.innerHTML = hist.slice(0,20).map(h=>`
-    <div class="dash-search-card" onclick="currentQuery='${esc(h.query)}';doSearch()">
-      <div class="dash-search-icon">🔍</div>
-      <div>
-        <div class="dash-search-q">${esc(h.query)}</div>
-        <div class="dash-search-meta">${h.cat&&h.cat!=='all'?'Category: '+esc(h.cat)+' · ':''}${new Date(h.ts).toLocaleDateString()}</div>
-      </div>
-    </div>`).join('');
-}
-
-function loadSavedSuppliers(){
-  const key = 'partmatch_saved_'+currentUser.email;
-  const saved = JSON.parse(localStorage.getItem(key)||'[]');
-  const container = el('dash-saved-list');
-  if(!container) return;
-  if(!saved.length){
-    container.innerHTML='<div class="dash-empty">No saved suppliers yet. Save suppliers from search results.</div>';
-    return;
-  }
-  container.innerHTML = saved.map(s=>`
-    <div class="dash-search-card">
-      <div class="dash-search-icon">${s.flag||'🌐'}</div>
-      <div>
-        <div class="dash-search-q">${esc(s.name)}</div>
-        <div class="dash-search-meta">${esc(s.country||'')} · Saved ${new Date(s.ts).toLocaleDateString()}</div>
-      </div>
-    </div>`).join('');
-}
-
-function loadQuoteHistory(){
-  const leads = JSON.parse(localStorage.getItem('partmatch_leads')||'[]')
-    .filter(l=>currentUser && l.email===currentUser.email);
-  const container = el('dash-quotes-list');
-  if(!container) return;
-  if(!leads.length){
-    container.innerHTML='<div class="dash-empty">No quote requests yet. <a onclick="switchView(\'view-quote\')">Submit a quote →</a></div>';
-    return;
-  }
-  container.innerHTML = leads.map(l=>`
-    <div class="dash-search-card">
-      <div class="dash-search-icon">📋</div>
-      <div>
-        <div class="dash-search-q">${esc(l.part||l.query||'—')}</div>
-        <div class="dash-search-meta">Ref: ${esc(l.ref||'—')} · ${esc(l.urgency||'')} · ${new Date(l.ts).toLocaleDateString()}</div>
-      </div>
-    </div>`).join('');
-}
-
-function saveHistory(query){
-  if(!currentUser) return;
-  const key = 'partmatch_hist_'+currentUser.email;
-  const hist = JSON.parse(localStorage.getItem(key)||'[]');
-  hist.unshift({query,cat:selectedCat,region:selectedRegion,delivery:selectedDelivery,ts:Date.now()});
-  if(hist.length>30) hist.splice(30);
-  localStorage.setItem(key,JSON.stringify(hist));
-}
-
-/* ── TOAST ── */
-function toast(msg, type=''){
-  const c = el('toast-container');
-  if(!c) return;
-  const t = document.createElement('div');
-  t.className = 'toast'+(type?' '+type:'');
-  t.textContent = msg;
-  c.appendChild(t);
-  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s';
-    setTimeout(()=>t.remove(),300); }, 2800);
-}
-
-/* ── BACK TO TOP ── */
-function initBackToTop(){
-  const btn = el('back-top');
-  if(!btn) return;
-  window.addEventListener('scroll',()=>{
-    btn.classList.toggle('show', window.scrollY>300);
-  },{passive:true});
-}
-
-/* ── UTILITIES ── */
-function el(id){ return document.getElementById(id); }
-function v(id){ return (el(id)||{}).value||''; }
-function esc(s){ if(!s)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function uuid(){ return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:r&3|8).toString(16)}); }
-function showErr(id,msg){ const e=el(id);if(e){e.textContent=msg;e.classList.add('show');} }
-
-/* ══════════════════════════════════════════════════════
-   PART 2 — SUPPLIER DATABASE, SEARCH ENGINE & RENDERERS
-══════════════════════════════════════════════════════ */
-
-const CAT_KEY_MAP = {
-  'all':'all','hydraulic-seals':'seals','seal-kits':'seals',
-  'orings':'orings','pneumatic':'pneumatic','hydraulic':'hydraulic',
-  'ball-bearings':'bearings','bearings':'bearings','valves':'valves',
-  'pipes':'pipes','fasteners':'fasteners','bolts':'fasteners',
-  'springs':'springs','power-transmission':'power-transmission',
-  'pumps':'pumps','electrical':'electrical','civil':'civil','mro':'mro'
-};
-
-const DELIVERY_SCORE = {
-  'same-day':10,'next-day':9,'2-3 days':8,'3-5 days':7,
-  '4-7 days':6,'5-7 days':5,'5-10 days':4,'7-14 days':3,
-  '7-21 days':2,'10-21 days':1,'14-30 days':1
-};
-
-const DELIVERY_ALLOWED = {
-  today:['same-day'],
-  '1-3days':['same-day','next-day','2-3 days'],
-  '4-7days':['same-day','next-day','2-3 days','3-5 days','4-7 days','5-7 days'],
-  any:null
-};
-
-const SUPPLIERS = {
-  grainger:{name:"Grainger",country:"USA",flag:"🇺🇸",region:"usa",reliability:5,deliveryTier:"same-day",priceLevel:"$$$",specialty:"All industrial MRO",description:"Largest US industrial distributor. Same-day pickup at 600+ US branches.",moq:"1 unit",inStock:true,categories:["fasteners","bearings","mro","hydraulic","pneumatic","electrical","lubricants"]},
-  mcmaster:{name:"McMaster-Carr",country:"USA",flag:"🇺🇸",region:"usa",reliability:5,deliveryTier:"next-day",priceLevel:"$$$",specialty:"Precision engineering parts",description:"Best technical specs online. Ships same or next day. Trusted by engineers worldwide.",moq:"1 unit",inStock:true,categories:["fasteners","bearings","springs","seals","pipes","pneumatic","hydraulic"]},
-  msc:{name:"MSC Direct",country:"USA",flag:"🇺🇸",region:"usa",reliability:5,deliveryTier:"same-day",priceLevel:"$$",specialty:"MRO and industrial seals",description:"Competitive MRO pricing. Same-day shipping from multiple US warehouses.",moq:"1 unit",inStock:true,categories:["fasteners","bearings","mro","seals"]},
-  motion:{name:"Motion Industries",country:"USA",flag:"🇺🇸",region:"usa",reliability:5,deliveryTier:"2-3 days",priceLevel:"$$",specialty:"Hydraulic and pneumatic specialist",description:"Hydraulic and pneumatic specialist. 550+ US locations. Strong aftermarket catalog.",moq:"1 unit",inStock:true,categories:["hydraulic","pneumatic","bearings","power-transmission","seals"]},
-  fastenal:{name:"Fastenal",country:"USA",flag:"🇺🇸",region:"usa",reliability:5,deliveryTier:"same-day",priceLevel:"$$",specialty:"Fasteners and MRO everything",description:"3,200 US locations. World's largest fastener company. From tiny M3 screws to large structural bolts.",moq:"1 unit",inStock:true,categories:["fasteners","mro","bearings","lubricants"]},
-  globalIndustrial:{name:"Global Industrial",country:"USA",flag:"🇺🇸",region:"usa",reliability:4,deliveryTier:"2-3 days",priceLevel:"$$",specialty:"Everything MRO all categories",description:"One stop US MRO supplier. From a single bolt to large equipment. Huge catalog.",moq:"1 unit",inStock:true,categories:["fasteners","mro","civil","electrical","lubricants","pumps"]},
-  hercules:{name:"Hercules Sealing",country:"USA",flag:"🇺🇸",region:"usa",reliability:4,deliveryTier:"2-3 days",priceLevel:"$$",specialty:"Cylinder seal kits",description:"Specializes in cylinder rebuild kits for excavators and loaders. Great aftermarket coverage.",moq:"1 kit",inStock:true,categories:["seals","hydraulic"]},
-  globaloring:{name:"Global O-Ring",country:"USA",flag:"🇺🇸",region:"usa",reliability:4,deliveryTier:"2-3 days",priceLevel:"$",specialty:"O-rings all materials",description:"Best prices on o-rings in NBR, Viton, EPDM, PTFE. Huge inventory.",moq:"1 unit",inStock:true,categories:["seals","orings"]},
-  sealdesign:{name:"Seal and Design",country:"USA",flag:"🇺🇸",region:"usa",reliability:4,deliveryTier:"2-3 days",priceLevel:"$$",specialty:"Custom and standard seals",description:"Custom seals to drawing. Strong aftermarket catalog for hydraulic and pneumatic seals.",moq:"1 unit",inStock:true,categories:["seals","orings","hydraulic"]},
-  applerubber:{name:"Apple Rubber",country:"USA",flag:"🇺🇸",region:"usa",reliability:4,deliveryTier:"3-5 days",priceLevel:"$$",specialty:"Custom rubber seals",description:"Custom rubber seals and o-rings. Good for non-standard sizes and materials.",moq:"1 unit",inStock:false,categories:["seals","orings"]},
-  timken:{name:"Timken",country:"USA",flag:"🇺🇸",region:"usa",reliability:5,deliveryTier:"3-5 days",priceLevel:"$$$",specialty:"Tapered roller bearings",description:"150-year bearing leader. Tapered roller bearings for mining and heavy industry.",moq:"1 unit",inStock:true,categories:["bearings","power-transmission"]},
-  daemar:{name:"Daemar",country:"Canada",flag:"🇨🇦",region:"usa",reliability:4,deliveryTier:"3-5 days",priceLevel:"$$",specialty:"Seals gaskets o-rings",description:"Canadian seals specialist. Strong hydraulic and pneumatic range. Ships across North America.",moq:"1 unit",inStock:true,categories:["seals","orings","hydraulic"]},
-  eatonHydraulics:{name:"Eaton Hydraulics",country:"USA",flag:"🇺🇸",region:"usa",reliability:5,deliveryTier:"5-7 days",priceLevel:"$$$",specialty:"Hydraulic pumps and seals",description:"Eaton hydraulic components and seals. Trusted for heavy duty applications.",moq:"1 unit",inStock:true,categories:["hydraulic"]},
-  netseals:{name:"Netseals",country:"UK",flag:"🇬🇧",region:"europe",reliability:5,deliveryTier:"3-5 days",priceLevel:"$$",specialty:"Pure seals specialist",description:"UK leading seals specialist. Massive range of hydraulic, pneumatic and rotary seals.",moq:"1 unit",inStock:true,categories:["seals","hydraulic","pneumatic","orings"]},
-  rscomponents:{name:"RS Components",country:"EU",flag:"🇪🇺",region:"europe",reliability:5,deliveryTier:"next-day",priceLevel:"$$$",specialty:"Pan-European industrial",description:"Next-day delivery across UK and EU. Huge stock. Trusted in 32 countries.",moq:"1 unit",inStock:true,categories:["fasteners","bearings","electrical","pneumatic","hydraulic","mro"]},
-  eriks:{name:"Eriks",country:"Netherlands",flag:"🇳🇱",region:"europe",reliability:5,deliveryTier:"4-7 days",priceLevel:"$$",specialty:"European industrial seals",description:"Top European industrial supplier. Strong hydraulic seals, pneumatics and gaskets.",moq:"1 unit",inStock:true,categories:["seals","hydraulic","pneumatic","pipes"]},
-  trelleborg:{name:"Trelleborg Sealing",country:"Sweden",flag:"🇸🇪",region:"europe",reliability:5,deliveryTier:"5-7 days",priceLevel:"$$$",specialty:"Premium high-performance seals",description:"World-class seals for mining, aerospace and offshore. Used where failure is not an option.",moq:"1 unit",inStock:false,categories:["seals","hydraulic"]},
-  hallite:{name:"Hallite Seals",country:"UK",flag:"🇬🇧",region:"europe",reliability:5,deliveryTier:"5-7 days",priceLevel:"$$",specialty:"Hydraulic cylinder seals",description:"World leader in hydraulic cylinder seals. Aftermarket specialist for all major cylinder brands.",moq:"1 unit",inStock:true,categories:["seals","hydraulic"]},
-  freudenberg:{name:"Freudenberg Sealing",country:"Germany",flag:"🇩🇪",region:"europe",reliability:5,deliveryTier:"5-10 days",priceLevel:"$$$",specialty:"Extreme condition seals",description:"German precision seals for extreme temperatures and pressures. Mining and oil and gas proven.",moq:"1 unit",inStock:false,categories:["seals","hydraulic"]},
-  skfseals:{name:"SKF Sealing",country:"Sweden",flag:"🇸🇪",region:"europe",reliability:5,deliveryTier:"5-7 days",priceLevel:"$$$",specialty:"Precision industrial seals and bearings",description:"SKF precision seals and bearings trusted in heavy industry and mining worldwide.",moq:"1 unit",inStock:true,categories:["seals","bearings","hydraulic"]},
-  parker:{name:"Parker Store",country:"Global",flag:"🌐",region:"global",reliability:5,deliveryTier:"3-7 days",priceLevel:"$$$",specialty:"Parker OEM and aftermarket",description:"Official Parker Hannifin source. OEM quality guaranteed. Global network of stores.",moq:"1 unit",inStock:true,categories:["hydraulic","pneumatic","seals","pipes"]},
-  festo:{name:"Festo",country:"Germany",flag:"🇩🇪",region:"europe",reliability:5,deliveryTier:"3-7 days",priceLevel:"$$$",specialty:"Pneumatic automation components",description:"German pneumatic specialist. Precision pneumatic cylinders, valves and seals.",moq:"1 unit",inStock:true,categories:["pneumatic"]},
-  norgren:{name:"Norgren IMI",country:"UK",flag:"🇬🇧",region:"europe",reliability:5,deliveryTier:"3-7 days",priceLevel:"$$",specialty:"Pneumatic motion control",description:"IMI Norgren pneumatic components. Strong aftermarket catalog.",moq:"1 unit",inStock:true,categories:["pneumatic"]},
-  boschRexroth:{name:"Bosch Rexroth",country:"Germany",flag:"🇩🇪",region:"europe",reliability:5,deliveryTier:"5-10 days",priceLevel:"$$$",specialty:"Hydraulic systems and parts",description:"Bosch Rexroth hydraulic components. OEM quality for heavy industrial hydraulic systems.",moq:"1 unit",inStock:false,categories:["hydraulic"]},
-  ksb:{name:"KSB Pumps",country:"Germany",flag:"🇩🇪",region:"europe",reliability:5,deliveryTier:"5-10 days",priceLevel:"$$$",specialty:"Industrial pumps valves water systems",description:"German engineering for pumps and industrial valves. Civil infrastructure and water treatment.",moq:"1 unit",inStock:false,categories:["pumps","valves","civil"]},
-  wurth:{name:"Wurth",country:"Germany",flag:"🇩🇪",region:"europe",reliability:5,deliveryTier:"next-day",priceLevel:"$$",specialty:"Fasteners tools chemicals worldwide",description:"World's largest assembly consumables supplier. Bolts, screws, anchors, tools, chemicals. Ships to 80+ countries.",moq:"1 unit",inStock:true,categories:["fasteners","mro","lubricants","civil"]},
-  misumi:{name:"MISUMI",country:"Japan",flag:"🇯🇵",region:"global",reliability:5,deliveryTier:"3-5 days",priceLevel:"$$",specialty:"80M precision components custom specs",description:"Engineer's paradise. 80 million configurable parts — shafts, springs, bearings, fasteners, gears to exact specifications.",moq:"1 unit",inStock:true,categories:["fasteners","bearings","springs","power-transmission","pneumatic"]},
-  nsk:{name:"NSK Bearings",country:"Japan",flag:"🇯🇵",region:"global",reliability:5,deliveryTier:"5-7 days",priceLevel:"$$$",specialty:"World top bearing manufacturer",description:"Precision ball bearings, roller bearings, linear guides. Used in aerospace to mining.",moq:"1 unit",inStock:true,categories:["bearings"]},
-  smc:{name:"SMC Corporation",country:"Japan",flag:"🇯🇵",region:"global",reliability:5,deliveryTier:"3-5 days",priceLevel:"$$$",specialty:"World largest pneumatic manufacturer",description:"World's largest pneumatic manufacturer. Go-to source for all SMC pneumatic parts.",moq:"1 unit",inStock:true,categories:["pneumatic"]},
-  hydrapak:{name:"HydraPak Seals",country:"Global",flag:"🌐",region:"global",reliability:4,deliveryTier:"5-7 days",priceLevel:"$$",specialty:"Hydraulic aftermarket seals",description:"Hydraulic seal aftermarket specialist. Good cross-reference database.",moq:"1 unit",inStock:true,categories:["seals","hydraulic"]},
-  indiamart:{name:"IndiaMART",country:"India",flag:"🇮🇳",region:"india",reliability:3,deliveryTier:"7-14 days",priceLevel:"$",specialty:"Indian manufacturers direct",description:"Largest Indian B2B marketplace. Very competitive prices direct from manufacturers. Use verified suppliers only.",moq:"10+ units",inStock:true,categories:["fasteners","bearings","seals","hydraulic","pneumatic","civil","electrical","pumps","valves","pipes","mro"]},
-  tradeindia:{name:"TradeIndia",country:"India",flag:"🇮🇳",region:"india",reliability:3,deliveryTier:"7-14 days",priceLevel:"$",specialty:"Indian industrial suppliers",description:"Indian B2B directory. Good for sourcing from Indian hydraulic seal manufacturers.",moq:"10+ units",inStock:true,categories:["fasteners","bearings","seals","hydraulic","civil","pipes","pumps"]},
-  alibaba:{name:"Alibaba",country:"China",flag:"🇨🇳",region:"china",reliability:3,deliveryTier:"7-21 days",priceLevel:"$",specialty:"Bulk orders from factories",description:"Lowest global prices for bulk orders. Always use Gold Supplier verified vendors. Best for non-urgent large quantity.",moq:"50-100 units",inStock:true,categories:["fasteners","bearings","seals","hydraulic","pneumatic","civil","electrical","pumps","valves","pipes","mro","springs","power-transmission"]},
-  madeInChina:{name:"Made-in-China",country:"China",flag:"🇨🇳",region:"china",reliability:3,deliveryTier:"10-21 days",priceLevel:"$",specialty:"Chinese factory direct",description:"Direct from Chinese manufacturers. Good for custom seal specifications at very low cost.",moq:"50+ units",inStock:true,categories:["fasteners","seals","hydraulic","civil","pipes","valves","pumps"]},
-  dhgate:{name:"DHgate",country:"China",flag:"🇨🇳",region:"china",reliability:3,deliveryTier:"7-14 days",priceLevel:"$",specialty:"Small quantity China orders",description:"China wholesale for smaller quantities than Alibaba. Faster processing for small orders.",moq:"5-10 units",inStock:true,categories:["fasteners","bearings","seals","mro"]},
-  gulfIndustrial:{name:"Gulf Industrial",country:"UAE",flag:"🇦🇪",region:"middleeast",reliability:3,deliveryTier:"5-10 days",priceLevel:"$$",specialty:"Gulf region industrial",description:"Industrial supplier serving UAE, Saudi, Oman and the Gulf region.",moq:"1 unit",inStock:true,categories:["hydraulic","pneumatic","seals","pipes","valves"]},
-  tradeKeyAfrica:{name:"Tradekey Africa",country:"Africa",flag:"🌍",region:"africa",reliability:2,deliveryTier:"14-30 days",priceLevel:"$",specialty:"African industrial suppliers",description:"African B2B marketplace. Connects buyers with African and international suppliers.",moq:"Variable",inStock:false,categories:["fasteners","pipes","civil","mro"]},
-  russiaIndustrial:{name:"Russian Industrial",country:"Russia",flag:"🇷🇺",region:"russia",reliability:3,deliveryTier:"14-30 days",priceLevel:"$",specialty:"CIS region industrial",description:"Russian and CIS industrial suppliers. Competitive pricing for Eastern European buyers.",moq:"Variable",inStock:false,categories:["hydraulic","pneumatic","bearings","pipes"]}
-};
-
-const PRICE_DATA = {
-  fasteners:{china:"$0.01-$0.50/unit",india:"$0.02-$0.80/unit",europe:"$0.10-$3.00/unit",usa:"$0.15-$5.00/unit",moq:{china:"100-1000 units",india:"50-500 units",europe:"1-100 units",usa:"1-50 units"},lead:{china:"15-30 days",india:"7-21 days",europe:"2-7 days",usa:"1-5 days"},tip:"China best for bulk 1000+. USA/Europe for urgent small orders."},
-  bearings:{china:"$0.50-$50/unit",india:"$1.00-$80/unit",europe:"$5.00-$500/unit",usa:"$5.00-$600/unit",moq:{china:"1-10 units",india:"1-5 units",europe:"1 unit",usa:"1 unit"},lead:{china:"7-21 days",india:"3-14 days",europe:"1-5 days",usa:"1-3 days"},tip:"Search by bearing number (e.g. 6205). SKF/NSK for premium. China for budget."},
-  seals:{china:"$0.50-$30/unit",india:"$0.80-$40/unit",europe:"$3.00-$150/unit",usa:"$5.00-$200/unit",moq:{china:"10-100 units",india:"5-50 units",europe:"1-10 units",usa:"1 unit"},lead:{china:"7-21 days",india:"5-14 days",europe:"2-7 days",usa:"1-5 days"},tip:"Include bore size, material (NBR/Viton) and pressure rating for best match."},
-  orings:{china:"$0.01-$5/unit",india:"$0.02-$8/unit",europe:"$0.05-$20/unit",usa:"$0.05-$25/unit",moq:{china:"100-1000 units",india:"50-500 units",europe:"1-100 units",usa:"1 unit"},lead:{china:"7-21 days",india:"3-14 days",europe:"1-5 days",usa:"1-2 days"},tip:"Specify ID x CS dimensions or standard size (AS568). Material: NBR, Viton, EPDM."},
-  hydraulic:{china:"$20-$2000/unit",india:"$30-$3000/unit",europe:"$100-$10000/unit",usa:"$150-$15000/unit",moq:{china:"1-5 units",india:"1-3 units",europe:"1 unit",usa:"1 unit"},lead:{china:"14-45 days",india:"7-30 days",europe:"3-14 days",usa:"2-10 days"},tip:"Specify pressure rating, displacement and port sizes for accurate quotes."},
-  pneumatic:{china:"$2-$200/unit",india:"$5-$300/unit",europe:"$15-$800/unit",usa:"$20-$1000/unit",moq:{china:"1-10 units",india:"1-5 units",europe:"1 unit",usa:"1 unit"},lead:{china:"7-21 days",india:"5-14 days",europe:"2-7 days",usa:"1-5 days"},tip:"State bore diameter, stroke length and mounting style."},
-  pipes:{china:"$0.50-$50/meter",india:"$0.80-$60/meter",europe:"$3-$200/meter",usa:"$4-$250/meter",moq:{china:"100m or 1 ton",india:"50m+",europe:"1m+",usa:"1m+"},lead:{china:"21-45 days",india:"7-21 days",europe:"3-14 days",usa:"2-10 days"},tip:"Specify OD or DN size, wall thickness (Schedule), material and end type."},
-  civil:{china:"$60-$90/ton",india:"$70-$100/ton",europe:"$120-$180/ton",usa:"$130-$200/ton",moq:{china:"20 tons+",india:"1 ton+",europe:"1 ton+",usa:"1 ton+"},lead:{china:"30-60 days",india:"3-14 days",europe:"3-10 days",usa:"2-7 days"},tip:"Check local suppliers first for cement and structural steel. China best for fittings."},
-  springs:{china:"$0.05-$50/unit",india:"$0.10-$70/unit",europe:"$0.50-$200/unit",usa:"$0.50-$250/unit",moq:{china:"10-1000 units",india:"10-500 units",europe:"1-100 units",usa:"1-50 units"},lead:{china:"7-21 days",india:"5-14 days",europe:"2-7 days",usa:"1-5 days"},tip:"Specify wire diameter, OD, free length and material."},
-  "power-transmission":{china:"$1-$500/unit",india:"$2-$700/unit",europe:"$10-$2000/unit",usa:"$10-$2500/unit",moq:{china:"1-10 units",india:"1-5 units",europe:"1 unit",usa:"1 unit"},lead:{china:"7-30 days",india:"5-21 days",europe:"2-10 days",usa:"1-7 days"},tip:"For belts state section and length. For chains state pitch and number of links."},
-  pumps:{china:"$50-$5000/unit",india:"$80-$7000/unit",europe:"$300-$30000/unit",usa:"$400-$40000/unit",moq:{china:"1-3 units",india:"1-2 units",europe:"1 unit",usa:"1 unit"},lead:{china:"14-60 days",india:"7-30 days",europe:"5-21 days",usa:"3-14 days"},tip:"State flow rate (m3/hr), head (m), fluid type and power supply."},
-  electrical:{china:"$20-$2000/unit",india:"$30-$2500/unit",europe:"$100-$8000/unit",usa:"$150-$10000/unit",moq:{china:"1-5 units",india:"1-2 units",europe:"1 unit",usa:"1 unit"},lead:{china:"14-45 days",india:"7-21 days",europe:"3-14 days",usa:"2-10 days"},tip:"State power kW or HP, frame size, speed RPM and voltage."},
-  mro:{china:"$1-$50/unit",india:"$2-$60/unit",europe:"$5-$150/unit",usa:"$5-$200/unit",moq:{china:"10-100 units",india:"5-50 units",europe:"1-10 units",usa:"1 unit"},lead:{china:"7-21 days",india:"3-14 days",europe:"1-5 days",usa:"1-3 days"},tip:"MRO items best sourced locally for fast delivery. Bulk from India or China."},
-  valves:{china:"$2-$500/unit",india:"$3-$700/unit",europe:"$10-$2000/unit",usa:"$15-$3000/unit",moq:{china:"1-10 units",india:"1-5 units",europe:"1 unit",usa:"1 unit"},lead:{china:"7-30 days",india:"5-21 days",europe:"2-10 days",usa:"1-7 days"},tip:"Specify connection type (flanged/threaded), pressure class and material."},
-  general:{china:"$1-$100/unit",india:"$2-$150/unit",europe:"$10-$500/unit",usa:"$10-$600/unit",moq:{china:"10-100 units",india:"5-50 units",europe:"1-10 units",usa:"1 unit"},lead:{china:"7-30 days",india:"5-21 days",europe:"2-10 days",usa:"1-7 days"},tip:"Add more detail to your search — part number, dimensions or machine model — for better results."}
-};
-
-function parseQuery(raw){
-  let q = raw.toLowerCase().trim();
-  ['i need','find me','looking for','please','do you have','can i get',
-   'where can i buy','how much is','i want to buy','help me find',
-   'show me','get me','need to order','can you find','urgently need'
-  ].forEach(n=>{ q=q.replace(new RegExp(n,'g'),''); });
-  q = q.trim();
-
-  const catMap = {
-    fasteners:['bolt','screw','nut','washer','stud','rivet','anchor','m3','m4','m5','m6','m8','m10','m12','m16','m20','m24','hex bolt','cap screw','set screw','machine screw','threaded rod','all thread','grade 8','grade 10','din 933','din 931'],
-    bearings:['bearing','ball bearing','roller bearing','needle bearing','tapered bearing','thrust bearing','slewing ring','pillow block','bushing','bush','plain bearing','6200','6201','6202','6203','6204','6205','6206','6207','6208','6300','6301','6302','6303','6304','6305','6306','30205','30206','30207','30208'],
-    seals:['hydraulic seal','piston seal','rod seal','wiper seal','scraper seal','buffer seal','rotary seal','seal kit','cylinder seal','ram seal','nbr seal','viton seal','ptfe seal','pu seal'],
-    orings:['o ring','o-ring','oring','rubber ring','seal ring','face seal','as568','bs1806','din 3771'],
-    hydraulic:['hydraulic pump','gear pump','piston pump','hydraulic motor','hydraulic valve','relief valve','check valve','hydraulic cylinder','hydraulic hose','hydraulic fitting','hydraulic filter','hydraulic power unit','hpu','hydraulic oil','hydraulic pipe'],
-    pneumatic:['pneumatic','air cylinder','pneumatic valve','air valve','solenoid valve','frl','filter regulator','air fitting','push to connect','pneumatic seal','air actuator'],
-    pipes:['pipe','steel pipe','ms pipe','gi pipe','stainless pipe','pvc pipe','hdpe pipe','copper pipe','pipe fitting','elbow','tee fitting','reducer','flange','dn25','dn32','dn40','dn50','dn65','dn80','dn100','dn150','dn200','schedule 40','schedule 80','sch 40'],
-    valves:['ball valve','gate valve','globe valve','butterfly valve','needle valve','diaphragm valve','safety valve','foot valve','strainer','y strainer','pn16','pn25','class 150'],
-    civil:['cement','concrete','mortar','rebar','reinforcement','tmt bar','i beam','h beam','angle iron','channel steel','flat bar','square tube','hollow section','steel plate','wire mesh','brc mesh','scaffolding','waterproofing','concrete block'],
-    springs:['spring','compression spring','tension spring','torsion spring','wave spring','disc spring','belleville','gas spring','gas strut'],
-    'power-transmission':['gear','spur gear','bevel gear','helical gear','worm gear','gearbox','reducer','shaft','coupling','jaw coupling','belt','v belt','timing belt','conveyor belt','chain','roller chain','sprocket','pulley','timing pulley','brake','clutch'],
-    pumps:['centrifugal pump','water pump','submersible pump','chemical pump','slurry pump','sewage pump','dosing pump','diaphragm pump','self priming pump'],
-    electrical:['electric motor','servo motor','stepper motor','gear motor','single phase','three phase','induction motor','vfd drive','variable frequency','inverter drive','0.37 kw','0.75 kw','1.5 kw','2.2 kw','3.7 kw','5.5 kw','7.5 kw','11 kw','15 kw'],
-    mro:['grease','lubricant','hydraulic oil','gear oil','thread lock','anti seize','penetrating oil','wd40','cleaning','safety','ppe','hand tool','power tool','welding','electrode','consumable']
-  };
-
-  let category='general'; let bestScore=0;
-  for(const [cat,kws] of Object.entries(catMap)){
-    const m=kws.filter(k=>q.includes(k));
-    if(m.length>bestScore){bestScore=m.length;category=cat;}
+  const histKey = 'partmatch_hist_'+currentUser.email;
+  const history = JSON.parse(localStorage.getItem(histKey)||'[]');
+  const hEl = el('dash-history');
+  if(hEl){
+    if(!history.length){ hEl.innerHTML='<div class="dash-empty">No searches yet. <a onclick="switchView(\'view-landing\')">Start searching →</a></div>'; }
+    else {
+      hEl.innerHTML = history.slice(0,10).map(h=>`
+        <div class="history-item">
+          <span class="history-query">${esc(h.query)}</span>
+          <span class="history-time">${new Date(h.timestamp).toLocaleDateString()}</span>
+          <button class="history-btn" onclick="quickSearch('${h.query.replace(/'/g,"\\'")}')">Search</button>
+        </div>`).join('');
+    }
   }
 
-  const dims = q.match(/\d+\.?\d*\s*(mm|cm|m\b|inch|"|ft|bar|psi)/gi)||[];
-  const threads = q.match(/m\d+(\.\d+)?/gi)||[];
-
-  const matMap = {
-    'Stainless Steel':['stainless','ss304','ss316','inox','a2','a4'],
-    'Carbon Steel':['carbon steel','mild steel','ms '],
-    'Alloy Steel':['alloy steel','8.8','10.9','12.9','grade 8','grade 10'],
-    'Cast Iron':['cast iron',' ci '],
-    'Brass':['brass','bronze','gunmetal'],
-    'Aluminum':['aluminum','aluminium'],
-    'NBR Nitrile':['nbr','nitrile'],
-    'Viton FKM':['viton','fkm'],
-    'EPDM':['epdm'],
-    'PTFE':['ptfe','teflon'],
-    'Polyurethane':['polyurethane',' pu '],
-    'Nylon':['nylon','pa66','pa6'],
-    'HDPE':['hdpe'],'PVC':['pvc']
-  };
-  let material='';
-  for(const [mat,kws] of Object.entries(matMap)){
-    if(kws.some(k=>q.includes(k))){material=mat;break;}
+  const clickKey = 'partmatch_clicks_'+currentUser.email;
+  const clicks = JSON.parse(localStorage.getItem(clickKey)||'[]');
+  const cEl = el('dash-clicks');
+  if(cEl){
+    if(!clicks.length){ cEl.innerHTML='<div class="dash-empty">No clicks tracked yet.</div>'; }
+    else {
+      cEl.innerHTML = clicks.slice(0,10).map(c=>`
+        <div class="clicks-item">
+          <span class="clicks-seller">${esc(c.seller||'Unknown')}</span>
+          <span class="clicks-product">${esc(c.product||'')}</span>
+          <span class="clicks-time">${new Date(c.timestamp).toLocaleDateString()}</span>
+        </div>`).join('');
+    }
   }
-
-  const brands=['jcb','caterpillar','cat','komatsu','hitachi','volvo','doosan','liebherr','sandvik','atlas copco','ingersoll rand','parker','bosch rexroth','festo','smc','norgren','eaton','skf','nsk','ntn','fag','timken','siemens','abb','grundfos','ksb','cummins','perkins','john deere','case'];
-  const brand=brands.find(b=>q.includes(b))||'';
-
-  let urgency='standard';
-  if(/emergency|right now|immediately|today|asap|machine down|broken down|production stop/.test(q)) urgency='emergency';
-  else if(/fast|quick|soon|next day|this week/.test(q)) urgency='fast';
-
-  const qtyM=q.match(/(\d+)\s*(pcs|pieces|units|nos|sets|kits)/i);
-  const qty=qtyM?parseInt(qtyM[1]):1;
-
-  const understanding=[];
-  if(category!=='general') understanding.push({label:'Part Type',value:category.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())});
-  if(dims.length) understanding.push({label:'Dimensions',value:dims.join(', ')});
-  if(threads.length) understanding.push({label:'Thread',value:threads.join(', ').toUpperCase()});
-  if(material) understanding.push({label:'Material',value:material});
-  if(brand) understanding.push({label:'Equipment',value:brand.toUpperCase()});
-  if(qty>1) understanding.push({label:'Quantity',value:qty+' units'});
-  understanding.push({label:'Urgency',value:urgency==='emergency'?'⚡ Emergency':urgency==='fast'?'🚀 Fast':'📦 Standard'});
-
-  const optimized=q.replace(/\b(good|cheap|best|nice|some|any|few|many)\b/gi,'').replace(/\s+/g,' ').trim();
-  return {original:raw,cleaned:q,optimized,category,dimensions:dims,threads,material,brand,urgency,quantity:qty,understanding};
 }
 
-function getSupplierUrl(id,query){
-  const q=encodeURIComponent(query);
-  const qp=query.replace(/\s+/g,'+');
-  const g=s=>`https://www.google.com/search?q=${encodeURIComponent(query+' '+s)}`;
-  const urls={
-    grainger:`https://www.grainger.com/search?searchQuery=${q}&internalSearchTerm=${q}`,
-    mcmaster:`https://www.mcmaster.com/#${q}`,
-    msc:`https://www.mscdirect.com/browse/tnprod/?query=${q}&hdrsrh=true&searchterm=${q}`,
-    motion:`https://www.motionindustries.com/search.jsp?term=${q}&view=grid`,
-    fastenal:`https://www.fastenal.com/products?term=${q}&searchType=3`,
-    globalIndustrial:`https://www.globalindustrial.com/c/?search=${q}&modelNumber=&inStockOnly=false`,
-    hercules:`https://www.herculesus.com/search?q=${q}`,
-    globaloring:`https://www.globaloring.com/search/?q=${q}`,
-    sealdesign:`https://www.sealanddesign.com/catalogsearch/result/?q=${q}`,
-    applerubber:`https://www.applerubber.com/search/?search=${q}`,
-    timken:g('site:timken.com bearing'),
-    daemar:`https://www.daemar.com/search?q=${q}`,
-    eatonHydraulics:g('site:eaton.com hydraulics'),
-    netseals:`https://www.netseals.it/ricerca/?q=${q}`,
-    rscomponents:`https://uk.rs-online.com/web/c/?searchTerm=${q}`,
-    eriks:`https://www.eriks.eu/en/search/?term=${q}&searchType=products`,
-    trelleborg:g('site:trelleborg.com seals'),
-    hallite:g('site:hallite.com seals'),
-    freudenberg:g('site:fst.com seals'),
-    skfseals:`https://www.skf.com/en/search#q=${q}&t=products&sort=relevance`,
-    parker:`https://www.parker.com/us/en/search.html#q=${q}&sort=relevancy`,
-    festo:`https://www.festo.com/en/search/?query=${q}&tab=products&currentPage=1`,
-    norgren:g('site:norgren.com products'),
-    boschRexroth:g('site:boschrexroth.com'),
-    ksb:g('site:ksb.com products'),
-    wurth:`https://www.wurth.com/en/search?q=${q}`,
-    misumi:`https://us.misumi-ec.com/vona2/result/?Keyword=${q}&CategorySpec=&HissuCode=`,
-    nsk:g('site:nsk.com bearing'),
-    smc:g('site:smcworld.com products'),
-    hydrapak:g('hydraulic seal aftermarket supplier'),
-    indiamart:`https://dir.indiamart.com/search.mp?ss=${q}&prdsrc=1`,
-    tradeindia:`https://www.tradeindia.com/search/?q=${q}`,
-    alibaba:`https://www.alibaba.com/trade/search?SearchText=${q}&IndexArea=product_en&fsb=y`,
-    madeInChina:`https://www.made-in-china.com/multi-search/${qp}/F1/`,
-    dhgate:`https://www.dhgate.com/wholesale/search.do?act=search&searchkey=${q}`,
-    gulfIndustrial:g('hydraulic parts supplier UAE Dubai'),
-    tradeKeyAfrica:g('industrial parts supplier Africa'),
-    russiaIndustrial:g('industrial parts supplier Russia')
-  };
-  return urls[id]||g('industrial parts supplier');
-}
-
-function getSuppliersByRegion(region){
-  const rm={
-    all:()=>true,
-    usa:s=>s.region==='usa'||s.region==='global',
-    india:s=>['india','global','china'].includes(s.region),
-    china:s=>['china','global'].includes(s.region),
-    europe:s=>['europe','global'].includes(s.region),
-    africa:s=>['africa','global','china','india'].includes(s.region),
-    middleeast:s=>['middleeast','global','europe','india'].includes(s.region),
-    russia:s=>['russia','global','china'].includes(s.region)
-  };
-  const f=rm[region]||rm.all;
-  return Object.entries(SUPPLIERS).filter(([,s])=>f(s)).map(([id,s])=>({id,...s}));
-}
-
-function renderUnderstanding(parsed){
-  const wrap=el('understanding-card'); if(!wrap) return;
-  if(!parsed.understanding||!parsed.understanding.length){wrap.style.display='none';return;}
-  const rows=parsed.understanding.map(u=>`<div class="und-row"><span class="und-label">${u.label}</span><span class="und-value">${esc(u.value)}</span></div>`).join('');
-  wrap.innerHTML=`<div class="und-card"><div class="und-header">🧠 PartMatch AI understood your search</div><div class="und-grid">${rows}</div><div class="und-query">Optimized search: "${esc(parsed.optimized)}"</div></div>`;
-  wrap.style.display='block';
-}
-
-function renderPriceTable(price,parsed){
-  const wrap=el('price-table-wrap'); if(!wrap||!price) return;
-  const catLabel=parsed.category==='general'?'General Parts':parsed.category.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-  wrap.innerHTML=`<div class="ptable-wrap"><div class="ptable-hdr">💰 Global Price Comparison<span>${catLabel}</span></div><table class="ptable"><thead><tr><th>Region</th><th>Est. Price</th><th>Min Order</th><th>Lead Time</th></tr></thead><tbody><tr><td>🇨🇳 China</td><td class="price-low">${price.china}</td><td>${price.moq.china}</td><td>${price.lead.china}</td></tr><tr><td>🇮🇳 India</td><td class="price-low">${price.india}</td><td>${price.moq.india}</td><td>${price.lead.india}</td></tr><tr><td>🇪🇺 Europe</td><td>${price.europe}</td><td>${price.moq.europe}</td><td>${price.lead.europe}</td></tr><tr><td>🇺🇸 USA</td><td>${price.usa}</td><td>${price.moq.usa}</td><td>${price.lead.usa}</td></tr></tbody></table><div class="ptable-tip">💡 ${price.tip}</div></div>`;
-}
-
-function renderResults(fastest,bestMatch,bestPrice,parsed){
-  const wrap=el('results-output'); if(!wrap) return;
-  const q=parsed.optimized||parsed.original;
-
-  function makeCard(s,badge=''){
-    const url=getSupplierUrl(s.id,q);
-    const isG=url.includes('google.com');
-    const stars='★'.repeat(s.reliability)+'☆'.repeat(5-s.reliability);
-    return `<div class="result-card" id="rcard-${s.id}">
-      <div class="card-top">
-        <div class="card-flag-name">
-          <span class="card-flag">${s.flag}</span>
-          <span class="card-name">${esc(s.name)}</span>
-          ${badge?`<span style="font-size:10px;background:#0FAF8A;color:#fff;padding:2px 7px;border-radius:10px;margin-left:4px">${badge}</span>`:''}
-          ${isG?'<span class="google-badge">🔍 via Google</span>':''}
-        </div>
-        <div class="card-stars" title="${s.reliability}/5 reliability">${stars}</div>
-      </div>
-      <div class="card-meta">
-        <span class="card-delivery">📦 ${s.deliveryTier}</span>
-        <span class="card-price">${s.priceLevel}</span>
-        <div class="card-availability">🔗 Check availability at their website</div>
-      </div>
-      <div class="card-specialty">${esc(s.specialty)}</div>
-      <div class="card-desc">${esc(s.description)}</div>
-      <div class="card-actions">
-        <a href="${url}" target="_blank" rel="noopener" class="btn-view" onclick="trackClick('${s.id}')">View Product →</a>
-        <button class="btn-save" id="save-${s.id}" onclick="savePart('${s.id}','${s.name.replace(/'/g,"\\'")}','${q.replace(/'/g,"\\'")}')">🔖 Save</button>
-      </div>
-    </div>`;
-  }
-
-  function section(title,icon,cards,note=''){
-    return `<div class="results-section"><div class="section-header">${icon} ${title}${note?`<span class="section-note">${note}</span>`:''}</div><div class="cards-grid">${cards.length?cards.join(''):'<div class="no-results">No suppliers match this filter for your region.</div>'}</div></div>`;
-  }
-
-  const total=fastest.length+bestMatch.length+bestPrice.length;
-  let html=`<div id="results-count">Showing ${total} supplier${total===1?'':'s'} for "<strong>${esc(parsed.original)}</strong>"</div>`;
-
-  if(fastest.length) html+=section('Fastest Available','⚡',fastest.map((s,i)=>makeCard(s,i===0?'FASTEST':'')),fastest.length<2?'Limited same-day options — better value options shown below':'');
-  html+=section('Best Match — Reliable &amp; Priced Well','✅',bestMatch.map((s,i)=>makeCard(s,i===0?'RECOMMENDED':'')));
-  if(bestPrice.length) html+=section('Best Price — Longer Wait','💰',bestPrice.map(s=>makeCard(s)),'Best for bulk or non-urgent orders');
-
-  // Search tips
-  const tipMap={
-    fasteners:['Specify grade (8.8, 10.9, 12.9)','Include thread pitch (M8x1.25)','State finish: zinc, stainless, black oxide'],
-    bearings:['Search by bearing number (e.g. 6205)','Specify bore and outer diameter','State load type: radial or axial thrust'],
-    seals:['Include bore size and rod diameter','Specify material: NBR, Viton, PU, PTFE','State max pressure (bar or PSI)'],
-    orings:['Specify ID x CS dimensions or AS568 size','Material: NBR, Viton, EPDM, PTFE','Confirm temperature range required'],
-    hydraulic:['State pressure rating and flow rate','Include shaft size and port sizes','Specify fluid type: mineral oil, HF, water'],
-    pneumatic:['State bore diameter and stroke','Include mounting style','Specify port size and voltage for valves'],
-    pipes:['State OD or DN size and schedule','Specify material: CS, SS 304/316, GI','Include end type: plain, threaded, flanged'],
-    pumps:['State flow rate (m3/hr or GPM)','Head/pressure required (m or bar)','Fluid type: water, chemical, slurry'],
-    civil:['Check local suppliers first for cement','State grade and quantity in tons','Include delivery-to-site requirements']
-  };
-  const catTips=tipMap[parsed.category];
-  if(catTips) html+=`<div class="tips-card"><div class="tips-title">💡 Search Tips for Better Results</div><ul class="tips-list">${catTips.map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
-
-  wrap.innerHTML=html;
-
-  // Show inline quote section and pre-fill
-  const qs=el('quote-section'); if(qs) qs.style.display='block';
-  const qp=el('q-part'); if(qp) qp.value=parsed.original;
-}
-
-function trackClick(supplierId){
-  const tid=sessionStorage.getItem('partmatch_tid'); if(!tid) return;
-  const tr=JSON.parse(localStorage.getItem('partmatch_training')||'[]');
-  const idx=tr.findIndex(r=>r.id===tid);
-  if(idx>-1){tr[idx].clickedSupplier=supplierId;localStorage.setItem('partmatch_training',JSON.stringify(tr));}
-}
-
-function savePart(supplierId,supplierName,query){
-  if(!currentUser){toast('Please login to save parts','err');switchView('view-login');return;}
-  const key='partmatch_saved_'+currentUser.email;
-  const saved=JSON.parse(localStorage.getItem(key)||'[]');
-  saved.unshift({supplierId,supplierName,query,savedAt:new Date().toISOString()});
-  localStorage.setItem(key,JSON.stringify(saved.slice(0,50)));
-  const btn=el('save-'+supplierId);
-  if(btn){btn.textContent='✅ Saved';btn.disabled=true;}
-  toast('Saved to your dashboard','ok');
-}
-
+/* ── QUOTE ── */
 function submitQuote(){
-  const part=(el('q-part')||{}).value?.trim()||'';
-  const email=(el('q-email')||{}).value?.trim()||'';
-  if(!part||!email){ toast('Part description and email are required','err'); return; }
+  const name    = (el('q-name')||{}).value?.trim();
+  const email   = (el('q-email')||{}).value?.trim();
+  const part    = (el('q-part')||{}).value?.trim();
+  const qty     = (el('q-qty')||{}).value?.trim();
+  const urgency = (el('q-urgency')||{}).value;
+  const notes   = (el('q-notes')||{}).value?.trim();
 
-  const partno=(el('q-partno')||{}).value||'';
-  const qty=(el('q-qty')||{}).value||'';
-  const urgency=(el('q-urgency')||{}).value||'standard';
-  const country=(el('q-country')||{}).value||'';
-  const name=(el('q-name')||{}).value||'';
-  const company=(el('q-company')||{}).value||'';
-  const whatsapp=(el('q-whatsapp')||{}).value||'';
-  const specs=(el('q-specs')||{}).value||'';
+  if(!name||!email||!part){ toast('Name, email and part description are required.','err'); return; }
 
-  const ref='PM-'+new Date().getFullYear()+'-'+Math.floor(Math.random()*9000+1000);
+  const ref = 'PM-' + Date.now().toString(36).toUpperCase();
+  const leads = JSON.parse(localStorage.getItem('partmatch_leads')||'[]');
+  leads.push({ ref, name, email, part, qty, urgency, notes, timestamp: new Date().toISOString() });
+  localStorage.setItem('partmatch_leads', JSON.stringify(leads));
 
-  const leads=JSON.parse(localStorage.getItem('partmatch_leads')||'[]');
-  leads.push({ref,part,partno,qty,urgency,country,name,company,email,whatsapp,specs,timestamp:new Date().toISOString(),status:'New'});
-  localStorage.setItem('partmatch_leads',JSON.stringify(leads));
-
-  const subject=encodeURIComponent('PartMatch Sourcing Request '+ref+' — '+part);
-  const body=encodeURIComponent(
-    'Reference: '+ref+'\n\n'+
-    'Part: '+part+'\n'+
-    'Part Number: '+(partno||'Unknown')+'\n'+
-    'Quantity: '+(qty||'1')+'\n'+
-    'Urgency: '+urgency+'\n'+
-    'Country: '+country+'\n\n'+
-    'Contact Name: '+name+'\n'+
-    'Company: '+(company||'N/A')+'\n'+
-    'Email: '+email+'\n'+
-    'WhatsApp: '+(whatsapp||'N/A')+'\n\n'+
-    'Technical Specs:\n'+(specs||'None provided')+'\n\n'+
-    'Submitted: '+new Date().toLocaleString()
+  const subject = encodeURIComponent('PartMatch AI Quote Request — '+ref);
+  const body = encodeURIComponent(
+    'Reference: '+ref+'\nName: '+name+'\nEmail: '+email+
+    '\nPart: '+part+'\nQty: '+(qty||'N/A')+'\nUrgency: '+urgency+'\nNotes: '+(notes||'N/A')
   );
-  window.location.href='mailto:alluvenkat11@gmail.com?subject='+subject+'&body='+body;
+  window.open('mailto:alluvenkat11@gmail.com?subject='+subject+'&body='+body, '_blank');
 
-  const tid=sessionStorage.getItem('partmatch_tid');
-  if(tid){
-    const tr=JSON.parse(localStorage.getItem('partmatch_training')||'[]');
-    const idx=tr.findIndex(r=>r.id===tid);
-    if(idx>-1){tr[idx].quoteRequested=true;localStorage.setItem('partmatch_training',JSON.stringify(tr));}
-  }
-
-  const conf=el('q-confirm');
+  const conf = el('q-confirm');
   if(conf){
-    conf.innerHTML='✅ Request submitted!<br>Reference: <strong>'+ref+'</strong><br>Expected response within 24 hours.'
-      +(whatsapp?'<br><a href="https://wa.me/'+whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent('Hi, I submitted a parts request on PartMatch AI. Reference: '+ref+'. Part needed: '+part)+'" target="_blank" rel="noopener">Also send via WhatsApp →</a>':'');
+    conf.innerHTML = '✅ Request submitted! Reference: <strong>'+ref+'</strong><br>Expected response within 24 hours.';
     conf.style.display='block';
   }
+  toast('Quote request sent!','ok');
 }
 
-/* ── SETTINGS PANEL ── */
-function openSettings(){
-  el('settings-panel').classList.add('open');
-  el('settings-overlay').classList.add('open');
-  loadSettingsValues();
-}
-function closeSettings(){
-  el('settings-panel').classList.remove('open');
-  el('settings-overlay').classList.remove('open');
-}
-function loadSettingsValues(){
-  const braveKey=localStorage.getItem('pm_brave_key');
-  const aiKey=localStorage.getItem('pm_ai_key');
-  const aiProvider=localStorage.getItem('pm_ai_provider')||'anthropic';
-  const region=localStorage.getItem('pm_pref_region')||'all';
-  const delivery=localStorage.getItem('pm_pref_delivery')||'any';
-  if(braveKey){el('setting-brave-key').placeholder='••••••••••••••••••••';el('brave-key-status').textContent='✅ Brave key saved';}
-  if(aiKey){el('setting-ai-key').placeholder='••••••••••••••••••••';el('ai-key-status').textContent='✅ AI key saved';}
-  const radio=el('ai-'+aiProvider); if(radio) radio.checked=true;
-  showAiLink(aiProvider);
-  const rs=el('setting-region'); if(rs) rs.value=region;
-  const ds=el('setting-delivery'); if(ds) ds.value=delivery;
-}
-function showAiLink(provider){
-  ['anthropic','openai','gemini'].forEach(p=>{
-    const lnk=el('link-'+p); if(lnk) lnk.style.display=p===provider?'block':'none';
-  });
-  localStorage.setItem('pm_ai_provider',provider);
-}
-function saveKey(type){
-  if(type==='brave'){
-    const key=(el('setting-brave-key')||{}).value?.trim(); if(!key) return;
-    localStorage.setItem('pm_brave_key',key);
-    el('brave-key-status').textContent='✅ Brave key saved!';
-    el('setting-brave-key').value=''; el('setting-brave-key').placeholder='••••••••••••••••••••';
-  }
-  if(type==='ai'){
-    const key=(el('setting-ai-key')||{}).value?.trim(); if(!key) return;
-    localStorage.setItem('pm_ai_key',key);
-    el('ai-key-status').textContent='✅ AI key saved!';
-    el('setting-ai-key').value=''; el('setting-ai-key').placeholder='••••••••••••••••••••';
-  }
-}
-function removeKey(type){
-  if(type==='brave'){localStorage.removeItem('pm_brave_key');el('setting-brave-key').placeholder='Paste Brave API key here';el('brave-key-status').textContent='Key removed';}
-  if(type==='ai'){localStorage.removeItem('pm_ai_key');el('setting-ai-key').placeholder='Paste AI API key here';el('ai-key-status').textContent='Key removed';}
-}
-function savePref(key,value){ localStorage.setItem('pm_pref_'+key,value); }
+/* ── SETTINGS ── */
+function openSettings(){ el('settings-panel').classList.add('open'); el('settings-overlay').classList.add('open'); }
+function closeSettings(){ el('settings-panel').classList.remove('open'); el('settings-overlay').classList.remove('open'); }
 
-/* ── BRAVE SEARCH LAYER ── */
-async function runBraveSearch(query){
-  const key=localStorage.getItem('pm_brave_key');
-  if(!key){ showBravePrompt(); return; }
-  showBraveLoading();
-  try{
-    const r=await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query+' industrial parts supplier price')}&count=8&result_filter=web`,{
-      headers:{'Accept':'application/json','Accept-Encoding':'gzip','X-Subscription-Token':key}
-    });
-    if(!r.ok){ if(r.status===401){localStorage.removeItem('pm_brave_key');showBravePrompt('Invalid Brave API key — please re-enter in Settings.');} else hideBraveSection(); return; }
-    const data=await r.json();
-    const results=(data.web&&data.web.results)||[];
-    if(!results.length){ hideBraveSection(); return; }
-    renderBraveResults(results, query);
-  }catch(e){ hideBraveSection(); }
-}
-function renderBraveResults(results, query){
-  const sec=el('brave-results-section'); if(!sec) return;
-  const cards=results.map(r=>{
-    const domain=r.url?new URL(r.url).hostname.replace('www.',''):'';
-    const price=r.description&&r.description.match(/\$[\d,]+\.?\d*/)?r.description.match(/\$[\d,]+\.?\d*/)[0]:'';
-    return `<a class="brave-card" href="${esc(r.url)}" target="_blank" rel="noopener" onclick="trackBraveClick('${esc(domain)}')">
-      <div class="brave-card-meta">
-        <span class="brave-domain">${esc(domain)}</span>
-        ${price?`<span class="brave-price">${esc(price)}</span>`:''}
-      </div>
-      <div class="brave-card-title">${esc(r.title||'')}</div>
-      <div class="brave-card-snippet">${esc((r.description||'').slice(0,120))}${(r.description||'').length>120?'…':''}</div>
-    </a>`;
-  }).join('');
-  sec.innerHTML=`<div class="layer-header">
-    <span class="layer-icon">🌐</span>
-    <span class="layer-title">Live Web Results</span>
-    <span class="layer-badge">Brave Search</span>
-    <span class="layer-count">${results.length} results</span>
-  </div>
-  <div class="brave-grid">${cards}</div>`;
-  sec.style.display='block';
-}
-function showBraveLoading(){
-  const sec=el('brave-results-section'); if(!sec) return;
-  sec.innerHTML=`<div class="brave-loading"><span class="loading-dots"><span></span><span></span><span></span></span> Searching live web…</div>`;
-  sec.style.display='block';
-}
-function showBravePrompt(msg){
-  const sec=el('brave-results-section'); if(!sec) return;
-  sec.innerHTML=`<div class="brave-prompt">
-    <span class="brave-prompt-icon">🌐</span>
-    <div class="brave-prompt-text">${msg||'Add a free Brave Search API key to get live web results alongside the supplier directory.'}</div>
-    <button class="brave-prompt-btn" onclick="openSettings()">Add Brave Key →</button>
-  </div>`;
-  sec.style.display='block';
-}
-function hideBraveSection(){
-  const sec=el('brave-results-section'); if(sec) sec.style.display='none';
-}
-function trackBraveClick(domain){
-  const tid=sessionStorage.getItem('partmatch_tid'); if(!tid) return;
-  const tr=JSON.parse(localStorage.getItem('partmatch_training')||'[]');
-  const idx=tr.findIndex(r=>r.id===tid);
-  if(idx>-1){tr[idx].braveClickedDomain=domain;localStorage.setItem('partmatch_training',JSON.stringify(tr));}
+/* ── ROTATING PLACEHOLDER ── */
+const PLACEHOLDERS = [
+  'Search: hydraulic piston seal 80mm NBR…',
+  'Search: M8 hex bolt grade 8.8 stainless…',
+  'Search: 6205 deep groove ball bearing…',
+  'Search: JCB excavator brake pads…',
+  'Search: Donaldson hydraulic filter P553000…',
+  'Search: LAPP cable 3G2.5 flexible…',
+  'Search: Camry brake pads front…',
+  'Search: Toyota Camry wiper blades…',
+  'Search: Parker O-ring 50x3 NBR 70…',
+  'Search: SKF bearing 6205-2RS…'
+];
+let _phIdx = 0;
+function rotatePlaceholder(){
+  _phIdx = (_phIdx + 1) % PLACEHOLDERS.length;
+  const inp = el('landing-q');
+  if(inp && document.activeElement !== inp) inp.placeholder = PLACEHOLDERS[_phIdx];
 }
 
-/* ── AI ANALYSIS LAYER ── */
-const AI_SYSTEM_PROMPT=`You are PartMatch AI — an expert industrial parts identification and sourcing assistant.
-When given a part query, respond with valid JSON only (no markdown, no preamble):
-{
-  "identified": true/false,
-  "confidence": 0-100,
-  "partType": "string",
-  "standard": "ISO/DIN/ANSI/etc or null",
-  "material": "string or null",
-  "dimensions": "string or null",
-  "oem_equivalents": [{"brand":"string","partNo":"string"}],
-  "alternatives": [{"name":"string","spec":"string","notes":"string","priceRange":"string"}],
-  "priceRangeUSD": {"low":"string","high":"string","notes":"string"},
-  "buyingTips": ["string"],
-  "searchTerms": ["string"]
-}`;
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem('partmatch_user');
+  if(saved){ try{ currentUser = JSON.parse(saved); }catch(e){} }
+  updateNavUI();
+  setInterval(rotatePlaceholder, 2800);
 
-async function runAIAnalysis(query, parsed){
-  const key=localStorage.getItem('pm_ai_key');
-  const provider=localStorage.getItem('pm_ai_provider')||'anthropic';
-  if(!key){ showAIPrompt(); return; }
-  showAILoading();
-  try{
-    let responseText='';
-    if(provider==='anthropic'){
-      const r=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1024,system:AI_SYSTEM_PROMPT,messages:[{role:'user',content:query}]})
-      });
-      if(!r.ok){if(r.status===401){localStorage.removeItem('pm_ai_key');showAIPrompt('Invalid Anthropic API key.');}else hideAISection();return;}
-      const d=await r.json(); responseText=d.content?.[0]?.text||'';
-    } else if(provider==='openai'){
-      const r=await fetch('https://api.openai.com/v1/chat/completions',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-        body:JSON.stringify({model:'gpt-4o-mini',max_tokens:1024,messages:[{role:'system',content:AI_SYSTEM_PROMPT},{role:'user',content:query}]})
-      });
-      if(!r.ok){if(r.status===401){localStorage.removeItem('pm_ai_key');showAIPrompt('Invalid OpenAI API key.');}else hideAISection();return;}
-      const d=await r.json(); responseText=d.choices?.[0]?.message?.content||'';
-    } else if(provider==='gemini'){
-      const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({contents:[{parts:[{text:AI_SYSTEM_PROMPT+'\n\nUser query: '+query}]}]})
-      });
-      if(!r.ok){if(r.status===400||r.status===403){localStorage.removeItem('pm_ai_key');showAIPrompt('Invalid Gemini API key.');}else hideAISection();return;}
-      const d=await r.json(); responseText=d.candidates?.[0]?.content?.parts?.[0]?.text||'';
-    }
-    const cleaned=responseText.replace(/```json?|```/g,'').trim();
-    const analysis=JSON.parse(cleaned);
-    renderAIAnalysis(analysis, query);
-  }catch(e){ hideAISection(); }
-}
-function renderAIAnalysis(a, query){
-  const sec=el('ai-analysis-section'); if(!sec) return;
-  if(!a||!a.identified){hideAISection();return;}
-  const conf=a.confidence||0;
-  const confColor=conf>=80?'#0FAF8A':conf>=50?'#F5A623':'#e74c3c';
-  let html=`<div class="layer-header">
-    <span class="layer-icon">🤖</span>
-    <span class="layer-title">AI Part Analysis</span>
-    <span class="ai-badge ai-confidence" style="background:${confColor}">${conf}% confident</span>
-  </div>
-  <div class="ai-card">
-    <div class="ai-identified">
-      <div><span class="ai-label">Identified as</span><span class="ai-value">${esc(a.partType||'')}</span></div>
-      ${a.standard?`<div><span class="ai-label">Standard</span><span class="ai-value">${esc(a.standard)}</span></div>`:''}
-      ${a.material?`<div><span class="ai-label">Material</span><span class="ai-value">${esc(a.material)}</span></div>`:''}
-      ${a.dimensions?`<div><span class="ai-label">Dimensions</span><span class="ai-value">${esc(a.dimensions)}</span></div>`:''}
-    </div>`;
-  if(a.oem_equivalents&&a.oem_equivalents.length){
-    html+=`<div class="ai-section"><strong>OEM Equivalents</strong><div class="ai-oem-list">${
-      a.oem_equivalents.map(o=>`<div class="ai-oem-item"><span class="ai-oem-brand">${esc(o.brand)}</span><span class="ai-oem-no">${esc(o.partNo)}</span></div>`).join('')
-    }</div></div>`;
-  }
-  if(a.alternatives&&a.alternatives.length){
-    html+=`<div class="ai-section"><strong>Aftermarket Alternatives</strong><div class="ai-alt-list">${
-      a.alternatives.map(alt=>`<div class="ai-alt-item">
-        <div class="ai-alt-name">${esc(alt.name)}</div>
-        <div class="ai-alt-spec">${esc(alt.spec||'')}</div>
-        <div class="ai-alt-meta"><span class="ai-alt-notes">${esc(alt.notes||'')}</span>${alt.priceRange?`<span class="ai-alt-price">${esc(alt.priceRange)}</span>`:''}</div>
-      </div>`).join('')
-    }</div></div>`;
-  }
-  if(a.priceRangeUSD&&(a.priceRangeUSD.low||a.priceRangeUSD.high)){
-    html+=`<div class="ai-section"><strong>Global Price Range (USD)</strong>
-      <div class="ai-price-grid">
-        ${a.priceRangeUSD.low?`<div class="ai-price-item"><span>Low</span><strong>${esc(a.priceRangeUSD.low)}</strong></div>`:''}
-        ${a.priceRangeUSD.high?`<div class="ai-price-item"><span>High</span><strong>${esc(a.priceRangeUSD.high)}</strong></div>`:''}
-      </div>
-      ${a.priceRangeUSD.notes?`<div style="font-size:12px;color:#64748b;margin-top:6px">${esc(a.priceRangeUSD.notes)}</div>`:''}
-    </div>`;
-  }
-  if(a.buyingTips&&a.buyingTips.length){
-    html+=`<div class="ai-section"><strong>Buying Tips</strong>${
-      a.buyingTips.map(t=>`<div class="ai-tip">💡 ${esc(t)}</div>`).join('')
-    }</div>`;
-  }
-  if(a.searchTerms&&a.searchTerms.length){
-    html+=`<div class="ai-section"><strong>Try These Search Terms</strong><div class="ai-terms">${
-      a.searchTerms.map(t=>`<button class="ai-term-btn" onclick="searchWithTerm('${t.replace(/'/g,"\\'")}')">🔍 ${esc(t)}</button>`).join('')
-    }</div></div>`;
-  }
-  html+=`</div>`;
-  sec.innerHTML=html;
-  sec.style.display='block';
-}
-function showAILoading(){
-  const sec=el('ai-analysis-section'); if(!sec) return;
-  sec.innerHTML=`<div class="brave-loading"><span class="loading-dots"><span></span><span></span><span></span></span> AI is analyzing your part…</div>`;
-  sec.style.display='block';
-}
-function showAIPrompt(msg){
-  const sec=el('ai-analysis-section'); if(!sec) return;
-  sec.innerHTML=`<div class="brave-prompt">
-    <span class="brave-prompt-icon">🤖</span>
-    <div class="brave-prompt-text">${msg||'Add a free AI API key (Claude, GPT-4o, or Gemini) to get deep part identification, OEM equivalents, and buying advice.'}</div>
-    <button class="brave-prompt-btn" onclick="openSettings()">Add AI Key →</button>
-  </div>`;
-  sec.style.display='block';
-}
-function hideAISection(){
-  const sec=el('ai-analysis-section'); if(sec) sec.style.display='none';
-}
-function searchWithTerm(term){
-  const inp=el('landing-q'); if(inp) inp.value=term;
-  const ri=el('results-q'); if(ri) ri.value=term;
-  currentQuery=term;
-  doSearch();
-}
-
-/* ── HEADER SEARCH ── */
-function headerSearch(){
-  const inp=el('hdr-q'); if(!inp) return;
-  const val=inp.value.trim(); if(!val) return;
-  currentQuery=val;
-  ['landing-q','results-q','dash-q'].forEach(id=>{ const e=el(id); if(e) e.value=val; });
-  ['brave-results-section','ai-analysis-section'].forEach(id=>{ const e=el(id); if(e){e.style.display='none';e.innerHTML='';} });
-  doSearch();
-  window.scrollTo(0,0);
-}
-
-// Hide header search on initial load (landing is default)
-document.addEventListener('DOMContentLoaded',()=>{
-  const hs = el('hdr-search');
-  if(hs) hs.style.display='none';
+  const inp = el('search-input');
+  if(inp) inp.addEventListener('keydown', e => { if(e.key==='Enter') handleSearch(); });
 });
 </script>
 </body>
