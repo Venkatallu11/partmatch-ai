@@ -358,6 +358,30 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
 .settings-desc{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5}
 .settings-info{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:12px;font-size:12px;color:#166534;line-height:1.6}
 
+/* ── MARKET TAGS & DELIVERY ── */
+.product-market-tag{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg);border-bottom:1px solid var(--border);font-size:0.75rem}
+.market-flag{font-size:1rem}
+.market-name{color:var(--muted);font-weight:500}
+.delivery-badge{margin-left:auto;border:1px solid;border-radius:10px;padding:2px 8px;font-size:0.7rem;font-weight:500}
+.product-price-row{display:flex;align-items:baseline;gap:8px}
+.price-range{font-size:0.75rem;color:var(--muted)}
+.product-delivery-info{font-size:0.75rem;color:var(--green)}
+.delivery-estimate{font-size:0.72rem;font-weight:500;padding:3px 0}
+.market-summary{font-size:0.75rem;color:var(--muted);margin-left:8px}
+
+/* ── MARKET FILTER TABS ── */
+.market-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;padding:0.75rem;background:#fff;border-radius:8px;border:1px solid var(--border)}
+.mf-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:#fff;color:#374151;font-size:0.78rem;cursor:pointer;transition:all 0.2s}
+.mf-btn:hover{border-color:var(--teal);color:var(--teal)}
+.mf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ── SCOPE WARNING ── */
+.scope-warning{text-align:center;padding:3rem 2rem;grid-column:1/-1}
+.scope-icon{font-size:3rem}
+.scope-title{font-size:1rem;font-weight:600;color:var(--navy);margin:1rem 0 0.5rem}
+.scope-text{font-size:0.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.6}
+.scope-examples{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1rem;font-size:0.78rem;color:var(--muted)}
+
 /* ── RESPONSIVE ── */
 @media(max-width:640px){
   .hero-stats{gap:20px}
@@ -392,6 +416,7 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
       <div id="nav-user" style="display:none">
         <button class="btn-ghost" onclick="switchView('view-dashboard')" style="margin-right:6px">Dashboard</button>
       </div>
+      <span id="user-location" style="font-size:0.72rem;color:rgba(255,255,255,0.5);white-space:nowrap;display:none"></span>
       <button class="settings-btn" onclick="openSettings()" title="Settings">⚙</button>
     </nav>
   </div>
@@ -454,6 +479,17 @@ input,select,textarea{font-family:'Inter',sans-serif;font-size:15px;outline:none
     </div>
 
     <div id="results-count"></div>
+    <div class="market-filters" id="market-filters" style="display:none">
+      <button class="mf-btn active" onclick="filterMarket('all',this)">🌍 All</button>
+      <button class="mf-btn" onclick="filterMarket('USA',this)">🇺🇸 USA</button>
+      <button class="mf-btn" onclick="filterMarket('India',this)">🇮🇳 India</button>
+      <button class="mf-btn" onclick="filterMarket('China',this)">🇨🇳 China</button>
+      <button class="mf-btn" onclick="filterMarket('UK',this)">🇬🇧 UK</button>
+      <button class="mf-btn" onclick="filterMarket('Germany',this)">🇩🇪 Germany</button>
+      <button class="mf-btn" onclick="filterMarket('UAE',this)">🇦🇪 UAE</button>
+      <button class="mf-btn" onclick="filterMarket('Japan',this)">🇯🇵 Japan</button>
+      <button class="mf-btn" onclick="filterMarket('Australia',this)">🇦🇺 AU</button>
+    </div>
     <div id="results-container"></div>
 
     <!-- QUOTE SECTION -->
@@ -603,6 +639,8 @@ const SERPER_KEY = '58ef3d3145d814ffd17502ddce24a72ee5a6d7eb';
 /* ── STATE ── */
 let currentUser = null;
 let currentQuery = '';
+let allSearchResults = [];
+let userLocation = { country:'Unknown', countryCode:'US', city:'', flag:'🌍' };
 
 const el = id => document.getElementById(id);
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -700,80 +738,164 @@ function updateNavUI(){
   }
 }
 
+/* ── LOCATION ── */
+function getFlag(code){
+  const flags={'US':'🇺🇸','GB':'🇬🇧','DE':'🇩🇪','IN':'🇮🇳','CN':'🇨🇳','JP':'🇯🇵','AU':'🇦🇺','CA':'🇨🇦','FR':'🇫🇷','IT':'🇮🇹','ES':'🇪🇸','NL':'🇳🇱','SE':'🇸🇪','AE':'🇦🇪','SA':'🇸🇦','ZA':'🇿🇦','BR':'🇧🇷','MX':'🇲🇽','RU':'🇷🇺','PL':'🇵🇱','TH':'🇹🇭','SG':'🇸🇬','MY':'🇲🇾','NG':'🇳🇬','KE':'🇰🇪','EG':'🇪🇬','PK':'🇵🇰','BD':'🇧🇩','ID':'🇮🇩','PH':'🇵🇭'};
+  return flags[code] || '🌍';
+}
+async function detectUserCountry(){
+  try{
+    const resp = await fetch('https://ipapi.co/json/');
+    const data = await resp.json();
+    return { country: data.country_name||'Unknown', countryCode: data.country_code||'US', city: data.city||'', flag: getFlag(data.country_code||'US') };
+  } catch(e){
+    return { country:'Unknown', countryCode:'US', city:'', flag:'🌍' };
+  }
+}
+
+function getDeliveryDays(sellerGl, buyerCode){
+  if(sellerGl === buyerCode.toLowerCase()) return { min:1, max:5, label:'1–5 days', color:'#16A34A' };
+  const fast=['us','gb','de','fr','nl','ca','au','jp','sg'];
+  const medium=['in','th','my','pl','es','it','br','mx'];
+  const slow=['cn','pk','bd','ng','ke','eg','id','ph'];
+  if(fast.includes(sellerGl))   return { min:3,  max:10, label:'3–10 days',  color:'#0284C7' };
+  if(medium.includes(sellerGl)) return { min:7,  max:21, label:'7–21 days',  color:'#D97706' };
+  if(slow.includes(sellerGl))   return { min:14, max:35, label:'14–35 days', color:'#DC2626' };
+  return { min:7, max:30, label:'7–30 days', color:'#6B7A99' };
+}
+
 /* ── SEARCH ── */
+async function searchOneMarket(query, gl, hl, marketName, flag){
+  try{
+    const resp = await fetch('https://google.serper.dev/shopping', {
+      method:'POST',
+      headers:{ 'X-API-KEY': SERPER_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify({ q:query, gl, hl, num:10 })
+    });
+    if(!resp.ok) return [];
+    const data = await resp.json();
+    return (data.shopping||[]).map(item => ({
+      ...item, market:marketName, marketFlag:flag, marketCode:gl,
+      deliveryDays: getDeliveryDays(gl, userLocation.countryCode)
+    }));
+  } catch(e){ return []; }
+}
+
+function parsePrice(priceStr){
+  if(!priceStr) return null;
+  const n = parseFloat(priceStr.replace(/[^0-9.]/g,''));
+  return isNaN(n) ? null : n;
+}
+
 async function searchProducts(query){
   showLoading();
   const cat = (el('cat-select')||{}).value || '';
   const fullQuery = cat ? query + ' ' + cat : query;
 
+  const markets = [
+    { gl:'us', hl:'en',    name:'USA',       flag:'🇺🇸' },
+    { gl:'in', hl:'en',    name:'India',      flag:'🇮🇳' },
+    { gl:'cn', hl:'zh-cn', name:'China',      flag:'🇨🇳' },
+    { gl:'gb', hl:'en',    name:'UK',         flag:'🇬🇧' },
+    { gl:'de', hl:'de',    name:'Germany',    flag:'🇩🇪' },
+    { gl:'ae', hl:'en',    name:'UAE',        flag:'🇦🇪' },
+    { gl:'au', hl:'en',    name:'Australia',  flag:'🇦🇺' },
+    { gl:'jp', hl:'ja',    name:'Japan',      flag:'🇯🇵' }
+  ];
+
+  const userGl = userLocation.countryCode.toLowerCase();
+  markets.sort((a,b) => a.gl===userGl ? -1 : b.gl===userGl ? 1 : 0);
+
   try{
-    const response = await fetch('https://google.serper.dev/shopping', {
-      method: 'POST',
-      headers: {
-        'X-API-KEY': SERPER_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ q: fullQuery, num: 20, gl: 'us', hl: 'en' })
+    const allResults = await Promise.all(
+      markets.map(m => searchOneMarket(fullQuery, m.gl, m.hl, m.name, m.flag))
+    );
+    const merged = allResults.flat();
+    if(merged.length === 0){ showNoResults(query); return; }
+    merged.sort((a,b) => {
+      if(a.marketCode===userGl && b.marketCode!==userGl) return -1;
+      if(b.marketCode===userGl && a.marketCode!==userGl) return 1;
+      const pa=parsePrice(a.price), pb=parsePrice(b.price);
+      return (pa&&pb) ? pa-pb : 0;
     });
-
-    if(!response.ok){
-      if(response.status === 401) throw new Error('API key invalid');
-      throw new Error('Search failed (status '+response.status+')');
-    }
-
-    const data = await response.json();
-    const results = data.shopping || [];
-
-    if(results.length === 0){ showNoResults(query); return; }
-    renderResults(results, query);
-
+    renderResults(merged, query);
   } catch(err){
-    showError(err.message);
+    showError('Search failed. Please try again.');
   }
 }
 
+function makeProductCard(item){
+  const delivery = item.deliveryDays || { label:'Unknown', color:'#6B7A99' };
+  const stars = item.rating ? ('★'.repeat(Math.round(item.rating))+'☆'.repeat(5-Math.round(item.rating))) : '';
+  const safeTitle = esc(item.title||'');
+  const safeSource = esc(item.source||'');
+  const safeLink = esc(item.link||'#');
+  const safeImg = esc(item.imageUrl||'');
+  const shortSource = (item.source||'').replace(/'/g,"\\'").substring(0,40);
+  const shortTitle = (item.title||'').replace(/'/g,"\\'").substring(0,40);
+  const destFlag = userLocation.flag;
+  const destCountry = esc(userLocation.city || userLocation.country);
+  return `<div class="product-card">
+    <div class="product-market-tag">
+      <span class="market-flag">${item.marketFlag||'🌍'}</span>
+      <span class="market-name">${esc(item.market||'')}</span>
+      <span class="delivery-badge" style="color:${delivery.color};border-color:${delivery.color}">📦 ${delivery.label}</span>
+    </div>
+    <div class="product-image-wrap">
+      ${safeImg ? `<img src="${safeImg}" alt="${safeTitle}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=product-image-placeholder>📦</div>'">`
+                : `<div class="product-image-placeholder">📦</div>`}
+    </div>
+    <div class="product-info">
+      <div class="product-title">${safeTitle}</div>
+      <div class="product-price-row">
+        <span class="product-price">${esc(item.price||'Get Quote')}</span>
+      </div>
+      ${item.source ? `<div class="product-seller">🏪 ${safeSource}</div>` : ''}
+      ${stars ? `<div class="product-rating">${stars} <span class="rating-count">(${item.ratingCount||0} reviews)</span></div>` : ''}
+      ${item.delivery ? `<div class="product-delivery-info">🚚 ${esc(item.delivery)}</div>` : ''}
+      <div class="delivery-estimate" style="color:${delivery.color}">⏱ Est. ${delivery.label} from ${esc(item.market||'')} → ${destFlag} ${destCountry}</div>
+      <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="product-btn"
+         onclick="trackClick('${shortSource}','${shortTitle}')">View Product →</a>
+    </div>
+  </div>`;
+}
+
 function renderResults(items, query){
+  allSearchResults = items;
+  const mf = el('market-filters'); if(mf) mf.style.display='flex';
+  document.querySelectorAll('.mf-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+
+  const markets = {};
+  items.forEach(i => { markets[i.market] = (markets[i.market]||0)+1; });
+  const summary = Object.entries(markets).map(([m,c])=>`${c} from ${m}`).join(' · ');
+
   const countEl = el('results-count');
-  if(countEl) countEl.textContent = items.length + ' products found for "' + query + '"';
+  if(countEl) countEl.innerHTML = `<strong>${items.length} real products</strong> for "${esc(query)}" <span class="market-summary">${summary}</span>`;
 
-  el('results-container').innerHTML = items.map(item => {
-    const stars = item.rating ? ('★'.repeat(Math.round(item.rating)) + '☆'.repeat(5 - Math.round(item.rating))) : '';
-    const safeTitle = esc(item.title || '');
-    const safeSource = esc(item.source || '');
-    const safeLink = esc(item.link || '#');
-    const safeImg = esc(item.imageUrl || '');
-    const shortTitle = (item.title||'').substring(0,30).replace(/'/g,"\\'");
-    const shortSource = (item.source||'').replace(/'/g,"\\'");
-
-    return `<div class="product-card">
-      <div class="product-image-wrap">
-        ${safeImg
-          ? `<img src="${safeImg}" alt="${safeTitle}" class="product-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=product-image-placeholder>📦</div>'">`
-          : `<div class="product-image-placeholder">📦</div>`
-        }
-      </div>
-      <div class="product-info">
-        <div class="product-title">${safeTitle}</div>
-        <div class="product-price">${esc(item.price || 'Price on request')}</div>
-        ${item.source ? `<div class="product-seller">🏪 ${safeSource}</div>` : ''}
-        ${stars ? `<div class="product-rating">${stars} <span class="rating-count">(${item.ratingCount||0})</span></div>` : ''}
-        ${item.delivery ? `<div class="product-delivery">🚚 ${esc(item.delivery)}</div>` : ''}
-        <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="product-btn"
-           onclick="trackClick('${shortSource}','${shortTitle}')">View Product →</a>
-      </div>
-    </div>`;
-  }).join('');
+  el('results-container').innerHTML = items.map(makeProductCard).join('');
 
   const qs = el('quote-section');
   if(qs){ qs.style.display='block'; const qp=el('q-part'); if(qp) qp.value=query; }
 }
 
+function filterMarket(market, btn){
+  document.querySelectorAll('.mf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = market==='all' ? allSearchResults : allSearchResults.filter(i=>i.market===market);
+  if(!filtered.length){
+    el('results-container').innerHTML=`<div class="no-results"><div class="no-results-icon">🔍</div><div class="no-results-title">No results from ${esc(market)}</div><div class="no-results-text">Select "All" to see global results.</div></div>`;
+    return;
+  }
+  el('results-container').innerHTML = filtered.map(makeProductCard).join('');
+}
+
 function showLoading(){
   const countEl = el('results-count');
-  if(countEl) countEl.textContent = 'Searching Google Shopping…';
+  if(countEl) countEl.textContent = 'Searching 8 global markets simultaneously…';
+  const mf = el('market-filters'); if(mf) mf.style.display='none';
   el('results-container').innerHTML = `<div class="loading-state">
     <div class="loading-spinner"></div>
-    <div class="loading-text">Finding real products with real prices…</div>
+    <div class="loading-text">Searching USA · India · China · UK · Germany · UAE · Japan · Australia…</div>
   </div>`;
   const qs = el('quote-section'); if(qs) qs.style.display='none';
 }
@@ -801,12 +923,35 @@ function showError(msg){
   </div>`;
 }
 
+/* ── SCOPE CHECK ── */
+function isRelevantQuery(query){
+  const q = query.toLowerCase();
+  const blocked = ['bounty','chocolate','food','drink','movie','song','music','celebrity','fashion','clothes','shoes','makeup','phone case','toy','game console','bedding','pillow','lipstick','perfume','shampoo','snack'];
+  return !blocked.some(b=>q.includes(b));
+}
+function showScopeWarning(query){
+  switchView('view-results');
+  const mf = el('market-filters'); if(mf) mf.style.display='none';
+  const countEl = el('results-count'); if(countEl) countEl.innerHTML='';
+  el('results-container').innerHTML=`<div class="scope-warning">
+    <div class="scope-icon">⚙️</div>
+    <div class="scope-title">PartMatch AI is for industrial and mechanical parts</div>
+    <div class="scope-text">We cover: Hydraulic parts · Pneumatic systems · Bearings · Fasteners · Filters · Valves · Pumps · Pipes · Motors · Civil materials · Industrial cables</div>
+    <div class="scope-examples">Try:
+      <button class="qs-pill" onclick="quickSearch('hydraulic seal 80mm NBR')">hydraulic seal</button>
+      <button class="qs-pill" onclick="quickSearch('M8 bolt stainless steel')">M8 bolt</button>
+      <button class="qs-pill" onclick="quickSearch('6205 deep groove bearing')">6205 bearing</button>
+    </div>
+  </div>`;
+}
+
 /* ── SEARCH TRIGGER ── */
 function doSearch(){
   const q = (el('landing-q')||{}).value?.trim() ||
             (el('results-q')||{}).value?.trim() ||
             currentQuery;
   if(!q){ toast('Please enter a search term.','err'); return; }
+  if(!isRelevantQuery(q)){ showScopeWarning(q); return; }
   currentQuery = q;
   ['landing-q','results-q','hdr-q'].forEach(id=>{ const i=el(id); if(i) i.value=q; });
   switchView('view-results');
@@ -839,6 +984,7 @@ function headerSearch(){
 function quickSearch(term){
   const li = el('landing-q'); if(li) li.value = term;
   const ri = el('results-q'); if(ri) ri.value = term;
+  const hi = el('hdr-q'); if(hi) hi.value = term;
   currentQuery = term;
   switchView('view-results');
   saveSearchHistory(term);
@@ -961,6 +1107,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const inp = el('search-input');
   if(inp) inp.addEventListener('keydown', e => { if(e.key==='Enter') handleSearch(); });
+
+  detectUserCountry().then(loc => {
+    userLocation = loc;
+    const locEl = el('user-location');
+    if(locEl){ locEl.textContent = loc.flag + ' ' + (loc.city || loc.country); locEl.style.display=''; }
+  });
 });
 </script>
 </body>
